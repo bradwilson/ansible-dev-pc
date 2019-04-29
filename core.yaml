@@ -13,6 +13,19 @@
           - ca-certificates
           - software-properties-common
 
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Upgrade to latest APT packages
+      become: yes
+      apt:
+        upgrade: yes
+
     - name: Install core packages
       become: yes
       apt:
