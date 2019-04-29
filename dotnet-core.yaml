@@ -1,0 +1,22 @@
+- name: .NET Core
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install .NET Core SDK
+      become: yes
+      command: snap install --classic dotnet-sdk
+      args:
+        creates: /snap/dotnet-sdk/current/dotnet
+      register: dotnet_sdk_installed
+
+    - name: Create shortcut for dotnet
+      become: yes
+      file:
+        path: /snap/bin/dotnet
+        src: dotnet-sdk.dotnet
+        state: link
+
+    - name: Perform first-run experience
+      command: /snap/bin/dotnet new
+      when: dotnet_sdk_installed.changed

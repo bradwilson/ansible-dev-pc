@@ -1,0 +1,31 @@
+- name: VS Code
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Add Microsoft APT package key
+      become: yes
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+
+    - name: Add VS Code APT package repository
+      become: yes
+      apt_repository:
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
+        filename: vscode
+        update_cache: no
+      register: apt_repository
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install VS Code
+      become: yes
+      apt:
+        package: code

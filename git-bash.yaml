@@ -1,0 +1,34 @@
+- name: Git/Bash Integration
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    ### TODO: Currently non-functional
+    # - name: Download git completion
+    #   get_url:
+    #     url: https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+    #     dest: ~/.bash-git-completion.sh
+    #     mode: 0700
+
+    # - name: Add git completion to ~/.bashrc
+    #   blockinfile:
+    #     path: ~/.bashrc
+    #     marker: "### {mark} Ansible managed: Enable git auto-complete"
+    #     block: |
+    #       source ~/.bash-git-completion.sh
+
+    - name: Download bash-git-prompt
+      git:
+        repo: https://github.com/magicmonty/bash-git-prompt
+        dest: ~/.bash-git-prompt
+
+    - name: Enable bash-git-prompt
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Enable bash-git-prompt"
+        block: |
+          GIT_PROMPT_THEME=Default
+          GIT_PROMPT_FETCH_REMOTE_STATUS=0
+
+          source ~/.bash-git-prompt/gitprompt.sh
+          source ~/.bash-git-prompt/prompt-colors.sh

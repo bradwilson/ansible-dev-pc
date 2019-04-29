@@ -1,0 +1,17 @@
+- name: Docker customization
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Add custom Docker commands
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Docker customization"
+        block: |
+          docker-clean() {
+            _containers=$(docker ps --quiet --filter 'status=exited')
+            [[ -z ${_containers// } ]] || docker rm $_containers
+
+            _images=$(docker images --all --quiet --filter 'dangling=true')
+            [[ -z ${_images// } ]] || docker rmi $_images
+          }

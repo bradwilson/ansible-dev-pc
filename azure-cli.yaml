@@ -1,0 +1,36 @@
+- name: Azure CLI
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    apt_override:
+      # Azure CLI doesn't support disco yet, so hold it back to cosmic until it does
+      azure_cli_distro: "{{ (ansible_distribution_release == 'disco') | ternary('cosmic', ansible_distribution_release) }}"
+
+  tasks:
+    - name: Add Microsoft APT package key
+      become: yes
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+
+    - name: Add Azure CLI APT package repository
+      become: yes
+      apt_repository:
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ apt_override.azure_cli_distro }} main
+        filename: azure-cli
+        update_cache: no
+      register: apt_repository
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install Azure CLI
+      become: yes
+      apt:
+        package: azure-cli

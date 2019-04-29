@@ -1,0 +1,11 @@
+- name: prettyping
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Download prettyping
+      become: yes
+      get_url:
+        url: https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping
+        dest: /usr/local/bin/prettyping
+        mode: 0755

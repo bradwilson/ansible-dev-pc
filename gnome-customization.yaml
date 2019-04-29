@@ -1,0 +1,322 @@
+- name: Configure Ubuntu machine for developement work
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    apt_override:
+      # snwh doesn't support disco yet, so hold it back to cosmic until it does
+      snwh_distro: "{{ (ansible_distribution_release == 'disco') | ternary('cosmic', ansible_distribution_release) }}"
+
+    gnome_extensions:
+      # Dash to Panel (Windows-style bottom task bar)
+      - name: dash-to-panel@jderose9.github.com
+        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v19.shell-extension.zip
+
+      # Emoji Selector
+      - name: emoji-selector@maestroschan.fr
+        url: https://extensions.gnome.org/extension-data/emoji-selectormaestroschan.fr.v15.shell-extension.zip
+
+      # TopIcons Redux (shows legacy app icons in Gnome 3)
+      - name: topicons-redux@pop-planet.info
+        url: https://extensions.gnome.org/extension-data/topicons-redux%40pop-planet.info.v6.shell-extension.zip
+
+  tasks:
+    - name: Create GNOME extension directory
+      file:
+        path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
+        state: directory
+      register: new_extensions
+      loop: "{{ gnome_extensions }}"
+
+    - name: Download GNOME shell extension
+      get_url:
+        url: "{{ item.item.url }}"
+        dest: "/tmp/{{ item.item.name }}.zip"
+      loop: "{{ new_extensions.results }}"
+      when: item.changed
+
+    - name: Unzip GNOME extension
+      unarchive:
+        src: "/tmp/{{ item.item.name }}.zip"
+        dest: "~/.local/share/gnome-shell/extensions/{{ item.item.name }}"
+        creates: "~/.local/share/gnome-shell/extensions/{{ item.item.name }}/metadata.json"
+        remote_src: yes
+      loop: "{{ new_extensions.results }}"
+      when: item.changed
+
+    - name: Enable GNOME extension
+      command: gnome-shell-extension-tool -e "{{ item.item.name }}"
+      loop: "{{ new_extensions.results }}"
+      when: item.changed
+
+    - name: Install Ubuntu Mono Nerd Fonts
+      become: yes
+      get_url:
+        url: "{{ item }}"
+        dest: /usr/local/share/fonts/
+      loop:
+        - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular/complete/Ubuntu%20Mono%20Nerd%20Font%20Complete%20Mono%20Windows%20Compatible.ttf
+        - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular-Italic/complete/Ubuntu%20Mono%20Italic%20Nerd%20Font%20Complete%20Mono%20Windows%20Compatible.ttf
+        - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold/complete/Ubuntu%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono%20Windows%20Compatible.ttf
+        - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold-Italic/complete/Ubuntu%20Mono%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono%20Windows%20Compatible.ttf
+
+    - name: Add Gnome themes APT package key
+      become: yes
+      apt_key:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: 89993A70
+
+    - name: Add Gnome themes APT package repository
+      become: yes
+      apt_repository:
+        repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ apt_override.snwh_distro }} main
+        filename: snwh
+        update_cache: no
+      register: apt_repository
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install Gnome themes
+      become: yes
+      apt:
+        package:
+          - numix-gtk-theme
+          - paper-icon-theme
+
+    - name: Install PIP
+      become: yes
+      apt:
+        package:
+          - python-pip
+          - python3-pip
+
+    - name: Install psutil Python package
+      become: yes
+      pip:
+        name: psutil
+
+    - name: Update customization with dconf
+      dconf:
+        key: "{{ item.key }}"
+        value: "{{ item.value }}"
+      loop:
+        # Themes
+        - key: /org/gnome/desktop/interface/cursor-theme
+          value: "'Paper'"
+        - key: /org/gnome/desktop/interface/gtk-theme
+          value: "'Numix'"
+        - key: /org/gnome/desktop/interface/icon-theme
+          value: "'Paper'"
+
+        # Fonts
+        - key: /org/gnome/desktop/interface/monospace-font-name
+          value: "'UbuntuMono NF 11'"
+
+        # UI tweaks
+        - key: /org/gnome/desktop/interface/show-battery-percentage
+          value: "true"
+        - key: /org/gnome/desktop/peripherals/mouse/accel-profile
+          value: "'adaptive'"
+        - key: /org/gnome/desktop/sound/allow-volume-above-100-percent
+          value: "true"
+        - key: /org/gnome/desktop/wm/preferences/button-layout
+          value: "'appmenu:minimize,maximize,close'"
+        - key: /org/gnome/desktop/wm/preferences/num-workspaces
+          value: "1"
+        - key: /org/gnome/mutter/dynamic-workspaces
+          value: "false"
+        - key: "/org/gnome/shell/favorite-apps"
+          value: "['alacritty.desktop', 'firefox.desktop', 'google-chrome.desktop', 'slack.desktop', 'virt-manager.desktop', 'code.desktop', 'sublime_text.desktop', 'sublime_merge.desktop', 'org.remmina.Remmina.desktop']"
+
+        # Keyboard shortcuts
+        - key: /org/gnome/desktop/wm/keybindings/activate-window-menu
+          value: "['<Alt>space']"
+        - key: /org/gnome/desktop/wm/keybindings/always-on-top
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/begin-move
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/begin-resize
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/close
+          value: "['<Alt>F4']"
+        - key: /org/gnome/desktop/wm/keybindings/cycle-group
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/cycle-group-backward
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/cycle-panels
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/cycle-panels-backward
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/cycle-windows
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/cycle-windows-backward
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/lower
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/maximize-horizontally
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/maximize
+          value: "['<Super>Up']"
+        - key: /org/gnome/desktop/wm/keybindings/maximize-vertically
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/minimize
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-center
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-corner-ne
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-corner-nw
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-corner-se
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-corner-sw
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-down
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-left
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-right
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-up
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-side-e
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-side-n
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-side-s
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-side-w
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-10
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-11
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-12
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-1
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-2
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-3
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-4
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-5
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-6
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-7
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-8
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-9
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-down
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-last
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-left
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-right
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-up
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/panel-main-menu
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/panel-run-dialog
+          value: "['<Super>r']"
+        - key: /org/gnome/desktop/wm/keybindings/raise
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/raise-or-lower
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/set-spew-mark
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/show-desktop
+          value: "['<Super>m']"
+        - key: /org/gnome/desktop/wm/keybindings/switch-applications
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-applications-backward
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-group
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-group-backward
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-input-source
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-input-source-backward
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-panels
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-panels-backward
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-10
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-11
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-12
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-1
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-2
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-3
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-4
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-5
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-6
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-7
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-8
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-9
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-down
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-last
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-left
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-right
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-up
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/switch-windows
+          value: "['<Alt>Tab']"
+        - key: /org/gnome/desktop/wm/keybindings/switch-windows-backward
+          value: "['<Shift><Alt>Tab']"
+        - key: /org/gnome/desktop/wm/keybindings/toggle-above
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/toggle-fullscreen
+          value: "['<Super>f']"
+        - key: /org/gnome/desktop/wm/keybindings/toggle-maximized
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/toggle-on-all-workspaces
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/toggle-shaded
+          value: "@as []"
+        - key: /org/gnome/desktop/wm/keybindings/unmaximize
+          value: "['<Super>Down']"
+        - key: /org/gnome/settings/daemon/plugins/media-keys/home
+          value: "'<Super>e'"
+        - key: /org/gnome/settings/daemon/plugins/media-keys/screensaver
+          value: "'<Super>l'"
+        - key: /org/gnome/settings-daemon/plugins/xsettings/antialiasing
+          value: "'grayscale'"
+        - key: /org/gnome/shell/extensions/desktop-icons/show-home
+          value: "false"
+        - key: /org/gnome/shell/extensions/desktop-icons/show-trash
+          value: "true"
+        - key: /org/gnome/shell/extensions/emoji-selector/emoji-keybinding
+          value: "['<Super>Period']"
+        - key: /org/gnome/shell/extensions/emoji-selector/use-keybinding
+          value: "true"

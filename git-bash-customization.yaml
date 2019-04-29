@@ -1,0 +1,66 @@
+- name: Git/Bash customization
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Add bash-git-prompt customization
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: bash-git-prompt customization"
+        block: |
+          function echoKubeContext() {
+            if which kubectl > /dev/null; then
+              CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null)
+              if [[ $CURRENT_CONTEXT != "" ]]; then
+                echo -ne " \033[1;32;100m  \033[37m$CURRENT_CONTEXT \033[0m"
+              fi
+            fi
+          }
+
+          function echoAksAccount() {
+            if [ -f ~/.azure/clouds.config ]; then
+              if which gsed > /dev/null; then
+                CURRENT_SUB=$(gsed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
+              else
+                CURRENT_SUB=$(sed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
+              fi
+              if [[ $CURRENT_SUB != "" ]]; then
+                CURRENT_ACCOUNT=$(cat ~/.azure/azureProfile.json | jq -r ".subscriptions[] | select(.id==\"$CURRENT_SUB\") | .name")
+                if [[ $CURRENT_ACCOUNT != "" ]]; then
+                  echo -ne " \033[1;33;46m  \033[37m$CURRENT_ACCOUNT \033[0m"
+                fi
+              fi
+            fi
+          }
+
+          # Configuration
+          GIT_PROMPT_SHOW_UNTRACKED_FILES="all"
+          GIT_PROMPT_IGNORE_STASH="1"
+
+          # Pre- and post-status prompt strings
+          GIT_PROMPT_COMMAND_FAIL="${ResetColor} ${RedBg}${BrightWhite} ✘ _LAST_COMMAND_STATE_ ${ResetColor}"
+          GIT_PROMPT_COMMAND_OK=""
+          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoKubeContext\`\`echoAksAccount\`"
+          GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
+          GIT_PROMPT_END_USER="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor}\n${BoldGreen} sh$ ${ResetColor}"
+          GIT_PROMPT_END_ROOT="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor}\n${BoldRed} sh# ${ResetColor} "
+
+          # Individual overrides
+          GIT_PROMPT_BRANCH="${BlueBg}${BoldBlue}${BoldWhite} "
+          GIT_PROMPT_CHANGED="${BlueBg}${BoldYellow} ~"
+          GIT_PROMPT_CLEAN=""
+          GIT_PROMPT_CONFLICTS="${BlueBg}${BoldRed} ⊗ "
+          GIT_PROMPT_PREFIX="${BlueBg}${BrightWhite} "
+          GIT_PROMPT_REMOTE="${BlueBg}"
+          GIT_PROMPT_SEPARATOR=""
+          GIT_PROMPT_STAGED="${BlueBg}${BoldGreen} ±"
+          GIT_PROMPT_STASHED="${BlueBg}${BoldBlue} ⚑ "
+          GIT_PROMPT_SUFFIX="${BlueBg}${DimBlueBg} ${ResetColor}"
+          GIT_PROMPT_UNTRACKED="${BlueBg}${BoldYellow} +"
+          GIT_PROMPT_VIRTUALENV="${ResetColor} ${GreenBg}${BoldYellow} _VIRTUALENV_ ${ResetColor}"
+
+          # Symbols
+          GIT_PROMPT_SYMBOLS_AHEAD="${BoldBlue} "
+          GIT_PROMPT_SYMBOLS_BEHIND="${BoldBlue} "
+          GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="${BlueBg}${BoldBlue} ※ "
+          GIT_PROMPT_SYMBOLS_PREHASH=":"

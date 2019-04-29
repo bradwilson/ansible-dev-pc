@@ -1,0 +1,16 @@
+- name: ripgrep
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install ripgrep (pre-Cosmic)
+      become: yes
+      apt:
+        deb: https://github.com/BurntSushi/ripgrep/releases/download/11.0.1/ripgrep_11.0.1_amd64.deb
+      when: ansible_distribution_release == 'bionic'
+
+    - name: Install ripgrep (Cosmic or later)
+      become: yes
+      apt:
+        package: ripgrep
+      when: ansible_distribution_release != 'bionic'

@@ -1,0 +1,47 @@
+#########################################################################################
+##### Note that import order here is important, so rearranging import lists
+##### is **not** recommended.
+#####
+##### Any file which ends in -customization includes opinionated personal customizations.
+##### It is highly recommended that you look inside them or comment them out from here.
+#########################################################################################
+
+- name: Configure Ubuntu machine for developement work
+  hosts: 127.0.0.1
+  connection: local
+
+##### Operating system packages and configuration
+
+- import_playbook: core.yaml                     # Core OS packages
+- import_playbook: core-customization.yaml       # Core OS customization
+- import_playbook: fortune-customization.yaml    # Show fortune through cowsay and lolcat on shell start
+- import_playbook: gnome-customization.yaml      # GNOME extensions, themes, UI tweaks, keyboard shortcuts, favorites
+
+##### Applications (free)
+
+- import_playbook: alacritty.yaml                  # High performance terminal app
+- import_playbook: alacritty-customization.yaml    # Alacritty UI customization
+- import_playbook: azure-cli.yaml                  # Azure CLI (az)
+- import_playbook: docker.yaml                     # Docker Community Edition
+- import_playbook: docker-customization.yaml       # Docker custom shell commands
+- import_playbook: dotnet-core.yaml                # .NET Core SDK
+- import_playbook: git-bash.yaml                   # Git prompt integration for bash
+- import_playbook: git-bash-customization.yaml     # Customized git-bash prompt
+- import_playbook: google-chrome.yaml              # Google Chrome (needed for Teams)
+- import_playbook: kubectl.yaml                    # Kubernetes CLI
+- import_playbook: kubectl-customization.yaml      # Bash aliases for kubectl
+- import_playbook: kvm.yaml                        # Virtualization tools
+- import_playbook: nodejs.yaml                     # NodeJS and nvm (Node Version Manager)
+- import_playbook: powershell-core.yaml            # PowerShell Core (used in automation)
+- import_playbook: prettyping.yaml                 # Prettier version of ping w/ graphs
+- import_playbook: ripgrep.yaml                    # Git-aware recursive grep tool
+- import_playbook: slack.yaml                      # Slack Desktop app
+- import_playbook: remmina.yaml                    # RDP/X/VNC/SSH client
+- import_playbook: vscode.yaml                     # Visual Studio Code
+- import_playbook: vscode-customization.yaml       # Extensions
+
+##### Applications (commercial license required)
+
+- import_playbook: beyond-compare.yaml    # Beyond Compare 4
+- import_playbook: insync.yaml            # Insync Google Drive sync tool
+- import_playbook: sublime.yaml           # Sublime Text and Sublime Merge

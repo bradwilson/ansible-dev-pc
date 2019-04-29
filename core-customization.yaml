@@ -1,0 +1,49 @@
+- name: Core OS customization
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Disable sudo password requirement
+      become: yes
+      lineinfile:
+        path: /etc/sudoers
+        line: "{{ lookup('env', 'USER') }} ALL=(ALL) NOPASSWD: ALL"
+
+    - name: Enhance terminal prompt
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: prompt enhancement"
+        block: |
+          # Write current path in the terminal title bar
+          function writeCwdInTitlebar() {
+            case "$TERM" in
+              xterm*|rxvt*)
+                echo -ne "\e]0;`whoami`@`hostname`: `dirs +0`\a"
+                ;;
+              *)
+                ;;
+            esac
+          }
+
+          export PROMPT_COMMAND="${PROMPT_COMMAND}writeCwdInTitlebar;"
+
+          # Force newline when things don't end cleanly
+          clear_newline() {
+            if [ "$(__get_terminal_column)" != 0 ]; then
+              echo -e '\033[7m%\033[0m'
+            fi
+            echo ""
+          }
+
+          __get_terminal_column() {
+            exec < /dev/tty
+            local oldstty=$(stty -g)
+            stty raw -echo min 0
+            echo -en "\033[6n" > /dev/tty
+            local pos
+            IFS=';' read -r -d R -a pos
+            stty $oldstty
+            echo "$((${pos[1]} - 1))"
+          }
+
+          export PROMPT_COMMAND="clear_newline;${PROMPT_COMMAND}"

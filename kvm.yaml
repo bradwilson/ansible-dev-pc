@@ -1,0 +1,22 @@
+- name: QEMU/KVM
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install QEMU/KVM
+      become: yes
+      apt:
+        package:
+          - bridge-utils
+          - libvirt-clients
+          - libvirt-daemon-system
+          - ovmf
+          - qemu-kvm
+          - virt-manager
+
+    - name: Enable QEMU/KVM for current user
+      become: yes
+      user:
+        name={{ lookup('env', "USER") }}
+        groups=libvirt
+        append=yes

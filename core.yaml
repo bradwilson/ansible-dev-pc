@@ -1,0 +1,55 @@
+- name: Core OS packages
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Enable HTTPS APT support
+      become: yes
+      apt:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - apt-transport-https
+          - ca-certificates
+          - software-properties-common
+
+    - name: Install core packages
+      become: yes
+      apt:
+        package:
+          - curl
+          - dconf-editor
+          - git
+          - git-gui
+          - git-lfs
+          - gitk
+          - gnome-tweaks
+          - htop
+          - jq
+          - snapd
+          - xclip
+
+    - name: Create ~/bin
+      file:
+        path: ~/bin
+        state: directory
+
+    - name: Add ~/bin to PATH
+      lineinfile:
+        path: ~/.bashrc
+        line: export PATH=$PATH:~/bin
+
+    - name: Add /snap/bin to PATH
+      lineinfile:
+        path: ~/.bashrc
+        line: export PATH=$PATH:/snap/bin
+
+    - name: Get installed package list
+      package_facts: {}
+
+    - name: Add dm-crypt to /etc/initramfs-tools/modules
+      become: yes
+      lineinfile:
+        path: /etc/initramfs-tools/modules
+        line: dm-crypt
+      when: ansible_facts.packages["cryptsetup-initramfs"] is defined

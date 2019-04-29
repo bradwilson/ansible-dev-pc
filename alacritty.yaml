@@ -1,0 +1,59 @@
+- name: Alacritty
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Alacritty on Pop!_OS
+      block:
+        - name: Install Alacritty (Pop!_OS)
+          become: yes
+          apt:
+            package: alacritty
+
+      when: "'Pop!_OS' in hostvars[inventory_hostname].ansible_facts.lsb.description"
+
+    - name: Alacritty on Ubuntu
+      block:
+        - name: Install Alacritty pre-requisites (Ubuntu)
+          become: yes
+          apt:
+            package:
+              - cargo
+              - cmake
+              - libfontconfig1-dev
+              - libfreetype6-dev
+
+        - name: Build Alacritty (Ubuntu)
+          command: cargo install --git https://github.com/jwilm/alacritty
+          args:
+            creates: ~/.cargo/bin/alacritty
+
+        - name: Install Alacritty (Ubuntu)
+          become: yes
+          copy:
+            src: "{{ lookup('env', 'HOME') }}/.cargo/bin/alacritty"
+            dest: /usr/local/bin/alacritty
+            mode: 0755
+            remote_src: yes
+
+        - name: Make Alacritty a terminal alternative (Ubuntu)
+          become: yes
+          alternatives:
+            name: x-terminal-emulator
+            link: /usr/bin/x-terminal-emulator
+            path: /usr/local/bin/alacritty
+            priority: 20
+
+        - name: Download Alacritty icon (Ubuntu)
+          become: yes
+          get_url:
+            url: https://raw.githubusercontent.com/jwilm/alacritty/master/extra/logo/alacritty-term.svg
+            dest: /usr/share/icons/Alacritty.svg
+
+        - name: Download Alacritty desktop definition (Ubuntu)
+          become: yes
+          get_url:
+            url: https://raw.githubusercontent.com/jwilm/alacritty/master/extra/linux/alacritty.desktop
+            dest: /usr/share/applications/alacritty.desktop
+
+      when: "'Pop!_OS' not in hostvars[inventory_hostname].ansible_facts.lsb.description"

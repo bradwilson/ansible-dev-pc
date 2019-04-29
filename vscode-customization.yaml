@@ -1,0 +1,30 @@
+- name: VS Code Customization
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extentions
+      become: no
+      command: code --install-extension {{ item }}
+      args:
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - formulahendry.dotnet-test-explorer              # .NET Core Test Explorer
+        - vscoss.vscode-ansible                           # Ansible
+        - ms-azure-devops.azure-pipelines                 # Azure Pipelines
+        - ms-vscode.csharp                                # C#
+        - streetsidesoftware.code-spell-checker           # Code Spell Checker
+        - peterjausovec.vscode-docker                     # Docker
+        - editorconfig.editorconfig                       # EditorConfig for VS Code
+        - thenikso.github-plus-theme                      # GitHub Plus Theme
+        - eamodio.gitlens                                 # GitLens
+        - ms-kubernetes-tools.vscode-kubernetes-tools     # Kubernetes
+        - ms-vsliveshare.vsliveshare-pack                 # Live Share Extension Pack
+        - pkief.material-icon-theme                       # Material Icon Theme
+        - ms-vscode.powershell                            # PowerShell
+        - wallabyjs.quokka-vscode                         # Quokka.js
+        - shan.code-settings-sync                         # Settings Sync
+        - eamodio.toggle-excluded-files                   # Toggle Excluded Files
+        - ms-vscode.vscode-typescript-tslint-plugin       # TSLint
+        - pflannery.vscode-versionlens                    # Version Lens
+        - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode

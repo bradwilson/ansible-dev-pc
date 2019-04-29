@@ -1,0 +1,31 @@
+- name: Beyond Compare
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Add Scooter Software APT package key
+      become: yes
+      apt_key:
+        url: https://www.scootersoftware.com/RPM-GPG-KEY-scootersoftware
+
+    - name: Add Beyond Compare 4 APT package repository
+      become: yes
+      apt_repository:
+        repo: deb http://www.scootersoftware.com/ bcompare4 non-free
+        filename: scootersoftware
+        update_cache: no
+      register: apt_repository
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install Beyond Compare 4
+      become: yes
+      apt:
+        package: bcompare

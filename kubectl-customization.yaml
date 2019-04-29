@@ -1,0 +1,21 @@
+- name: kubectl customization
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    ### TODO: Review with Korwel to get a more complete list
+    - name: Add useful kubectl aliases
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: kubectl shortcuts"
+        block: |
+          alias k=kubectl
+          alias kc='kubectl config'
+          alias kcl='kubectl config get-contexts'
+          alias kcu='kubectl config use-context'
+          alias kg='kubectl get'
+          alias kgd='kubectl get deployment'
+          alias kgi='kubectl get ingress'
+          alias kgn='kubectl get node'
+          alias kgp='kubectl get pod'
+          alias kgs='kubectl get service'
