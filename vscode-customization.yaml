@@ -4,7 +4,6 @@
 
   tasks:
     - name: Install VS Code Extentions
-      become: no
       command: code --install-extension {{ item }}
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
@@ -28,3 +27,8 @@
         - ms-vscode.vscode-typescript-tslint-plugin       # TSLint
         - pflannery.vscode-versionlens                    # Version Lens
         - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
+
+    - name: Use VS Code as default editor
+      lineinfile:
+        path: ~/.bashrc
+        line: export EDITOR='code'
