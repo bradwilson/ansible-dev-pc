@@ -17,13 +17,20 @@ Supported shell for customization work is `bash`; other shells are left as an ex
 
 # Pre-Requisites
 
-You need to install Ansible:
+1. Make sure you're up to date:
 
-```bash
-$ sudo apt -y install ansible
-```
+   ```bash
+   $ sudo apt update
+   $ sudo apt -y upgrade
+   ```
 
-If you want to close this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
+2. Install Ansible:
+
+   ```bash
+   $ sudo apt -y install ansible
+   ```
+
+3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
 
 # Running
 
