@@ -37,6 +37,7 @@
 - import_playbook: ripgrep.yaml                    # Git-aware recursive grep tool
 - import_playbook: slack.yaml                      # Slack Desktop app
 - import_playbook: remmina.yaml                    # RDP/X/VNC/SSH client
+- import_playbook: vlc.yaml                        # VideoLan Client (primarily for codecs)
 - import_playbook: vscode.yaml                     # Visual Studio Code
 - import_playbook: vscode-customization.yaml       # Extensions
 
