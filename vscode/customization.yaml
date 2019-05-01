@@ -8,7 +8,6 @@
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
-        - vscoss.vscode-ansible                           # Ansible
         - streetsidesoftware.code-spell-checker           # Code Spell Checker
         - editorconfig.editorconfig                       # EditorConfig for VS Code
         - thenikso.github-plus-theme                      # GitHub Plus Theme

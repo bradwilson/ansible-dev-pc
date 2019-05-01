@@ -26,6 +26,9 @@
 - import_playbook: vscode/core.yaml
 - import_playbook: vscode/customization.yaml
 
+# Ansible
+- import_playbook: ansible/vscode.yaml
+
 # Azure
 - import_playbook: azure/core.yaml
 - import_playbook: azure/vscode.yaml
