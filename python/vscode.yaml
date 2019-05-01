@@ -1,0 +1,9 @@
+- name: Python (VS Code)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extention
+      command: code --install-extension ms-python.python
+      args:
+        creates: ~/.vscode/extensions/ms-python.python-*/package.json

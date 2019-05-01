@@ -63,6 +63,7 @@
 
 # Python
 - import_playbook: python/core.yaml
+- import_playbook: python/vscode.yaml
 
 ##### Applications (free)
 
