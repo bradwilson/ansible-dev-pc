@@ -28,7 +28,13 @@
         - pflannery.vscode-versionlens                    # Version Lens
         - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
 
-    - name: Use VS Code as default editor
-      lineinfile:
+    - name: Use VS Code as default editor via GUI, nano via SSH
+      blockinfile:
         path: ~/.bashrc
-        line: export EDITOR='code'
+        marker: "### {mark} Ansible managed: Default editor"
+        block: |
+          if [ -z "$SSH_CONNECTION" ]; then
+            export EDITOR='nano'
+          else
+            export EDITOR='code'
+          fi
