@@ -47,3 +47,7 @@
           }
 
           export PROMPT_COMMAND="clear_newline;${PROMPT_COMMAND}"
+          export ANSIBLE_NOCOWS=1
+          export CLICOLOR=1
+          export GREP_COLORS='1;35;40'
+          export LSCOLORS=GxFxCxDxBxegedabagaced
