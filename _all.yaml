@@ -1,9 +1,13 @@
 #########################################################################################
-##### Note that import order here is important, so rearranging import lists
-##### is **not** recommended.
-#####
-##### Any file which ends in -customization includes opinionated personal customizations.
-##### It is highly recommended that you look inside them or comment them out from here.
+#
+#  Note that import order here is important, so rearranging import lists
+#  is *not* recommended.
+#
+#  Each customization.yaml file includes opinionated customization, so it's worth
+#  reviewing each file to determine if you want that customization. Each vscode.yaml
+#  file installs extensions into Visual Studio Code for the given tool, and should
+#  be commented out if VS Code is not installed.
+#
 #########################################################################################
 
 - name: Configure Ubuntu machine for developement work
@@ -12,37 +16,82 @@
 
 ##### Operating system packages and configuration
 
-- import_playbook: core.yaml                     # Core OS packages
-- import_playbook: core-customization.yaml       # Core OS customization
-- import_playbook: fortune-customization.yaml    # Show fortune through cowsay and lolcat on shell start
-- import_playbook: gnome-customization.yaml      # GNOME extensions, themes, UI tweaks, keyboard shortcuts, favorites
+- import_playbook: core.yaml
+- import_playbook: customization-text.yaml
+- import_playbook: customization-ui.yaml
+
+##### Developer tools
+
+# Visual Studio Code
+- import_playbook: vscode/core.yaml
+- import_playbook: vscode/customization.yaml
+
+# Azure
+- import_playbook: azure/core.yaml
+- import_playbook: azure/vscode.yaml
+
+# Docker
+- import_playbook: docker/core.yaml
+- import_playbook: docker/customization.yaml
+- import_playbook: docker/vscode.yaml
+
+# .NET Core
+- import_playbook: dotnet-core/core.yaml
+- import_playbook: dotnet-core/vscode.yaml
+
+# git
+- import_playbook: git/core.yaml
+- import_playbook: git/customization.yaml
+- import_playbook: git/vscode.yaml
+
+# Kubernetes
+- import_playbook: kubectl/core.yaml
+- import_playbook: kubectl/customization.yaml
+- import_playbook: kubectl/vscode.yaml
+
+# QEMU/KVM (virtualization platform)
+- import_playbook: kvm/core.yaml
+
+# NodeJS
+- import_playbook: nodejs/core.yaml
+- import_playbook: nodejs/customization.yaml
+- import_playbook: nodejs/vscode.yaml
+
+# PowerShell Core
+- import_playbook: powershell-core/core.yaml
+- import_playbook: powershell-core/vscode.yaml
+
+# Python
+- import_playbook: python/core.yaml
 
 ##### Applications (free)
 
-- import_playbook: alacritty.yaml                  # High performance terminal app
-- import_playbook: alacritty-customization.yaml    # Alacritty UI customization
-- import_playbook: azure-cli.yaml                  # Azure CLI (az)
-- import_playbook: docker.yaml                     # Docker Community Edition
-- import_playbook: docker-customization.yaml       # Docker custom shell commands
-- import_playbook: dotnet-core.yaml                # .NET Core SDK
-- import_playbook: git-bash.yaml                   # Git prompt integration for bash
-- import_playbook: git-bash-customization.yaml     # Customized git-bash prompt
-- import_playbook: google-chrome.yaml              # Google Chrome (needed for Teams)
-- import_playbook: kubectl.yaml                    # Kubernetes CLI
-- import_playbook: kubectl-customization.yaml      # Bash aliases for kubectl
-- import_playbook: kvm.yaml                        # Virtualization tools
-- import_playbook: nodejs.yaml                     # NodeJS and nvm (Node Version Manager)
-- import_playbook: powershell-core.yaml            # PowerShell Core (used in automation)
-- import_playbook: prettyping.yaml                 # Prettier version of ping w/ graphs
-- import_playbook: ripgrep.yaml                    # Git-aware recursive grep tool
-- import_playbook: slack.yaml                      # Slack Desktop app
-- import_playbook: remmina.yaml                    # RDP/X/VNC/SSH client
-- import_playbook: vlc.yaml                        # VideoLan Client (primarily for codecs)
-- import_playbook: vscode.yaml                     # Visual Studio Code
-- import_playbook: vscode-customization.yaml       # Extensions
+# Alacritty (high performance terminal application)
+- import_playbook: alacritty/core.yaml
+- import_playbook: alacritty/customization.yaml
+
+# Google Chrome browser   (TODO: extensions to enable Teams)
+- import_playbook: google-chrome/core.yaml
+
+# Prettier version of ping w/ graphs
+- import_playbook: prettyping/core.yaml
+
+# Slack desktop application
+- import_playbook: slack/core.yaml
+
+# RDP/X/VNC/SSH client
+- import_playbook: remmina/core.yaml
+
+# VideoLan Client (primarily for codecs)
+- import_playbook: vlc/core.yaml
 
 ##### Applications (commercial license required)
 
-- import_playbook: beyond-compare.yaml    # Beyond Compare 4
-- import_playbook: insync.yaml            # Insync Google Drive sync tool
-- import_playbook: sublime.yaml           # Sublime Text and Sublime Merge
+# Beyond Compare 4
+- import_playbook: bc4/core.yaml
+
+# Insync (Google Drive sync tool)
+- import_playbook: insync/core.yaml
+
+# Sublime Text and Sublime Merge
+- import_playbook: sublime/core.yaml

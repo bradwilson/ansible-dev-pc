@@ -1,0 +1,12 @@
+- name: .NET Core (VS Code)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extentions
+      command: code --install-extension {{ item }}
+      args:
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - formulahendry.dotnet-test-explorer
+        - ms-vscode.csharp

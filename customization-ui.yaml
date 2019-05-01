@@ -1,4 +1,4 @@
-- name: Configure Ubuntu machine for developement work
+- name: Core OS customization (Gnome UI)
   hosts: 127.0.0.1
   connection: local
 

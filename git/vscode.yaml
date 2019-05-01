@@ -1,0 +1,9 @@
+- name: git (VS Code)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extention
+      command: code --install-extension eamodio.gitlens
+      args:
+        creates: ~/.vscode/extensions/eamodio.gitlens-*/package.json

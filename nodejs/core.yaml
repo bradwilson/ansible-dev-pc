@@ -1,0 +1,9 @@
+- name: NodeJS
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install Node Version Manager
+      shell: "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash"
+      args:
+        creates: ~/.nvm/install.sh

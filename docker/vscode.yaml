@@ -1,0 +1,9 @@
+- name: Docker (VS Code)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extention
+      command: code --install-extension peterjausovec.vscode-docker
+      args:
+        creates: ~/.vscode/extensions/peterjausovec.vscode-docker-*/package.json

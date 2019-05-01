@@ -1,0 +1,24 @@
+- name: Python
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install pyenv
+      git:
+        dest: ~/.pyenv
+        repo: https://github.com/pyenv/pyenv
+
+    - name: Install pyenv-virtualenv
+      git:
+        dest: ~/.pyenv/plugins/pyenv-virtualenv
+        repo: https://github.com/pyenv/pyenv-virtualenv
+
+    - name: Enable pyenv
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: pyenv support"
+        block: |
+          export PYENV_ROOT=$HOME/.pyenv
+          export PATH=$PATH:$PYENV_ROOT/bin:$PYENV_ROOT/plugins/pyenv-virtualenv/bin
+          eval "$(pyenv init -)"
+          eval "$(pyenv virtualenv-init -)"
