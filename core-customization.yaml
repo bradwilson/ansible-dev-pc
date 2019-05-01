@@ -51,3 +51,9 @@
           export CLICOLOR=1
           export GREP_COLORS='1;35;40'
           export LSCOLORS=GxFxCxDxBxegedabagaced
+
+          alias ..='cd ..'
+          alias ...='cd ../..'
+          alias ....='cd ../../..'
+          alias .....='cd ../../../..'
+          alias ......='cd ../../../../..'
