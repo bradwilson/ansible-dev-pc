@@ -7,8 +7,9 @@
       become: yes
       apt:
         package:
-          - fortune
+          - colordiff
           - cowsay
+          - fortune
           - lolcat
 
     - name: Add fortune to ~/.bashrc
@@ -64,6 +65,8 @@
           export CLICOLOR=1
           export GREP_COLORS='1;35;40'
           export LSCOLORS=GxFxCxDxBxegedabagaced
+
+          alias diff='colordiff'
 
           alias ..='cd ..'
           alias ...='cd ../..'
