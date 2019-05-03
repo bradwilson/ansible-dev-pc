@@ -38,7 +38,9 @@
           - gitk
           - gnome-tweaks
           - htop
+          - inetutils-traceroute
           - jq
+          - net-tools
           - snapd
           - xclip
 
