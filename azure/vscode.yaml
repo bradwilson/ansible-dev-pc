@@ -3,7 +3,10 @@
   connection: local
 
   tasks:
-    - name: Install VS Code Extention
-      command: code --install-extension ms-azure-devops.azure-pipelines
+    - name: Install VS Code Extentions
+      command: code --install-extension {{ item }}
       args:
-        creates: ~/.vscode/extensions/ms-azure-devops.azure-pipelines-*/package.json
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - ms-azure-devops.azure-pipelines
+        - msazurermtools.azurerm-vscode-tools
