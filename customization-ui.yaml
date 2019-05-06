@@ -28,16 +28,9 @@
       register: new_extensions
       loop: "{{ gnome_extensions }}"
 
-    - name: Download GNOME shell extension
-      get_url:
-        url: "{{ item.item.url }}"
-        dest: "/tmp/{{ item.item.name }}.zip"
-      loop: "{{ new_extensions.results }}"
-      when: item.changed
-
-    - name: Unzip GNOME extension
+    - name: Extract GNOME extension
       unarchive:
-        src: "/tmp/{{ item.item.name }}.zip"
+        src: "{{ item.item.url }}"
         dest: "~/.local/share/gnome-shell/extensions/{{ item.item.name }}"
         creates: "~/.local/share/gnome-shell/extensions/{{ item.item.name }}/metadata.json"
         remote_src: yes
