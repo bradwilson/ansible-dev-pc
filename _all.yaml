@@ -97,5 +97,8 @@
 # Insync (Google Drive sync tool)
 - import_playbook: insync/core.yaml
 
+# JetBrains Toolbox (used to install/updated JetBrains tools)
+- import_playbook: jetbrains/core.yaml
+
 # Sublime Text and Sublime Merge
 - import_playbook: sublime/core.yaml
