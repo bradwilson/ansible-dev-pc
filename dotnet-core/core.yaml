@@ -20,3 +20,11 @@
     - name: Perform first-run experience
       command: /snap/bin/dotnet new
       when: dotnet_sdk_installed.changed
+
+    - name: Update environment for .NET Core
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: .NET Core enhancement"
+        block: |
+          export DOTNET_ROOT=/snap/dotnet-sdk/current
+          export PATH=$PATH:$HOME/.dotnet/tools
