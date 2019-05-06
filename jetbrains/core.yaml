@@ -18,6 +18,7 @@
         unarchive:
           src: https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ toolbox_ver }}.tar.gz
           dest: /tmp
+          remote_src: yes
           creates: /tmp/jetbrains-toolbox-{{ toolbox_ver }}/jetbrains-toolbox
 
       - name: Install Toolbox
