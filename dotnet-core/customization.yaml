@@ -1,0 +1,16 @@
+- name: .NET Core
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install global tools
+      command: dotnet tool install -g {{ item }}
+      args:
+        creates: ~/.dotnet/tools/.store/{{ item }}
+      loop:
+        - coverlet.console
+        - dotnet-depends
+        - dotnet-format
+        - dotnet-outdated
+        - dotnet-reportgenerator-globaltool
+        - dotnet-retire
