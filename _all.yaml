@@ -56,6 +56,10 @@
 # QEMU/KVM (virtualization platform)
 - import_playbook: kvm/core.yaml
 
+# Mono (.NET Framework)
+- import_playbook: mono/core.yaml
+- import_playbook: mono/vscode.yaml
+
 # NodeJS
 - import_playbook: nodejs/core.yaml
 - import_playbook: nodejs/customization.yaml

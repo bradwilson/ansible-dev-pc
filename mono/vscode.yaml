@@ -1,0 +1,9 @@
+- name: Mono (VS Code)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extention
+      command: code --install-extension ms-vscode.csharp
+      args:
+        creates: ~/.vscode/extensions/ms-vscode.csharp-*/package.json
