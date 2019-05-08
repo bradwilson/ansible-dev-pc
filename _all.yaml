@@ -31,6 +31,7 @@
 
 # Azure
 - import_playbook: azure/core.yaml
+- import_playbook: azure/storage-explorer.yaml
 - import_playbook: azure/vscode.yaml
 
 # Docker

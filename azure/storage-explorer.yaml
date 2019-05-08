@@ -1,0 +1,40 @@
+- import_playbook: ../dotnet-core/core.yaml
+
+- name: Azure (Storage Explorer)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install pre-requisites
+      become: yes
+      apt:
+        package:
+          - libgconf-2-4
+          - libgnome-keyring-common
+          - libgnome-keyring-dev
+
+    - name: Create Storage Explorer download location
+      become: yes
+      file:
+        path: /opt/microsoft/storage-explorer
+        state: directory
+
+    - name: Download Storage Explorer
+      become: yes
+      unarchive:
+        src: https://go.microsoft.com/fwlink/?LinkId=722418&clcid=0x409
+        dest: /opt/microsoft/storage-explorer
+        remote_src: yes
+        creates: /opt/microsoft/storage-explorer/StorageExplorer
+
+    - name: Ensure local applications folder exists
+      become: yes
+      file:
+        path: /usr/local/share/applications
+        state: directory
+
+    - name: Add Storage Explorer desktop file
+      become: yes
+      copy:
+        src: storage-explorer.desktop
+        dest: /usr/local/share/applications/storage-explorer.desktop
