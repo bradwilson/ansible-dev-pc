@@ -42,6 +42,7 @@
           - jq
           - net-tools
           - snapd
+          - uuid
           - xclip
 
     - name: Create ~/bin
