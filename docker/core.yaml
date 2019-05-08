@@ -33,7 +33,9 @@
     - name: Install Docker
       become: yes
       apt:
-        package: docker-ce
+        package:
+          - docker-ce
+          - docker-compose
 
     - name: Enable Docker for current user
       become: yes
