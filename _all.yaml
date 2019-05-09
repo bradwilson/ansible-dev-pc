@@ -30,7 +30,7 @@
 - import_playbook: ansible/vscode.yaml
 
 # Azure
-- import_playbook: azure/core.yaml
+- import_playbook: azure/az.yaml
 - import_playbook: azure/storage-explorer.yaml
 - import_playbook: azure/vscode.yaml
 
