@@ -1,0 +1,28 @@
+- name: Azure (azshell)
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    azshell_version: v0.2.0
+
+  tasks:
+    - name: Create azshell folder
+      become: yes
+      file:
+        path: /opt/azshell
+        state: directory
+
+    - name: Download azshell
+      become: yes
+      unarchive:
+        src: https://github.com/yangl900/azshell/releases/download/{{ azshell_version }}/azshell_linux_64-bit.tar.gz
+        dest: /opt/azshell
+        remote_src: yes
+        creates: /opt/azshell/azshell
+
+    - name: Create shortcut to azshell
+      become: yes
+      file:
+        path: /usr/local/bin/azshell
+        src: /opt/azshell/azshell
+        state: link

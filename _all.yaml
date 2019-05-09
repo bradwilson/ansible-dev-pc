@@ -31,6 +31,7 @@
 
 # Azure
 - import_playbook: azure/az.yaml
+- import_playbook: azure/azshell.yaml
 - import_playbook: azure/storage-explorer.yaml
 - import_playbook: azure/vscode.yaml
 
