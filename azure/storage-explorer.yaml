@@ -1,3 +1,4 @@
+# .NET Core 2.x dependency
 - import_playbook: ../dotnet-core/core.yaml
 
 - name: Azure (Storage Explorer)
