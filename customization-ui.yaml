@@ -103,6 +103,8 @@
           value: "'Numix'"
         - key: /org/gnome/desktop/interface/icon-theme
           value: "'Paper'"
+        - key: /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-theme-colors
+          value: "false"
 
         # Fonts
         - key: /org/gnome/desktop/interface/monospace-font-name
@@ -121,8 +123,14 @@
           value: "1"
         - key: /org/gnome/mutter/dynamic-workspaces
           value: "false"
-        - key: "/org/gnome/shell/favorite-apps"
-          value: "['alacritty.desktop', 'firefox.desktop', 'google-chrome.desktop', 'slack.desktop', 'virt-manager.desktop', 'code.desktop', 'sublime_text.desktop', 'sublime_merge.desktop', 'org.remmina.Remmina.desktop']"
+        - key: /org/gnome/settings-daemon/plugins/xsettings/antialiasing
+          value: "'grayscale'"
+        - key: /org/gnome/shell/favorite-apps
+          value: "['alacritty.desktop', 'firefox.desktop', 'google-chrome.desktop', 'slack.desktop', 'virt-manager.desktop', 'code.desktop', 'jetbrains-rider.desktop', 'sublime_text.desktop', 'sublime_merge.desktop', 'org.remmina.Remmina.desktop']"
+        - key: /org/gnome/shell/extensions/desktop-icons/show-home
+          value: "false"
+        - key: /org/gnome/shell/extensions/desktop-icons/show-trash
+          value: "true"
 
         # Keyboard shortcuts
         - key: /org/gnome/desktop/wm/keybindings/activate-window-menu
@@ -295,19 +303,15 @@
           value: "@as []"
         - key: /org/gnome/desktop/wm/keybindings/unmaximize
           value: "['<Super>Down']"
+        - key: /org/gnome/mutter/keybindings/toggle-tiled-left
+          value: "['<Super>Left']"
+        - key: /org/gnome/mutter/keybindings/toggle-tiled-right
+          value: "['<Super>Right']"
         - key: /org/gnome/settings/daemon/plugins/media-keys/home
           value: "'<Super>e'"
         - key: /org/gnome/settings/daemon/plugins/media-keys/screensaver
           value: "'<Super>l'"
-        - key: /org/gnome/settings-daemon/plugins/xsettings/antialiasing
-          value: "'grayscale'"
-        - key: /org/gnome/shell/extensions/desktop-icons/show-home
-          value: "false"
-        - key: /org/gnome/shell/extensions/desktop-icons/show-trash
-          value: "true"
         - key: /org/gnome/shell/extensions/emoji-selector/emoji-keybinding
           value: "['<Super>Period']"
         - key: /org/gnome/shell/extensions/emoji-selector/use-keybinding
           value: "true"
-        - key: /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-theme-colors
-          value: "false"
