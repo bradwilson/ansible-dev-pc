@@ -32,6 +32,8 @@
         package:
           - curl
           - dconf-editor
+          - exfat-fuse
+          - exfat-utils
           - git
           - git-gui
           - git-lfs
