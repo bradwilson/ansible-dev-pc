@@ -4,6 +4,9 @@
 
   tasks:
     - name: Install VS Code Extention
-      command: code --install-extension eamodio.gitlens
+      command: code --install-extension {{ item }}
       args:
-        creates: ~/.vscode/extensions/eamodio.gitlens-*/package.json
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - eamodio.gitlens
+        - GitHub.vscode-pull-request-github
