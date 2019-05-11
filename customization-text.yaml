@@ -97,10 +97,6 @@
               ln -s $HOME/gdrive/DevBinaries/.docker/config.json ~/.docker
             fi
 
-            if [ ! -e ~/.git-bash-completion.sh ]; then
-              ln -s $HOME/gdrive/DevBinaries/DotFiles/.git-bash-completion.sh ~/
-            fi
-
             if [ ! -e ~/.git-credentials ]; then
               ln -s $HOME/gdrive/DevBinaries/DotFiles/.git-credentials ~/
             fi
@@ -133,15 +129,19 @@
               ln -s $HOME/gdrive/DevBinaries/DotFiles/NuGet.Config ~/.nuget/NuGet/
             fi
 
-            mkdir -p ~/.ssh
-            chmod 700 ~/.ssh
-            ln -fs $HOME/gdrive/DevBinaries/.ssh/* ~/.ssh/
-            chmod 700 ~/.ssh/*
+            if [ -d ~/gdrive/DevBinaries/.ssh ]; then
+              mkdir -p ~/.ssh
+              chmod 700 ~/.ssh
+              ln -fs $HOME/gdrive/DevBinaries/.ssh/* ~/.ssh/
+              chmod 700 ~/.ssh/*
 
-            if [ ! -e ~/.ssh/authorized_keys ]; then
-              ln -s $HOME/gdrive/DevBinaries/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+              if [ ! -e ~/.ssh/authorized_keys ]; then
+                ln -s $HOME/gdrive/DevBinaries/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+              fi
             fi
 
-            export PATH=~/gdrive/DevBinaries:$PATH
+            if [ -d ~/gdrive/DevBinaries ]; then
+              export PATH=~/gdrive/DevBinaries:$PATH
+            fi
 
           fi
