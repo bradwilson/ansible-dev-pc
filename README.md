@@ -15,6 +15,12 @@ Other Ubuntu variants may work (like Mint) but they have not been tested. Non-Ub
 
 Supported shell for customization work is `bash`; other shells are left as an exercise to the reader.
 
+## Please fork this and customize it
+
+The purpose here is to document what I use for my personal Linux-based development. You will likely want to make changes to my customizations, including
+adding/removing software, choosing different defaults, etc. While you can make those changes locally, if you plan to use these scripts long-term, it
+will likely be more beneficial for you if you fork this project so you can preserve your changes and easily merge newer versions of these scripts.
+
 # Pre-Requisites
 
 1. Make sure you're up to date:
@@ -44,4 +50,4 @@ $ ansible-playbook -K _all.yaml
 
 You will be prompted for your sudo password.
 
-_**After installation is complete, you must reboot the computer/VM.**_
+_**Since core OS packages are upgraded, it is safest to reboot the PC/VM after running these scripts. At a bare minimum, many customizations done here will require you to log out and log back in.**_
