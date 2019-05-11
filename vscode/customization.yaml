@@ -18,6 +18,16 @@
         - pflannery.vscode-versionlens                    # Version Lens
         - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
 
+    - name: Override default VS Code preferences
+      copy:
+        src: settings.json
+        dest: /home/brad/.config/Code/User/settings.json
+
+    - name: Override default VS Code key bindings
+      copy:
+        src: keybindings.json
+        dest: /home/brad/.config/Code/User/keybindings.json
+
     - name: Use VS Code as default editor via GUI, nano via SSH
       blockinfile:
         path: ~/.bashrc
