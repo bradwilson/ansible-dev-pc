@@ -111,6 +111,8 @@
           value: "'UbuntuMono NF 11'"
 
         # UI tweaks
+        - key: /org/gnome/desktop/interface/enable-animations
+          value: "false"
         - key: /org/gnome/desktop/interface/show-battery-percentage
           value: "true"
         - key: /org/gnome/desktop/peripherals/mouse/accel-profile
@@ -315,3 +317,5 @@
           value: "['<Super>Period']"
         - key: /org/gnome/shell/extensions/emoji-selector/use-keybinding
           value: "true"
+        - key: /org/gnome/shell/keybindings/open-application-menu
+          value: "@as []"
