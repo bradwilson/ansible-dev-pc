@@ -67,9 +67,81 @@
           export LSCOLORS=GxFxCxDxBxegedabagaced
 
           alias diff='colordiff'
+          alias dir='ls -lA'
+          alias grep="grep --color=auto"
+          alias less='less -R'
+          alias ll='ls -l'
+          alias ls='ls -Fh --color'
 
           alias ..='cd ..'
           alias ...='cd ../..'
           alias ....='cd ../../..'
           alias .....='cd ../../../..'
           alias ......='cd ../../../../..'
+
+          # Create a bunch of symlinks to known things in Google Drive
+          if [ -d ~/gdrive ]; then
+
+            # TODO: How many of these things can/should be raw automated instead of
+            # being pulled from Google Drive?
+
+            if [ ! -e ~/.config/git/config ]; then
+              mkdir -p ~/.config/git
+              chmod 700 ~/.config
+              ln -s $HOME/gdrive/DevBinaries/.config/git/config ~/.config/git
+            fi
+
+            if [ ! -e ~/.docker/config.json ]; then
+              mkdir -p ~/.docker
+              chmod 700 ~/.docker
+              ln -s $HOME/gdrive/DevBinaries/.docker/config.json ~/.docker
+            fi
+
+            if [ ! -e ~/.git-bash-completion.sh ]; then
+              ln -s $HOME/gdrive/DevBinaries/DotFiles/.git-bash-completion.sh ~/
+            fi
+
+            if [ ! -e ~/.git-credentials ]; then
+              ln -s $HOME/gdrive/DevBinaries/DotFiles/.git-credentials ~/
+            fi
+
+            if [ ! -d ~/.gnupg ]; then
+              mkdir -p ~/.gnupg
+              chmod 700 ~/.gnupg
+            fi
+
+            ln -fs $HOME/gdrive/DevBinaries/DotFiles/.gnupg/* ~/.gnupg/
+
+            if [ ! -d ~/.kube ]; then
+              mkdir ~/.kube
+            fi
+
+            if [ ! -e ~/.kube/config ]; then
+              ln -s $HOME/gdrive/DevBinaries/DotFiles/.kube/config ~/.kube/
+            fi
+
+            if [ ! -d ~/.kube/ports ]; then
+              ln -s $HOME/gdrive/DevBinaries/DotFiles/.kube/ports ~/.kube/
+            fi
+
+            if [ ! -e ~/.npmrc ]; then
+              ln -s $HOME/gdrive/DevBinaries/DotFiles/.npmrc ~/
+            fi
+
+            if [ ! -e ~/.nuget/NuGet/NuGet.Config ]; then
+              mkdir -p ~/.nuget/NuGet
+              ln -s $HOME/gdrive/DevBinaries/DotFiles/NuGet.Config ~/.nuget/NuGet/
+            fi
+
+            mkdir -p ~/.ssh
+            chmod 700 ~/.ssh
+            ln -fs $HOME/gdrive/DevBinaries/.ssh/* ~/.ssh/
+            chmod 700 ~/.ssh/*
+
+            if [ ! -e ~/.ssh/authorized_keys ]; then
+              ln -s $HOME/gdrive/DevBinaries/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+            fi
+
+            export PATH=~/gdrive/DevBinaries:$PATH
+
+          fi
