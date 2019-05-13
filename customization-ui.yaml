@@ -115,8 +115,6 @@
           value: "false"
         - key: /org/gnome/desktop/interface/show-battery-percentage
           value: "true"
-        - key: /org/gnome/desktop/peripherals/mouse/accel-profile
-          value: "'adaptive'"
         - key: /org/gnome/desktop/sound/allow-volume-above-100-percent
           value: "true"
         - key: /org/gnome/desktop/wm/preferences/button-layout
@@ -133,6 +131,15 @@
           value: "false"
         - key: /org/gnome/shell/extensions/desktop-icons/show-trash
           value: "true"
+
+        # Keyboard & mouse settings
+
+        - key: /org/gnome/desktop/peripherals/keyboard/delay
+          value: "@u 250"
+        - key: /org/gnome/desktop/peripherals/keyboard/repeat-interval
+          value: "@u 25"
+        - key: /org/gnome/desktop/peripherals/mouse/accel-profile
+          value: "'adaptive'"
 
         # Keyboard shortcuts
         - key: /org/gnome/desktop/wm/keybindings/activate-window-menu
