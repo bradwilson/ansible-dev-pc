@@ -3,7 +3,10 @@
   connection: local
 
   tasks:
-    - name: Install VS Code Extention
-      command: code --install-extension ms-vscode.csharp
+    - name: Install VS Code Extentions
+      command: code --install-extension {{ item }}
       args:
-        creates: ~/.vscode/extensions/ms-vscode.csharp-*/package.json
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - ms-vscode.csharp     # C#
+        - k--kato.docomment    # C# XML Documentation Comments
