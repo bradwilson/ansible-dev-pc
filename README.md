@@ -5,15 +5,17 @@ This repository contains useful scripts to set up a Linux development machine. T
 - Ubuntu ([download](https://www.ubuntu.com/download/desktop))
   - 18.04 (bionic)
   - 18.10 (cosmic)
-  - 19.04 (disco)
+  - 19.04 <sup>(1)</sup> (disco)
 - Pop!_OS ([download](https://system76.com/pop))
   - 18.04
   - 18.10
-  - 19.04
+  - 19.04 <sup>(1)</sup>
 
 Other Ubuntu variants may work (like Mint) but they have not been tested. Non-Ubuntu variants are unsupported (with no
 intention of supporting them). Similarly, shell for customization work is `bash`; other shells are left as an exercise
 to the reader.
+
+_<sup>(1)</sup> .NET Core does not support 19.04 as of today (13 May 2019), so you may find that running the .NET Core installation scripts fails on a 19.04-based OS. Please use either 18.04 or 18.10 until support has been added._
 
 ## Please fork this and customize it
 
