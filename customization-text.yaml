@@ -145,3 +145,11 @@
             fi
 
           fi
+
+          # Start in the ~/dev folder when it exists (and we're in an interactive shell)
+          if [ -d ~/dev ]; then
+            case "$-" in
+              *i*) cd ~/dev ;;
+              *)   ;;
+            esac
+          fi
