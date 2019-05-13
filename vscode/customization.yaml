@@ -34,7 +34,7 @@
         marker: "### {mark} Ansible managed: Default editor"
         block: |
           if [ -z "$SSH_CONNECTION" ]; then
-            export EDITOR='nano'
+            export EDITOR='code --wait'
           else
-            export EDITOR='code'
+            export EDITOR='nano'
           fi
