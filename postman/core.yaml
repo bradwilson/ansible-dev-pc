@@ -1,0 +1,18 @@
+- name: Postman
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install Postman
+      become: yes
+      unarchive:
+        src: https://dl.pstmn.io/download/latest/linux64
+        dest: /opt
+        remote_src: yes
+        creates: /opt/Postman/Postman
+
+    - name: Add Postman desktop file
+      become: yes
+      copy:
+        src: postman.desktop
+        dest: /usr/local/share/applications/postman.desktop
