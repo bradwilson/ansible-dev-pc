@@ -40,7 +40,7 @@
 
   // Debugging
   "debug.internalConsoleOptions": "openOnSessionStart",
-  "debug.toolBarLocation": "hidden",
+  "debug.toolBarLocation": "docked",
 
   // Text editor
   "breadcrumbs.enabled": true,
