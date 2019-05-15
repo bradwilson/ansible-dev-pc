@@ -39,8 +39,6 @@
             esac
           }
 
-          export PROMPT_COMMAND="${PROMPT_COMMAND}writeCwdInTitlebar;"
-
           # Force newline when things don't end cleanly
           clear_newline() {
             if [ "$(__get_terminal_column)" != 0 ]; then
@@ -60,7 +58,9 @@
             echo "$((${pos[1]} - 1))"
           }
 
-          export PROMPT_COMMAND="clear_newline;${PROMPT_COMMAND}"
+          PROMPT_COMMAND="clear_newline;writeCwdInTitlebar;"
+
+          # Environment customization
           export ANSIBLE_NOCOWS=1
           export CLICOLOR=1
           export GREP_COLORS='1;35;40'
