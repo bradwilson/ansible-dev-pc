@@ -6,3 +6,4 @@ Exec=/opt/microsoft/storage-explorer/StorageExplorer
 Icon=/opt/microsoft/storage-explorer/resources/app/out/app/media/StorageExplorerLetterpress.svg
 Categories=Database;Development;System;
 Terminal=false
+StartupVMClass=storageexplorer
