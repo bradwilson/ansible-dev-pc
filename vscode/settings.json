@@ -1,43 +1,4 @@
 {
-  // Spelling
-  "cSpell.enabledLanguageIds": [
-      "asciidoc",
-      "c",
-      "cpp",
-      "csharp",
-      "css",
-      "go",
-      "handlebars",
-      "html",
-      "jade",
-      "javascript",
-      "javascriptreact",
-      "latex",
-      "less",
-      "markdown",
-      "php",
-      "plaintext",
-      "pub",
-      "python",
-      "restructuredtext",
-      "rust",
-      "scss",
-      "text",
-      "typescript",
-      "typescriptreact",
-      "yml"
-  ],
-  "cSpell.userWords": [
-      "appcenter",
-      "fluentd",
-      "kubernetes",
-      "recurse",
-      "telegraf",
-      "testdouble",
-      "vanaheim",
-      "xunit"
-  ],
-
   // Debugging
   "debug.internalConsoleOptions": "openOnSessionStart",
   "debug.toolBarLocation": "docked",
@@ -59,7 +20,7 @@
   "files.defaultLanguage": "markdown",
   "files.trimTrailingWhitespace": true,
 
-  // File explorer
+  // Explorer
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
   "explorer.openEditors.visible": 0,
@@ -67,74 +28,50 @@
   // Git
   "git.inputValidation": "off",
 
-  // extension: VS Live Share
-  "liveshare.featureSet": "insiders",
-
-  // Languages
-  "omnisharp.loggingLevel": "warning",
-  "omnisharp.enableRoslynAnalyzers": true,
-  "powershell.integratedConsole.showOnStartup": false,
+  // TypeScript
   "typescript.updateImportsOnFileMove.enabled": "always",
 
-  // extension: Settings sync
-  "sync.askGistName": false,
-  "sync.autoDownload": false,
-  "sync.autoUpload": false,
-  "sync.forceDownload": false,
-  "sync.gist": "ffcea81da35b3f1a5a03f4ef7b190f8a",
-  "sync.quietSync": false,
-  "sync.removeExtensions": true,
-  "sync.syncExtensions": true,
-
-  // Terminal
-  "terminal.integrated.fontFamily": "UbuntuMono NF",
-  "terminal.integrated.fontSize": 16,
-  "terminal.integrated.rendererType": "canvas",
-
-  // extension: Toggle excluded files
-  "toggleexcludedfiles.statusBar.enabled": true,
-
-  // extension: VS Intellicode
-  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-
-  // Themes/colors/workbench/etc.
+  // Themes/colors/fonts/workbench/etc.
   "extensions.ignoreRecommendations": true,
   "material-icon-theme.activeIconPack": "none",
   "material-icon-theme.folders.color": "#ff7043",
   "search.useGlobalIgnoreFiles": true,
+  "terminal.integrated.fontFamily": "UbuntuMono NF",
+  "terminal.integrated.fontSize": 16,
+  "terminal.integrated.rendererType": "canvas",
   "window.restoreFullscreen": true,
   "window.restoreWindows": "none",
   "window.titleBarStyle": "native",
   "window.zoomLevel": -1,
   "workbench.colorCustomizations": {
-      "terminal.ansiBlack": "#2e3436",
-      "terminal.ansiBlue": "#3465a4",
-      "terminal.ansiBrightBlack": "#555753",
-      "terminal.ansiBrightBlue": "#729fcf",
-      "terminal.ansiBrightCyan": "#34e2e2",
-      "terminal.ansiBrightGreen": "#8ae234",
-      "terminal.ansiBrightMagenta": "#ad7fa8",
-      "terminal.ansiBrightRed": "#f49797",
-      "terminal.ansiBrightWhite": "#fbfbfb",
-      "terminal.ansiBrightYellow": "#fce94f",
-      "terminal.ansiCyan": "#06989a",
-      "terminal.ansiGreen": "#4e9a06",
-      "terminal.ansiMagenta": "#75507b",
-      "terminal.ansiRed": "#ae5e5e",
-      "terminal.ansiWhite": "#b5bbae",
-      "terminal.ansiYellow": "#c4a000",
-      "terminal.background": "#2e3436",
-      "terminal.foreground": "#b5bbae",
-      "terminal.selectionBackground": "#3465a440",
-      "[GitHub Plus]": {
-          "editor.background": "#fbfbfb",
-          "editor.foreground": "#2e3436",
-          "gitDecoration.ignoredResourceForeground": "#d0d0d0",
-          "panel.background": "#fbfbfb3d",
-          "statusBar.background": "#3465a4",
-          "statusBar.border": "#3465a4",
-          "statusBar.foreground": "#fbfbfb",
-      }
+    "terminal.ansiBlack": "#2e3436",
+    "terminal.ansiBlue": "#3465a4",
+    "terminal.ansiBrightBlack": "#555753",
+    "terminal.ansiBrightBlue": "#729fcf",
+    "terminal.ansiBrightCyan": "#34e2e2",
+    "terminal.ansiBrightGreen": "#8ae234",
+    "terminal.ansiBrightMagenta": "#ad7fa8",
+    "terminal.ansiBrightRed": "#f49797",
+    "terminal.ansiBrightWhite": "#fbfbfb",
+    "terminal.ansiBrightYellow": "#fce94f",
+    "terminal.ansiCyan": "#06989a",
+    "terminal.ansiGreen": "#4e9a06",
+    "terminal.ansiMagenta": "#75507b",
+    "terminal.ansiRed": "#ae5e5e",
+    "terminal.ansiWhite": "#b5bbae",
+    "terminal.ansiYellow": "#c4a000",
+    "terminal.background": "#2e3436",
+    "terminal.foreground": "#b5bbae",
+    "terminal.selectionBackground": "#3465a440",
+    "[GitHub Plus]": {
+      "editor.background": "#fbfbfb",
+      "editor.foreground": "#2e3436",
+      "gitDecoration.ignoredResourceForeground": "#d0d0d0",
+      "panel.background": "#fbfbfb3d",
+      "statusBar.background": "#3465a4",
+      "statusBar.border": "#3465a4",
+      "statusBar.foreground": "#fbfbfb",
+    }
   },
   "workbench.colorTheme": "GitHub Plus",
   "workbench.editor.closeEmptyGroups": false,
@@ -145,4 +82,59 @@
   "workbench.startupEditor": "none",
   "workbench.statusBar.feedback.visible": false,
   "workbench.tips.enabled": false,
+
+  // extension: Live Share
+  "liveshare.featureSet": "insiders",
+
+  // extension: Toggle Excluded Files
+  "toggleexcludedfiles.statusBar.enabled": true,
+
+  // extension: VS Intellicode
+  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+
+  // extension: C#
+  "omnisharp.loggingLevel": "warning",
+  "omnisharp.enableRoslynAnalyzers": true,
+
+  // extension: PowerShell
+  "powershell.integratedConsole.showOnStartup": false,
+
+  // extension: Code Spell Checker
+  "cSpell.enabledLanguageIds": [
+    "asciidoc",
+    "c",
+    "cpp",
+    "csharp",
+    "css",
+    "go",
+    "handlebars",
+    "html",
+    "jade",
+    "javascript",
+    "javascriptreact",
+    "latex",
+    "less",
+    "markdown",
+    "php",
+    "plaintext",
+    "pub",
+    "python",
+    "restructuredtext",
+    "rust",
+    "scss",
+    "text",
+    "typescript",
+    "typescriptreact",
+    "yml"
+  ],
+  "cSpell.userWords": [
+    "appcenter",
+    "fluentd",
+    "kubernetes",
+    "recurse",
+    "telegraf",
+    "testdouble",
+    "vanaheim",
+    "xunit"
+  ]
 }
