@@ -1,0 +1,49 @@
+# Ported from https://www.reddit.com/r/gnome/comments/2hj8bx/has_anyone_figured_out_a_way_to_keep_the_screen/cktqjqd/
+# We don't use the ZIP file as-is because we want to dynamically enable it to support our verison of GNOME shell.
+- name: No Screen Blank
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Create extension directory
+      file:
+        path: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost
+        state: directory
+      register: folder
+
+    - name: Copy extension code
+      copy:
+        src: extension.js
+        dest: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost
+      when: folder.changed
+
+    - name: Get GNOME shell version
+      shell: gnome-shell --version
+      when: folder.changed
+      register: gnome_shell_raw
+
+    - name: Extraction GNOME shell version
+      set_fact:
+        gnome_shell_version: "{{ gnome_shell_raw.stdout | regex_search(regexp, '\\1') }}"
+      vars:
+        regexp: 'GNOME Shell ((\d+)\.(\d+))\.\d+'
+      when: folder.changed
+
+    - name: Create extension manifest
+      blockinfile:
+        path: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost/metadata.json
+        create: yes
+        marker: '{mark}'
+        marker_begin: '{'
+        marker_end: '}'
+        block: |
+          "shell-version": ["{{ gnome_shell_version[0] }}"],
+          "uuid": "no-screen-blank@localhost",
+          "name": "No Screen Blank",
+          "description": "Disable blanking the screen after showing the lock screen"
+      when: folder.changed
+      register: metadata
+
+    - name: Enable extension
+      command: gnome-shell-extension-tool -e no-screen-blank@localhost
+      when: folder.changed and metadata.changed
