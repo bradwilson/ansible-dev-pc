@@ -2,7 +2,27 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    git_global_options:
+      - name: alias.wipe
+        value: "!git add -A && git commit -qm 'WIPE SAVEPOINT' && git reset HEAD~1 --hard"
+      - name: fetch.prune
+        value: "true"
+      - name: log.follow
+        value: "true"
+      - name: pack.useSparse
+        value: "true"
+      - name: push.default
+        value: "upstream"
+
   tasks:
+    - name: Update Git global config
+      git_config:
+        scope: global
+        name: "{{ item.name }}"
+        value: "{{ item.value }}"
+      loop: "{{ git_global_options }}"
+
     ### TODO: Currently non-functional
     # - name: Download git completion
     #   get_url:
