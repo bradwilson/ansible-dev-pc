@@ -3,6 +3,23 @@
   connection: local
 
   tasks:
+    - name: Add Git APT package repository
+      become: yes
+      apt_repository:
+        repo: ppa:git-core/ppa
+        filename: git
+        update_cache: no
+      register: apt_repository
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
     - name: Install APT packages
       become: yes
       apt:
@@ -11,6 +28,7 @@
           - git-gui
           - git-lfs
           - gitk
+        state: latest
 
     - name: Install ripgrep (18.04)
       become: yes
