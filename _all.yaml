@@ -67,6 +67,9 @@
 - import_playbook: nodejs/customization.yaml
 - import_playbook: nodejs/vscode.yaml
 
+# Postman
+- import_playbook: postman/core.yaml
+
 # PowerShell Core
 - import_playbook: powershell-core/core.yaml
 - import_playbook: powershell-core/vscode.yaml
