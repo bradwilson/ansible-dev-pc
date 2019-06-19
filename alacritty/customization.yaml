@@ -45,9 +45,9 @@
               x: 0
               y: 0
 
-          render_timer: false
-
-          persistent_logging: false
+          debug:
+            render_timer: false
+            persistent_logging: false
 
           draw_bold_text_with_bright_colors: true
 
