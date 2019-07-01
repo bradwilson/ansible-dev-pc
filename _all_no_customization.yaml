@@ -39,6 +39,9 @@
 - import_playbook: git/core.yaml
 - import_playbook: git/vscode.yaml
 
+# golang
+- import_playbook: golang/core.yaml
+
 # Kubernetes
 - import_playbook: kubectl/core.yaml
 - import_playbook: kubectl/vscode.yaml

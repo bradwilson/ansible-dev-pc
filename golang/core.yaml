@@ -1,0 +1,25 @@
+- name: Go
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    go_version: 1.12.6
+
+  tasks:
+    - name: Download go
+      become: yes
+      unarchive:
+        src: https://dl.google.com/go/go{{ go_version }}.linux-amd64.tar.gz
+        dest: /usr/local
+        remote_src: yes
+        creates: /usr/local/go/bin/go
+
+    - name: Add /usr/local/go/bin to PATH
+      lineinfile:
+        path: ~/.bashrc
+        line: export PATH=$PATH:/usr/local/go/bin
+
+    - name: Create default go folder
+      file:
+        path: ~/go
+        state: directory
