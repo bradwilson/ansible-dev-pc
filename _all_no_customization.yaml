@@ -1,0 +1,100 @@
+#########################################################################################
+#
+#  Note that import order here is important, so rearranging import lists
+#  is *not* recommended.
+#
+#########################################################################################
+
+- name: Configure Ubuntu machine for development work
+  hosts: 127.0.0.1
+  connection: local
+
+##### Operating system packages and configuration
+
+- import_playbook: core.yaml
+
+##### Developer tools
+
+# Visual Studio Code
+- import_playbook: vscode/core.yaml
+
+# Ansible
+- import_playbook: ansible/vscode.yaml
+
+# Azure
+- import_playbook: azure/az.yaml
+- import_playbook: azure/azshell.yaml
+- import_playbook: azure/storage-explorer.yaml
+- import_playbook: azure/vscode.yaml
+
+# Docker
+- import_playbook: docker/core.yaml
+- import_playbook: docker/vscode.yaml
+
+# .NET Core
+- import_playbook: dotnet-core/core.yaml
+- import_playbook: dotnet-core/vscode.yaml
+
+# git
+- import_playbook: git/core.yaml
+- import_playbook: git/vscode.yaml
+
+# Kubernetes
+- import_playbook: kubectl/core.yaml
+- import_playbook: kubectl/vscode.yaml
+
+# QEMU/KVM (virtualization platform)
+- import_playbook: kvm/core.yaml
+
+# Mono (.NET Framework)
+- import_playbook: mono/core.yaml
+- import_playbook: mono/vscode.yaml
+
+# NodeJS
+- import_playbook: nodejs/core.yaml
+- import_playbook: nodejs/vscode.yaml
+
+# Postman
+- import_playbook: postman/core.yaml
+
+# PowerShell Core
+- import_playbook: powershell-core/core.yaml
+- import_playbook: powershell-core/vscode.yaml
+
+# Python
+- import_playbook: python/core.yaml
+- import_playbook: python/vscode.yaml
+
+##### Applications (free)
+
+# Alacritty (high performance terminal application)
+- import_playbook: alacritty/core.yaml
+
+# Google Chrome browser
+- import_playbook: google-chrome/core.yaml
+
+# Prettier version of ping w/ graphs
+- import_playbook: prettyping/core.yaml
+
+# Slack desktop application
+- import_playbook: slack/core.yaml
+
+# RDP/X/VNC/SSH client
+- import_playbook: remmina/core.yaml
+
+# VideoLan Client (primarily for codecs)
+- import_playbook: vlc/core.yaml
+
+##### Applications (commercial license required)
+
+# Beyond Compare 4
+- import_playbook: bc4/core.yaml
+
+# Insync (Google Drive sync tool)
+- import_playbook: insync/core.yaml
+
+# JetBrains Toolbox (used to install/updated JetBrains tools)
+- import_playbook: jetbrains/core.yaml
+
+# Sublime Text and Sublime Merge
+- import_playbook: sublime/core.yaml
