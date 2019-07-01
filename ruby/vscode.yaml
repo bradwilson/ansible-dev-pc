@@ -1,0 +1,9 @@
+- name: Ruby (VS Code)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extention
+      command: code --install-extension rebornix.ruby
+      args:
+        creates: ~/.vscode/extensions/rebornix.ruby-*/package.json
