@@ -4,6 +4,6 @@
 
   tasks:
     - name: Install VS Code Extention
-      command: code --install-extension peterjausovec.vscode-docker
+      command: code --install-extension ms-azuretools.vscode-docker
       args:
-        creates: ~/.vscode/extensions/peterjausovec.vscode-docker-*/package.json
+        creates: ~/.vscode/extensions/ms-azuretools.vscode-docker-*/package.json
