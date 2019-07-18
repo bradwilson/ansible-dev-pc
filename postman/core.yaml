@@ -11,6 +11,12 @@
         remote_src: yes
         creates: /opt/Postman/Postman
 
+    - name: Ensure local applications folder exists
+      become: yes
+      file:
+        path: /usr/local/share/applications
+        state: directory
+
     - name: Add Postman desktop file
       become: yes
       copy:
