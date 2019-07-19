@@ -78,8 +78,8 @@
           GIT_PROMPT_COMMAND_OK=""
           GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoKubeContext\`\`echoAksAccount\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
-          GIT_PROMPT_END_USER="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor}\n${BoldGreen} sh$ ${ResetColor}"
-          GIT_PROMPT_END_ROOT="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor}\n${BoldRed} sh# ${ResetColor} "
+          GIT_PROMPT_END_USER="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor}\n${BoldBlack} `whoami`${White} @ ${BoldBlack}`hostname` ${BoldGreen} sh$ ${ResetColor}"
+          GIT_PROMPT_END_ROOT="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor}\n${BoldBlack} `whoami`${White} @ ${BoldBlack}`hostname` ${BoldRed} sh# ${ResetColor} "
 
           # Individual overrides
           GIT_PROMPT_BRANCH="${BlueBg}${BoldBlue}${BoldWhite} "
