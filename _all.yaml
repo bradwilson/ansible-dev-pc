@@ -18,5 +18,6 @@
 - import_playbook: dotnet-core/customization.yaml
 - import_playbook: git/customization.yaml
 - import_playbook: kubectl/customization.yaml
+- import_playbook: no-screen-blank/core.yaml
 - import_playbook: nodejs/customization.yaml
 - import_playbook: alacritty/customization.yaml
