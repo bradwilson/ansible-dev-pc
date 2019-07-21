@@ -1,0 +1,13 @@
+- name: Go (VS Code)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install VS Code Extentions
+      command: code --install-extension {{ item }}
+      args:
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - ms-vscode.go
+        - premparihar.gotestexplorer
+        - maxmedia.go-prof
