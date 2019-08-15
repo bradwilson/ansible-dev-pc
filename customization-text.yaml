@@ -8,14 +8,52 @@
       apt:
         package:
           - colordiff
-          - cowsay
           - fortune
           - lolcat
+          - neofetch
 
-    - name: Add fortune to ~/.bashrc
-      lineinfile:
+    - name: Override neofetch configuration
+      copy:
+        dest: ~/.config/neofetch/config.conf
+        content: |
+          print_info() {
+              info title
+
+              prin ""
+
+              info "OS" distro
+              info "Kernel" kernel
+              info "Uptime" uptime
+              info "IP" local_ip
+
+              prin ""
+
+              info "Host" model
+              info "CPU" cpu
+              info "Memory" memory
+              info "GPU" gpu
+              info "Screens" resolution
+              info "Disk" disk
+              info "Battery" battery
+          }
+
+          cpu_temp="C"
+          refresh_rate="on"
+          block_range=(0 15)
+          cpu_display="infobar"
+          memory_display="infobar"
+          battery_display="infobar"
+          disk_display="infobar"
+          thumbnail_dir="${XDG_CACHE_HOME:-${HOME}/.cache}/thumbnails/neofetch"
+
+    - name: Add neofetch & fortune to ~/.bashrc
+      blockinfile:
         path: ~/.bashrc
-        line: fortune | cowsay -W 70 -f "$(ls /usr/share/cowsay/cows | sort -R | head -1)" | lolcat
+        marker: "### {mark} Ansible managed: login banner"
+        block: |
+          echo ""
+          neofetch
+          fortune | lolcat
 
     - name: Disable sudo password requirement
       become: yes
