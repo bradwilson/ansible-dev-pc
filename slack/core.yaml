@@ -3,10 +3,13 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Add Slack APT package key
       become: yes
       apt_key:
         url: https://packagecloud.io/slacktechnologies/slack/gpgkey
+      when: not is_wsl
 
     - name: Add Slack APT package repository
       become: yes
@@ -15,12 +18,13 @@
         filename: slack
         update_cache: no
       register: apt_repository
+      when: not is_wsl
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository.changed
+      when: not is_wsl and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
@@ -29,3 +33,4 @@
       become: yes
       apt:
         package: slack-desktop
+      when: not is_wsl

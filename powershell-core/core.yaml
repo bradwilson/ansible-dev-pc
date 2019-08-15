@@ -3,8 +3,29 @@
   connection: local
 
   tasks:
+    - name: Add Microsoft APT package key
+      become: yes
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+
+    - name: Add Microsoft APT package repository
+      become: yes
+      apt_repository:
+        repo: deb [arch=amd64] https://packages.microsoft.com/ubuntu/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main
+        filename: microsoft-prod
+        update_cache: no
+      register: apt_repository
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
     - name: Install PowerShell Core
       become: yes
-      command: snap install --classic powershell
-      args:
-        creates: /snap/bin/pwsh
+      apt:
+        package: powershell

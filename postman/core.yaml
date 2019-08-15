@@ -3,6 +3,8 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install Postman
       become: yes
       unarchive:
@@ -10,15 +12,18 @@
         dest: /opt
         remote_src: yes
         creates: /opt/Postman/Postman
+      when: not is_wsl
 
     - name: Ensure local applications folder exists
       become: yes
       file:
         path: /usr/local/share/applications
         state: directory
+      when: not is_wsl
 
     - name: Add Postman desktop file
       become: yes
       copy:
         src: postman.desktop
         dest: /usr/local/share/applications/postman.desktop
+      when: not is_wsl

@@ -3,6 +3,8 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install QEMU/KVM
       become: yes
       apt:
@@ -13,6 +15,7 @@
           - ovmf
           - qemu-kvm
           - virt-manager
+      when: not is_wsl
 
     - name: Enable QEMU/KVM for current user
       become: yes
@@ -20,3 +23,4 @@
         name={{ lookup('env', "USER") }}
         groups=libvirt
         append=yes
+      when: not is_wsl

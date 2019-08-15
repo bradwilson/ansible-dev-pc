@@ -6,10 +6,13 @@
     toolbox_ver: 1.14.5179
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Determine if Toolbox is installed
       stat:
         path: /usr/local/bin/jetbrains-toolbox
       register: toolbox_path
+      when: not is_wsl
 
     - block:
 
@@ -37,4 +40,4 @@
       - name: Launch Jetbrains Toolbox (first run experience)
         command: jetbrains-toolbox
 
-      when: toolbox_path.stat.exists == False
+      when: not is_wsl and toolbox_path.stat.exists == False

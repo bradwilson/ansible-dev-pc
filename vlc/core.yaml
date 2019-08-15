@@ -3,7 +3,10 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install VLC
       become: yes
       apt:
         package: vlc
+      when: not is_wsl

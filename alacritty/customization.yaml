@@ -3,10 +3,13 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Ensure Alacritty configuration folder exists
       file:
         path: ~/.config/alacritty
         state: directory
+      when: not is_wsl
 
     - name: Update ~/.config/alacritty/alacritty.yml
       copy:
@@ -215,3 +218,4 @@
             - { key: F11,      mods: Super,   chars: "\x1b[23;3~"                      }
             - { key: F12,      mods: Super,   chars: "\x1b[24;3~"                      }
             - { key: NumpadEnter,             chars: "\n"                              }
+      when: not is_wsl

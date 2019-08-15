@@ -3,10 +3,13 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Add Google APT package key
       become: yes
       apt_key:
         url: https://dl.google.com/linux/linux_signing_key.pub
+      when: not is_wsl
 
     - name: Add Google Chrome APT package repository
       become: yes
@@ -15,12 +18,13 @@
         filename: google-chrome
         update_cache: no
       register: apt_repository
+      when: not is_wsl
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository.changed
+      when: not is_wsl and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
@@ -29,3 +33,4 @@
       become: yes
       apt:
         package: google-chrome-stable
+      when: not is_wsl

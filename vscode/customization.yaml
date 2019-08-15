@@ -3,6 +3,8 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install VS Code Extentions
       command: code --install-extension {{ item }}
       args:
@@ -37,3 +39,4 @@
           else
             export EDITOR='nano'
           fi
+      when: not is_wsl

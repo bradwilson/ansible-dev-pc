@@ -3,6 +3,8 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Add Microsoft APT package key
       become: yes
       apt_key:
@@ -29,3 +31,14 @@
       become: yes
       apt:
         package: code
+
+    # This works around the fact that invoking 'code' from WSL 2 is a broken
+    # experience and instead relies on the user running an X server in Windows
+    # to display VS Code "remotely"
+    - name: Create code shortcut (WSL)
+      become: yes
+      copy:
+        src: code
+        dest: /usr/local/bin
+        mode: 0755
+      when: is_wsl

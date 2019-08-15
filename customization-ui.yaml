@@ -17,12 +17,15 @@
         url: https://extensions.gnome.org/extension-data/topicons-redux%40pop-planet.info.v6.shell-extension.zip
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Create GNOME extension directory
       file:
         path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
         state: directory
       register: new_extensions
       loop: "{{ gnome_extensions }}"
+      when: not is_wsl
 
     - name: Extract GNOME extension
       unarchive:
@@ -31,12 +34,12 @@
         creates: "~/.local/share/gnome-shell/extensions/{{ item.item.name }}/metadata.json"
         remote_src: yes
       loop: "{{ new_extensions.results }}"
-      when: item.changed
+      when: not is_wsl and item.changed
 
     - name: Enable GNOME extension
       command: gnome-shell-extension-tool -e "{{ item.item.name }}"
       loop: "{{ new_extensions.results }}"
-      when: item.changed
+      when: not is_wsl and item.changed
 
     - name: Install Ubuntu Mono Nerd Fonts
       become: yes
@@ -54,6 +57,7 @@
       apt_key:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: 89993A70
+      when: not is_wsl
 
     - name: Add Gnome themes APT package repository
       become: yes
@@ -62,12 +66,13 @@
         filename: snwh
         update_cache: no
       register: apt_repository
+      when: not is_wsl
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository.changed
+      when: not is_wsl and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
@@ -78,6 +83,7 @@
         package:
           - numix-gtk-theme
           - paper-icon-theme
+      when: not is_wsl
 
     - name: Install PIP
       become: yes
@@ -85,11 +91,13 @@
         package:
           - python-pip
           - python3-pip
+      when: not is_wsl
 
     - name: Install psutil Python package
       become: yes
       pip:
         name: psutil
+      when: not is_wsl
 
     - name: Update customization with dconf
       dconf:
@@ -326,3 +334,4 @@
           value: "true"
         - key: /org/gnome/shell/keybindings/open-application-menu
           value: "@as []"
+      when: not is_wsl

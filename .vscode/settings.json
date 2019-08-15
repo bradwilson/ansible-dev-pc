@@ -5,6 +5,6 @@
       "*.retry": true
     },
     "files.associations": {
-        "*.yaml": "ansible"
+      "*.yaml": "ansible"
     }
 }

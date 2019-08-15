@@ -71,16 +71,32 @@
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: prompt enhancement"
         block: |
+          # Set up support for X server in WSL
+          if [ -z "$WSL_DISTRO_NAME" ]; then
+            # Write current path in the terminal title bar
+            function writeCwdInTitlebar() {
+              case "$TERM" in
+                xterm*|rxvt*)
+                  echo -ne "\e]0;`whoami`@`hostname`$([ -z "$WSL_DISTRO_NAME" ] || echo -n " (WSL: $WSL_DISTRO_NAME)"): `dirs +0`\a"
+                  ;;
+                *)
+                  ;;
+              esac
+            }
+          else
           # Write current path in the terminal title bar
-          function writeCwdInTitlebar() {
-            case "$TERM" in
-              xterm*|rxvt*)
-                echo -ne "\e]0;`whoami`@`hostname`: `dirs +0`\a"
-                ;;
-              *)
-                ;;
-            esac
-          }
+            function writeCwdInTitlebar() {
+              case "$TERM" in
+                xterm*|rxvt*)
+                  echo -ne "\e]0;[WSL] $WSL_DISTRO_NAME: `dirs +0`\a"
+                  ;;
+                *)
+                  ;;
+              esac
+            }
+
+            export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+          fi
 
           # Force newline when things don't end cleanly
           clear_newline() {

@@ -6,6 +6,8 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install pre-requisites
       become: yes
       apt:
@@ -13,12 +15,14 @@
           - libgconf-2-4
           - libgnome-keyring-common
           - libgnome-keyring-dev
+      when: not is_wsl
 
     - name: Create Storage Explorer download location
       become: yes
       file:
         path: /opt/microsoft/storage-explorer
         state: directory
+      when: not is_wsl
 
     - name: Download Storage Explorer
       become: yes
@@ -27,15 +31,18 @@
         dest: /opt/microsoft/storage-explorer
         remote_src: yes
         creates: /opt/microsoft/storage-explorer/StorageExplorer
+      when: not is_wsl
 
     - name: Ensure local applications folder exists
       become: yes
       file:
         path: /usr/local/share/applications
         state: directory
+      when: not is_wsl
 
     - name: Add Storage Explorer desktop file
       become: yes
       copy:
         src: storage-explorer.desktop
         dest: /usr/local/share/applications/storage-explorer.desktop
+      when: not is_wsl
