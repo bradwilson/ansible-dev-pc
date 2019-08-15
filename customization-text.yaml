@@ -12,6 +12,11 @@
           - lolcat
           - neofetch
 
+    - name: Ensure neofetch configuration folder exists
+      file:
+        path: ~/.config/neofetch
+        state: directory
+
     - name: Override neofetch configuration
       copy:
         dest: ~/.config/neofetch/config.conf
