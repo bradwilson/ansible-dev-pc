@@ -18,6 +18,7 @@
         - eamodio.toggle-excluded-files                   # Toggle Excluded Files
         - pflannery.vscode-versionlens                    # Version Lens
         - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
+        - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
 
     - name: Override default VS Code preferences
       copy:
