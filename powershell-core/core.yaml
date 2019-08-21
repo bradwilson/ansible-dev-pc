@@ -3,29 +3,39 @@
   connection: local
 
   tasks:
-    - name: Add Microsoft APT package key
+    - name: Add Microsoft APT package key (18.04)
       become: yes
       apt_key:
         url: https://packages.microsoft.com/keys/microsoft.asc
+      when: ansible_distribution_release == 'bionic'
 
-    - name: Add Microsoft APT package repository
+    - name: Add Microsoft APT package repository (18.04)
       become: yes
       apt_repository:
         repo: deb [arch=amd64] https://packages.microsoft.com/ubuntu/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository
+      when: ansible_distribution_release == 'bionic'
 
-    - name: Update APT package list
+    - name: Update APT package list (18.04)
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository.changed
+      when: ansible_distribution_release == 'bionic' and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: Install PowerShell Core
+    - name: Install PowerShell Core (18.04)
       become: yes
       apt:
         package: powershell
+      when: ansible_distribution_release == 'bionic'
+
+    - name: Install PowerShell Core (18.10 or later)
+      become: yes
+      command: snap install --classic powershell
+      args:
+        creates: /snap/bin/pwsh
+      when: ansible_distribution_release != 'bionic'
