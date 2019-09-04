@@ -6,4 +6,7 @@
     - name: Install Ruby APT package
       become: yes
       apt:
-        package: ruby
+        package:
+          - ruby
+          - ruby-bundler
+          - ruby-dev
