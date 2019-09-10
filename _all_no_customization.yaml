@@ -35,6 +35,9 @@
 - import_playbook: dotnet-core/core.yaml
 - import_playbook: dotnet-core/vscode.yaml
 
+# Flameshot
+- import_playbook: flameshot/core.yaml
+
 # git
 - import_playbook: git/core.yaml
 - import_playbook: git/vscode.yaml
