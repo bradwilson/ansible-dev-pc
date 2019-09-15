@@ -3,6 +3,8 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Add Mono APT package key
       become: yes
       apt_key:
@@ -30,3 +32,9 @@
       become: yes
       apt:
         package: mono-complete
+      register: mono_install
+
+    - name: Disable Mono binfmt on WSL
+      become: yes
+      shell: update-binfmts --disable cli
+      when: is_wsl and mono_install.changed
