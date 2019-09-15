@@ -3,7 +3,10 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install VS Code Extention
       command: code --install-extension ms-python.python
       args:
         creates: ~/.vscode/extensions/ms-python.python-*/package.json
+      when: not is_wsl

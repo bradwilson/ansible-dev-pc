@@ -3,7 +3,10 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install VS Code Extention
       command: code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
       args:
         creates: ~/.vscode/extensions/ms-kubernetes-tools.vscode-kubernetes-tools-*/package.json
+      when: not is_wsl

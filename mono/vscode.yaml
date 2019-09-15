@@ -3,6 +3,8 @@
   connection: local
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+
     - name: Install VS Code Extentions
       command: code --install-extension {{ item }}
       args:
@@ -10,3 +12,4 @@
       loop:
         - ms-vscode.csharp     # C#
         - k--kato.docomment    # C# XML Documentation Comments
+      when: not is_wsl

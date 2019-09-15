@@ -9,6 +9,7 @@
       become: yes
       apt_key:
         url: https://packages.microsoft.com/keys/microsoft.asc
+      when: not is_wsl
 
     - name: Add VS Code APT package repository
       become: yes
@@ -17,12 +18,13 @@
         filename: vscode
         update_cache: no
       register: apt_repository
+      when: not is_wsl
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository.changed
+      when: not is_wsl and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
@@ -31,14 +33,4 @@
       become: yes
       apt:
         package: code
-
-    # This works around the fact that invoking 'code' from WSL 2 is a broken
-    # experience and instead relies on the user running an X server in Windows
-    # to display VS Code "remotely"
-    - name: Create code shortcut (WSL)
-      become: yes
-      copy:
-        src: code
-        dest: /usr/local/bin
-        mode: 0755
-      when: is_wsl
+      when: not is_wsl
