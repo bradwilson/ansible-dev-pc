@@ -38,6 +38,7 @@
   "search.useGlobalIgnoreFiles": true,
   "terminal.integrated.fontFamily": "UbuntuMono NF",
   "terminal.integrated.fontSize": 16,
+  "terminal.integrated.fontWeightBold": "normal",
   "terminal.integrated.rendererType": "canvas",
   "window.restoreFullscreen": true,
   "window.restoreWindows": "none",
