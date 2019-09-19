@@ -5,17 +5,17 @@ This repository contains useful scripts to set up a Linux development machine. T
 - Ubuntu ([download](https://www.ubuntu.com/download/desktop))
   - 18.04 (bionic)
   - 18.10 (cosmic)
-  - 19.04 <sup>(1)</sup> (disco)
+  - 19.04 (disco)
 - Pop!_OS ([download](https://system76.com/pop))
   - 18.04
   - 18.10
-  - 19.04 <sup>(1)</sup>
+  - 19.04
+
+_Note: The scripts have been updated to support Ubuntu on WSL ("Windows Subsystem for Linux"), though some features require WSL 2._
 
 Other Ubuntu variants may work (like Mint) but they have not been tested. Non-Ubuntu variants are unsupported (with no
-intention of supporting them). Similarly, shell for customization work is `bash`; other shells are left as an exercise
-to the reader.
-
-_<sup>(1)</sup> .NET Core does not support 19.04 as of today (13 May 2019), so you may find that running the .NET Core installation scripts fails on a 19.04-based OS. Please use either 18.04 or 18.10 until support has been added._
+intention of supporting them). Similarly, text shell for customization work is `bash`, and UI shell customization work is for
+Gnome; other shells are left as an exercise to the reader.
 
 ## Please fork this and customize it
 
@@ -57,9 +57,9 @@ Linux for screen capture.
 
 # Running
 
-Before running the scripts, please review `_all.yaml` and comment out software you don't want installed. In particular,
-you should examine every `customization.yaml` file as these contain my personal opinionated customizations; feel free to
-comment out sections of those files, or ignore them entirely.
+Before running the scripts, please review `_all.yaml` and `_all_no_customization.yaml`, and comment out software you don't
+want installed. In particular, most folders contain `customization.yaml` files which tend to contain my personal opinions on
+customizations; feel free to comment out sections of those files, or ignore them entirely.
 
 To run the setup:
 
@@ -72,4 +72,4 @@ You can also run individual files if you'd prefer to take more control over what
 You will be prompted for your sudo password. Most of the operations performed by these scripts require root access.
 
 _**Since core OS packages are upgraded, it is safest to reboot the PC/VM after running these scripts. At a bare minimum,
-many customizations done here will require you to log out and log back in.**_
+many UI shell customizations done here will require you to log out and log back in.**_
