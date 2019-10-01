@@ -48,7 +48,7 @@
             if which kubectl > /dev/null; then
               CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null)
               if [[ $CURRENT_CONTEXT != "" ]]; then
-                echo -ne " \033[1;32;100m  \033[37m$CURRENT_CONTEXT \033[0m"
+                echo -ne " \033[92;100m  \033[97m$CURRENT_CONTEXT \033[0m"
               fi
             fi
           }
@@ -63,7 +63,7 @@
               if [[ $CURRENT_SUB != "" ]]; then
                 CURRENT_ACCOUNT=$(cat ~/.azure/azureProfile.json | jq -r ".subscriptions[] | select(.id==\"$CURRENT_SUB\") | .name")
                 if [[ $CURRENT_ACCOUNT != "" ]]; then
-                  echo -ne " \033[1;33;46m  \033[37m$CURRENT_ACCOUNT \033[0m"
+                  echo -ne " \033[93;46m  \033[97m$CURRENT_ACCOUNT \033[0m"
                 fi
               fi
             fi
