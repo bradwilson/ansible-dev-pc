@@ -134,7 +134,7 @@
         - key: /org/gnome/settings-daemon/plugins/xsettings/antialiasing
           value: "'grayscale'"
         - key: /org/gnome/shell/favorite-apps
-          value: "['alacritty.desktop', 'google-chrome.desktop', 'firefox.desktop', 'postman.desktop', 'slack.desktop', 'vmware-workstation.desktop', 'virt-manager.desktop', 'code.desktop', 'jetbrains-rider.desktop', 'sublime_text.desktop', 'sublime_merge.desktop', 'org.remmina.Remmina.desktop']"
+          value: "['com.alacritty.Alacritty.desktop', 'brave-browser.desktop', 'firefox.desktop', 'google-chrome.desktop', 'postman.desktop', 'slack.desktop', 'virt-manager.desktop', 'code.desktop', 'jetbrains-rider.desktop', 'jetbrains-pycharm-ce.desktop', 'sublime_text.desktop', 'sublime_merge.desktop', 'spotify.desktop', 'org.remmina.Remmina.desktop']"
         - key: /org/gnome/shell/extensions/desktop-icons/show-home
           value: "false"
         - key: /org/gnome/shell/extensions/desktop-icons/show-trash

@@ -27,6 +27,9 @@
 - import_playbook: azure/storage-explorer.yaml
 - import_playbook: azure/vscode.yaml
 
+# Brave
+- import_playbook: brave/core.yaml
+
 # Docker
 - import_playbook: docker/core.yaml
 - import_playbook: docker/vscode.yaml
@@ -106,6 +109,9 @@
 
 # JetBrains Toolbox (used to install/updated JetBrains tools)
 - import_playbook: jetbrains/core.yaml
+
+# Spotify
+- import_playbook: spotify/core.yaml
 
 # Sublime Text and Sublime Merge
 - import_playbook: sublime/core.yaml
