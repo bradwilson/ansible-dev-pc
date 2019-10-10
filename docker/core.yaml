@@ -2,12 +2,12 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    apt_override:
-      # snwh doesn't support disco yet, so hold it back to cosmic until it does
-      docker_distro: "{{ (ansible_distribution_release == 'disco') | ternary('cosmic', ansible_distribution_release) }}"
-
   tasks:
+    - name: Install Docker pre-requisites
+      become: yes
+      apt:
+        package: gnupg-agent
+
     - name: Add Docker APT package key
       become: yes
       apt_key:
@@ -16,7 +16,7 @@
     - name: Add Docker APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ apt_override.docker_distro }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
         filename: docker
         update_cache: no
       register: apt_repository
