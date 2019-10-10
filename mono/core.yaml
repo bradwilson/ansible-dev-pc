@@ -31,7 +31,9 @@
     - name: Install Mono
       become: yes
       apt:
-        package: mono-complete
+        package:
+          - mono-complete
+          - mono-vbnc
       register: mono_install
 
     - name: Disable Mono binfmt on WSL
