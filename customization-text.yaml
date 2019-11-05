@@ -137,6 +137,7 @@
           export GREP_COLORS='1;35;40'
           export LSCOLORS=GxFxCxDxBxegedabagaced
 
+          alias clip='xclip -selection clipboard'
           alias diff='colordiff'
           alias dir='ls -lA'
           alias grep="grep --color=auto"
