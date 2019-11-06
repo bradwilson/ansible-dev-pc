@@ -36,11 +36,11 @@
 
           font:
             normal:
-              family: UbuntuMono NF
+              family: FiraCode Nerd Font Mono
               style: Regular
             bold:
-              style: Regular
-            size: 11.0
+              style: Medium
+            size: 10.0
             offset:
               x: 0
               y: 0
