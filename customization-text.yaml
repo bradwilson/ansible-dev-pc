@@ -78,6 +78,12 @@
         path: /etc/sudoers
         line: "{{ lookup('env', 'USER') }} ALL=(ALL) NOPASSWD: ALL"
 
+    - name: Set default umask
+      lineinfile:
+        path: ~/.profile
+        line: umask 0077
+        regex: "^#* *umask"
+
     - name: Enhance terminal prompt
       blockinfile:
         path: ~/.bashrc
