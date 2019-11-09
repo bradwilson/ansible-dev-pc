@@ -82,7 +82,7 @@
       lineinfile:
         path: ~/.profile
         line: umask 0077
-        regex: "^#* *umask"
+        regexp: "^#* *umask"
 
     - name: Enhance terminal prompt
       blockinfile:
