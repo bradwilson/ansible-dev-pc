@@ -34,3 +34,17 @@
       apt:
         package: code
       when: not is_wsl
+
+    - name: Create shortcut to Windows ~/.vscode
+      file:
+        path: ~/.vscode
+        src: /mnt/c/Users/{{ lookup('ENV', 'USER' )}}/.vscode
+        state: link
+      when: is_wsl
+
+    - name: Create shortcut to Windows ~/.config/Code
+      file:
+        path: ~/.config/Code
+        src: /mnt/c/Users/{{ lookup('ENV', 'USER' )}}/AppData/Roaming/Code
+        state: link
+      when: is_wsl

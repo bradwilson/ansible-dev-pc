@@ -3,10 +3,7 @@
   connection: local
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
-
     - name: Install VS Code Extention
       command: code --install-extension ms-azuretools.vscode-docker
       args:
         creates: ~/.vscode/extensions/ms-azuretools.vscode-docker-*/package.json
-      when: not is_wsl

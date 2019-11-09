@@ -3,8 +3,6 @@
   connection: local
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
-
     - name: Install VS Code Extention
       command: code --install-extension {{ item }}
       args:
@@ -12,4 +10,3 @@
       loop:
         - eamodio.gitlens
         - GitHub.vscode-pull-request-github
-      when: not is_wsl

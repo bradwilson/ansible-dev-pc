@@ -19,19 +19,16 @@
         - pflannery.vscode-versionlens                    # Version Lens
         - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
         - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
-      when: not is_wsl
 
     - name: Override default VS Code preferences
       copy:
         src: settings.json
         dest: ~/.config/Code/User/settings.json
-      when: not is_wsl
 
     - name: Override default VS Code key bindings
       copy:
         src: keybindings.json
         dest: ~/.config/Code/User/keybindings.json
-      when: not is_wsl
 
     - name: Use VS Code as default editor via GUI, nano via SSH
       blockinfile:
