@@ -211,7 +211,7 @@
               mkdir -p ~/.ssh
               chmod 700 ~/.ssh
               ln -fs $HOME/gdrive/DevBinaries/.ssh/* ~/.ssh/
-              chmod 700 ~/.ssh/*
+              chmod 700 ~/.ssh/* 2>/dev/null
 
               if [ ! -e ~/.ssh/authorized_keys ]; then
                 ln -s $HOME/gdrive/DevBinaries/.ssh/id_rsa.pub ~/.ssh/authorized_keys
