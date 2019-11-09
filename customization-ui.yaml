@@ -63,11 +63,12 @@
         - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold/complete/Ubuntu%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.ttf
         - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold-Italic/complete/Ubuntu%20Mono%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf
       register: fonts_downloaded
+      when: not is_wsl
 
     - name: Update font cache
       become: yes
       command: fc-cache -sv
-      when: fonts_downloaded.changed
+      when: not is_wsl and fonts_downloaded.changed
 
     - name: Add Gnome themes APT package key
       become: yes
