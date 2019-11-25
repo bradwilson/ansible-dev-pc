@@ -3,10 +3,33 @@
   connection: local
 
   tasks:
-    - name: Install Ruby APT package
-      become: yes
+    - name: Install pre-requisites
+      becomes: yes
       apt:
         package:
-          - ruby
-          - ruby-bundler
-          - ruby-dev
+          - libssl-dev
+          - libreadline-dev
+          - zlib1g-dev
+
+    - name: Install rbenv
+      git:
+        repo: https://github.com/rbenv/rbenv
+        dest: ~/.rbenv
+
+    - name: Install ruby-build
+      git:
+        repo: https://github.com/rbenv/ruby-build.git
+        dest: ~/.rbenv/plugins/ruby-build
+
+    - name: Ensure shims folder exists
+      file:
+        path: ~/.rbenv/shims
+        state: directory
+
+    - name: Enable rbenv in bash
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Ruby"
+        block: |
+          export PATH="$HOME/.rbenv/bin:$PATH"
+          eval "$(rbenv init -)"

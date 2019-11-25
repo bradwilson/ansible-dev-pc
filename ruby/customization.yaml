@@ -1,0 +1,17 @@
+- name: Ruby (customization)
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    ruby_version: 2.6.5
+
+  tasks:
+    - name: Install Ruby {{ ruby_version }}
+      shell: rbenv install {{ ruby_version }}
+      args:
+        creates: ~/.rbenv/versions/{{ ruby_version }}/bin/ruby
+      register: ruby_install
+
+    - name: Use Ruby {{ ruby_version }} by default
+      shell: rbenv global {{ ruby_version }}
+      when: ruby_install.changed

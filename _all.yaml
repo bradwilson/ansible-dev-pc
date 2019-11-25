@@ -20,4 +20,5 @@
 - import_playbook: kubectl/customization.yaml
 - import_playbook: no-screen-blank/core.yaml
 - import_playbook: nodejs/customization.yaml
+- import_playbook: ruby/customization.yaml
 - import_playbook: alacritty/customization.yaml
