@@ -154,5 +154,25 @@
   {
     "key": "ctrl+shift+t",
     "command": "-workbench.action.reopenClosedEditor"
+  },
+  {
+    "key": "shift+alt+up",
+    "command": "-editor.action.copyLinesUpAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+alt+up",
+    "command": "editor.action.insertCursorAbove",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+alt+down",
+    "command": "-editor.action.copyLinesDownAction",
+    "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "shift+alt+down",
+    "command": "editor.action.insertCursorBelow",
+    "when": "editorTextFocus && !editorReadonly"
   }
 ]
