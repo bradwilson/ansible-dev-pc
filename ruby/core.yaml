@@ -4,7 +4,7 @@
 
   tasks:
     - name: Install pre-requisites
-      becomes: yes
+      become: yes
       apt:
         package:
           - libssl-dev
