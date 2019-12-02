@@ -13,7 +13,7 @@ This repository contains useful scripts to set up a Linux development machine. T
   - 19.04
   - 19.10
 
-_Note: The scripts have been updated to support Ubuntu on WSL ("Windows Subsystem for Linux"), though some features require WSL 2.
+_Note: The scripts have been updated to support [Ubuntu on WSL](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6) ("Windows Subsystem for Linux"), though some features require WSL 2.
 In addition, some software does not fully support 19.10 yet, so 19.04 versions are installed when necessary._
 
 Other Ubuntu variants may work (like Mint) but they have not been tested. Non-Ubuntu variants are unsupported (with no
