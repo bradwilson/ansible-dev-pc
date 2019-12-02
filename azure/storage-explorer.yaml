@@ -1,6 +1,3 @@
-# .NET Core 2.x dependency
-- import_playbook: ../dotnet-core/core.yaml
-
 - name: Azure (Storage Explorer)
   hosts: 127.0.0.1
   connection: local
@@ -8,30 +5,18 @@
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
 
-    - name: Install pre-requisites
+    - name: Install Storage Explorer
       become: yes
-      apt:
-        package:
-          - libgconf-2-4
-          - libgnome-keyring-common
-          - libgnome-keyring-dev
+      command: snap install storage-explorer
+      args:
+        creates: /snap/bin/storage-explorer
       when: not is_wsl
+      register: storage_explorer_installed
 
-    - name: Create Storage Explorer download location
+    - name: Connect Storage Explorer to Password Manager
       become: yes
-      file:
-        path: /opt/microsoft/storage-explorer
-        state: directory
-      when: not is_wsl
-
-    - name: Download Storage Explorer
-      become: yes
-      unarchive:
-        src: https://go.microsoft.com/fwlink/?LinkId=722418&clcid=0x409
-        dest: /opt/microsoft/storage-explorer
-        remote_src: yes
-        creates: /opt/microsoft/storage-explorer/StorageExplorer
-      when: not is_wsl
+      command: snap connect storage-explorer:password-manager-service :password-manager-service
+      when: not is_wsl and storage_explorer_installed.changed
 
     - name: Ensure local applications folder exists
       become: yes

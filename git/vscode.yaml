@@ -9,4 +9,4 @@
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
         - eamodio.gitlens
-        - GitHub.vscode-pull-request-github
+        - github.vscode-pull-request-github

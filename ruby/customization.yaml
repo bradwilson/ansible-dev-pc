@@ -7,11 +7,11 @@
 
   tasks:
     - name: Install Ruby {{ ruby_version }}
-      shell: rbenv install {{ ruby_version }}
+      shell: ~/.rbenv/bin/rbenv install {{ ruby_version }}
       args:
         creates: ~/.rbenv/versions/{{ ruby_version }}/bin/ruby
       register: ruby_install
 
     - name: Use Ruby {{ ruby_version }} by default
-      shell: rbenv global {{ ruby_version }}
+      shell: ~/.rbenv/bin/rbenv global {{ ruby_version }}
       when: ruby_install.changed

@@ -15,6 +15,7 @@
       # TopIcons Redux (shows legacy app icons in Gnome 3)
       - name: topicons-redux@pop-planet.info
         url: https://extensions.gnome.org/extension-data/topicons-redux%40pop-planet.info.v6.shell-extension.zip
+    snwh_distro_release: "{{ ansible_distribution_release if ansible_distribution_release != 'eoan' else 'disco' }}"
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
@@ -80,7 +81,7 @@
     - name: Add Gnome themes APT package repository
       become: yes
       apt_repository:
-        repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ ansible_distribution_release }} main
+        repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ snwh_distro_release }} main
         filename: snwh
         update_cache: no
       register: apt_repository
@@ -343,9 +344,9 @@
         - key: /org/gnome/mutter/keybindings/toggle-tiled-right
           value: "['<Super>Right']"
         - key: /org/gnome/settings/daemon/plugins/media-keys/home
-          value: "'<Super>e'"
+          value: "['<Super>e']"
         - key: /org/gnome/settings/daemon/plugins/media-keys/screensaver
-          value: "'<Super>l'"
+          value: "['<Super>l']"
         - key: /org/gnome/shell/extensions/emoji-selector/emoji-keybinding
           value: "['<Super>Period']"
         - key: /org/gnome/shell/extensions/emoji-selector/use-keybinding

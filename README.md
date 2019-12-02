@@ -6,12 +6,15 @@ This repository contains useful scripts to set up a Linux development machine. T
   - 18.04 (bionic)
   - 18.10 (cosmic)
   - 19.04 (disco)
+  - 19.10 (eoan)
 - Pop!_OS ([download](https://system76.com/pop))
   - 18.04
   - 18.10
   - 19.04
+  - 19.10
 
-_Note: The scripts have been updated to support Ubuntu on WSL ("Windows Subsystem for Linux"), though some features require WSL 2._
+_Note: The scripts have been updated to support Ubuntu on WSL ("Windows Subsystem for Linux"), though some features require WSL 2.
+In addition, some software does not fully support 19.10 yet, so 19.04 versions are installed when necessary._
 
 Other Ubuntu variants may work (like Mint) but they have not been tested. Non-Ubuntu variants are unsupported (with no
 intention of supporting them). Similarly, text shell for customization work is `bash`, and UI shell customization work is for

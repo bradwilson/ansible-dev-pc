@@ -2,6 +2,9 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    docker_distro_release: "{{ ansible_distribution_release if ansible_distribution_release != 'eoan' else 'disco' }}"
+
   tasks:
     - name: Install Docker pre-requisites
       become: yes
@@ -16,7 +19,7 @@
     - name: Add Docker APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ docker_distro_release }} stable
         filename: docker
         update_cache: no
       register: apt_repository
