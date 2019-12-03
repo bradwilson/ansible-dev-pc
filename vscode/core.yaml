@@ -42,6 +42,12 @@
         state: link
       when: is_wsl
 
+    - name: Ensure ~/.config folder exists
+      file:
+        path: ~/.config
+        state: directory
+      when: is_wsl
+
     - name: Create shortcut to Windows ~/.config/Code
       file:
         path: ~/.config/Code
