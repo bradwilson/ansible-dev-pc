@@ -15,3 +15,8 @@
     - name: Use Ruby {{ ruby_version }} by default
       shell: ~/.rbenv/bin/rbenv global {{ ruby_version }}
       when: ruby_install.changed
+
+    - name: Install lolcat gem
+      shell: ~/.rbenv/versions/{{ ruby_version }}/bin/gem install lolcat
+      args:
+        creates: ~/.rbenv/versions/{{ ruby_version }}/bin/lolcat

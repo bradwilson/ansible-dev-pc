@@ -21,7 +21,6 @@
         package:
           - colordiff
           - fortune
-          - lolcat
           - neofetch
 
     - name: Ensure neofetch configuration folder exists
