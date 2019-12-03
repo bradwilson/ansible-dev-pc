@@ -48,7 +48,7 @@
             if which kubectl > /dev/null; then
               CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null)
               if [[ $CURRENT_CONTEXT != "" ]]; then
-                echo -ne " \033[92;100m  \033[97m$CURRENT_CONTEXT \033[0m"
+                echo -ne " \033[38;5;112;48;5;242m  \033[38;5;254m$CURRENT_CONTEXT \033[0m"
               fi
             fi
           }
@@ -63,7 +63,7 @@
               if [[ $CURRENT_SUB != "" ]]; then
                 CURRENT_ACCOUNT=$(cat ~/.azure/azureProfile.json | jq -r ".subscriptions[] | select(.id==\"$CURRENT_SUB\") | .name")
                 if [[ $CURRENT_ACCOUNT != "" ]]; then
-                  echo -ne " \033[93;46m  \033[97m$CURRENT_ACCOUNT \033[0m"
+                  echo -ne " \033[38;5;227;48;5;30m  \033[38;5;254m$CURRENT_ACCOUNT \033[0m"
                 fi
               fi
             fi
@@ -72,8 +72,20 @@
           function echoRubyVersion() {
             if which rbenv > /dev/null; then
               CURRENT_RUBY=$(rbenv version-name)
-              echo -ne " \033[31;48;5;52m  \033[97m$CURRENT_RUBY \033[0m"
+              echo -ne " \033[38;5;210;48;5;52m  \033[38;5;254m$CURRENT_RUBY \033[0m"
             fi
+          }
+
+          function echoPath() {
+            echo -ne " \033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[0m"
+          }
+
+          function echoWhoami() {
+            echo -ne " \033[90m`whoami`\033[37m @ \033[90m`hostname` \033[0m"
+          }
+
+          function echoColor() {
+            echo -ne "\033[48;5;$1;38;5;$2m"
           }
 
           # Configuration
@@ -81,29 +93,28 @@
           GIT_PROMPT_IGNORE_STASH="1"
 
           # Pre- and post-status prompt strings
-          GIT_PROMPT_COMMAND_FAIL="${ResetColor} ${RedBg}${BrightWhite} ✘ _LAST_COMMAND_STATE_ ${ResetColor}"
+          GIT_PROMPT_COMMAND_FAIL="${ResetColor} \`echoColor 131 52\` ✘ \`echoColor 131 254\`_LAST_COMMAND_STATE_ ${ResetColor}"
           GIT_PROMPT_COMMAND_OK=""
           GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoKubeContext\`\`echoAksAccount\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
-          GIT_PROMPT_END_USER="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor} \n${BoldBlack} `whoami`${White} @ ${BoldBlack}`hostname` ${BoldGreen} sh$ ${ResetColor}"
-          GIT_PROMPT_END_ROOT="${ResetColor} ${GreenBg} ${BrightYellow}${BrightWhite} \`dirs +0\` ${ResetColor} \n${BoldBlack} `whoami`${White} @ ${BoldBlack}`hostname` ${BoldRed} sh# ${ResetColor} "
+          GIT_PROMPT_END_USER="${ResetColor}\`echoPath\` \n\`echoWhoami\`${BoldGreen} sh$ ${ResetColor}"
+          GIT_PROMPT_END_ROOT="${ResetColor}\`echoPath\` \n\`echoWhoami\`${BoldRed} sh# ${ResetColor}"
 
           # Individual overrides
-          GIT_PROMPT_BRANCH="${BlueBg}${BoldBlue}${BoldWhite} "
-          GIT_PROMPT_CHANGED="${BlueBg}${BoldYellow} ~"
+          GIT_PROMPT_BRANCH="\`echoColor 25 110\`\`echoColor 25 254\` "
+          GIT_PROMPT_CHANGED="\`echoColor 25 227\` ~"
           GIT_PROMPT_CLEAN=""
-          GIT_PROMPT_CONFLICTS="${BlueBg}${BoldRed}  "
-          GIT_PROMPT_PREFIX="${BlueBg}${BrightWhite} "
-          GIT_PROMPT_REMOTE="${BlueBg}"
+          GIT_PROMPT_CONFLICTS="\`echoColor 25 210\`  "
+          GIT_PROMPT_PREFIX="\`echoColor 25 254\` "
+          GIT_PROMPT_REMOTE=""
           GIT_PROMPT_SEPARATOR=""
-          GIT_PROMPT_STAGED="${BlueBg}${BoldGreen} ±"
-          GIT_PROMPT_STASHED="${BlueBg}${BoldBlue}  "
-          GIT_PROMPT_SUFFIX="${BlueBg}${DimBlueBg} ${ResetColor}"
-          GIT_PROMPT_UNTRACKED="${BlueBg}${BoldYellow} +"
-          GIT_PROMPT_VIRTUALENV="${ResetColor} ${GreenBg}${BoldYellow} _VIRTUALENV_ ${ResetColor}"
+          GIT_PROMPT_STAGED="\`echoColor 25 113\` ±"
+          GIT_PROMPT_STASHED="\`echoColor 25 110\`  "
+          GIT_PROMPT_SUFFIX="\`echoColor 25 254\` "
+          GIT_PROMPT_UNTRACKED="\`echoColor 25 227\` +"
 
           # Symbols
-          GIT_PROMPT_SYMBOLS_AHEAD="${BoldBlue} "
-          GIT_PROMPT_SYMBOLS_BEHIND="${BoldBlue} "
-          GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="${BlueBg}${BoldYellow} "
+          GIT_PROMPT_SYMBOLS_AHEAD="\`echoColor 25 110\` "
+          GIT_PROMPT_SYMBOLS_BEHIND="\`echoColor 25 110\` "
+          GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="\`echoColor 25 227\` "
           GIT_PROMPT_SYMBOLS_PREHASH=":"
