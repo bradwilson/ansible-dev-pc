@@ -54,28 +54,56 @@
 
           draw_bold_text_with_bright_colors: true
 
+          #### DARK
+
+          # colors:
+          #   primary:
+          #     background: '0x2e3436'
+          #     foreground: '0xb5bbae'
+          #   normal:
+          #     black:   '0x2e3436'
+          #     blue:    '0x3465a4'
+          #     cyan:    '0x06989a'
+          #     green:   '0x4e9a06'
+          #     magenta: '0x75507b'
+          #     red:     '0xae5e5e'
+          #     white:   '0xb5bbae'
+          #     yellow:  '0xc4a000'
+          #   bright:
+          #     black:   '0x696b67'
+          #     blue:    '0x729fcf'
+          #     cyan:    '0x2ec3c3'
+          #     green:   '0x79c32e'
+          #     magenta: '0xad7fa8'
+          #     red:     '0xf49797'
+          #     white:   '0xfbfbfb'
+          #     yellow:  '0xfce94f'
+          #   indexed_colors: []
+
+          #### LIGHT
+
           colors:
             primary:
-              background: '0x2e3436'
-              foreground: '0xb5bbae'
+              background: '0xfbfbfb'
+              foreground: '0x696b67'
             normal:
-              black:   '0x2e3436'
-              red:     '0xae5e5e'
-              green:   '0x4e9a06'
-              yellow:  '0xc4a000'
-              blue:    '0x3465a4'
-              magenta: '0x75507b'
-              cyan:    '0x06989a'
-              white:   '0xb5bbae'
-            bright:
-              black:   '0x555753'
-              red:     '0xf49797'
-              green:   '0x8ae234'
-              yellow:  '0xfce94f'
+              black:   '0xfbfbfb'
               blue:    '0x729fcf'
+              cyan:    '0x2ec3c3'
+              green:   '0x79c32e'
               magenta: '0xad7fa8'
-              cyan:    '0x34e2e2'
-              white:   '0xfbfbfb'
+              red:     '0xf49797'
+              white:   '0x696b67'
+              yellow:  '0xfce94f'
+            bright:
+              black:   '0xb5bbae'
+              blue:    '0x3465a4'
+              cyan:    '0x06989a'
+              green:   '0x4e9a06'
+              magenta: '0x75507b'
+              red:     '0xae5e5e'
+              white:   '0x2e3436'
+              yellow:  '0xc4a000'
             indexed_colors: []
 
           visual_bell:
