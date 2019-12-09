@@ -36,11 +36,11 @@
 
           font:
             normal:
-              family: FiraCode Nerd Font Mono
+              family: UbuntuMono Nerd Font Mono
               style: Regular
             bold:
               style: Medium
-            size: 10.0
+            size: 12.0
             offset:
               x: 0
               y: 0
@@ -68,7 +68,7 @@
           #     magenta: '0x75507b'
           #     red:     '0xae5e5e'
           #     white:   '0xb5bbae'
-          #     yellow:  '0xc4a000'
+          #     yellow:  '0x9b7f00'
           #   bright:
           #     black:   '0x696b67'
           #     blue:    '0x729fcf'
@@ -77,7 +77,7 @@
           #     magenta: '0xad7fa8'
           #     red:     '0xf49797'
           #     white:   '0xfbfbfb'
-          #     yellow:  '0xfce94f'
+          #     yellow:  '0xc4a000'
           #   indexed_colors: []
 
           #### LIGHT
@@ -94,7 +94,7 @@
               magenta: '0xad7fa8'
               red:     '0xf49797'
               white:   '0x696b67'
-              yellow:  '0xfce94f'
+              yellow:  '0xc4a000'
             bright:
               black:   '0xb5bbae'
               blue:    '0x3465a4'
@@ -103,7 +103,7 @@
               magenta: '0x75507b'
               red:     '0xae5e5e'
               white:   '0x2e3436'
-              yellow:  '0xc4a000'
+              yellow:  '0x9b7f00'
             indexed_colors: []
 
           visual_bell:
@@ -246,4 +246,3 @@
             - { key: F11,      mods: Super,   chars: "\x1b[23;3~"                      }
             - { key: F12,      mods: Super,   chars: "\x1b[24;3~"                      }
             - { key: NumpadEnter,             chars: "\n"                              }
-      when: not is_wsl
