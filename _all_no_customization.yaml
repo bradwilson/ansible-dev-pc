@@ -90,11 +90,14 @@
 # Prettier version of ping w/ graphs
 - import_playbook: prettyping/core.yaml
 
+# RDP/X/VNC/SSH client
+- import_playbook: remmina/core.yaml
+
 # Slack desktop application
 - import_playbook: slack/core.yaml
 
-# RDP/X/VNC/SSH client
-- import_playbook: remmina/core.yaml
+# Microsoft Teams
+- import_playbook: teams/core.yaml
 
 # VideoLan Client (primarily for codecs)
 - import_playbook: vlc/core.yaml
