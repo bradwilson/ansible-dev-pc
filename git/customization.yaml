@@ -80,10 +80,6 @@
             echo -ne " \033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[0m"
           }
 
-          function echoWhoami() {
-            echo -ne " \033[90m`whoami`\033[37m @ \033[90m`hostname` \033[0m"
-          }
-
           function echoColor() {
             echo -ne "\033[48;5;$1;38;5;$2m"
           }
@@ -97,8 +93,8 @@
           GIT_PROMPT_COMMAND_OK=""
           GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoKubeContext\`\`echoAksAccount\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
-          GIT_PROMPT_END_USER="${ResetColor}\`echoPath\` \n\`echoWhoami\`${BoldGreen} sh$ ${ResetColor}"
-          GIT_PROMPT_END_ROOT="${ResetColor}\`echoPath\` \n\`echoWhoami\`${BoldRed} sh# ${ResetColor}"
+          GIT_PROMPT_END_USER="${ResetColor}\`echoPath\` \n${BoldGreen} sh$ ${ResetColor}"
+          GIT_PROMPT_END_ROOT="${ResetColor}\`echoPath\` \n${BoldRed} sh# ${ResetColor}"
 
           # Individual overrides
           GIT_PROMPT_BRANCH="\`echoColor 25 110\`\`echoColor 25 254\` "
