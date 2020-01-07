@@ -3,23 +3,46 @@
   connection: local
 
   vars:
-    go_version: 1.12.6
+    go_version: 1.13.5
 
   tasks:
+    - name: Create binary folder
+      become: yes
+      file:
+        path: /opt/google/go{{ go_version }}
+        state: directory
+
     - name: Download go
       become: yes
       unarchive:
         src: https://dl.google.com/go/go{{ go_version }}.linux-amd64.tar.gz
-        dest: /usr/local
+        dest: /opt/google/go{{ go_version }}
         remote_src: yes
-        creates: /usr/local/go/bin/go
+        creates: /opt/google/go{{ go_version }}/go/bin/go
+      register: go_download
 
-    - name: Add /usr/local/go/bin to PATH
-      lineinfile:
-        path: ~/.bashrc
-        line: export PATH=$PATH:/usr/local/go/bin
-
-    - name: Create default go folder
+    - name: Create symlink to /usr/local/go
+      become: yes
       file:
-        path: ~/go
+        path: /usr/local/go
+        src: /opt/google/go{{ go_version }}/go
+        state: link
+
+    - name: Create package/source folder
+      file:
+        path: ~/dev/go
         state: directory
+
+    - name: Clean $GOPATH/pkg
+      file:
+        path: ~/dev/go/pkg
+        state: absent
+      when: go_download.changed
+
+    - name: Set up environment
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: golang support"
+        block: |
+          export PATH=$PATH:/usr/local/go/bin:$HOME/dev/go/bin
+          export GOPATH=$HOME/dev/go
