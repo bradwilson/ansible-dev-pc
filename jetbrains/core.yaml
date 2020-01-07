@@ -6,7 +6,7 @@
     toolbox_ver: 1.14.5179
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is search('microsoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: Determine if Toolbox is installed
       stat:
