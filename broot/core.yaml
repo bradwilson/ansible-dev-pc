@@ -1,0 +1,16 @@
+- name: Broot
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Download broot
+      become: yes
+      get_url:
+        url: https://dystroy.org/broot/download/x86_64-linux/broot
+        dest: /usr/local/bin/broot
+        mode: 0755
+      register: broot_download
+
+    - name: Run post-download install
+      shell: /usr/local/bin/broot --install
+      when: broot_download.changed

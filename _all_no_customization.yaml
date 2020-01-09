@@ -30,6 +30,9 @@
 # Brave
 - import_playbook: brave/core.yaml
 
+# Broot
+- import_playbook: broot/core.yaml
+
 # Docker
 - import_playbook: docker/core.yaml
 - import_playbook: docker/vscode.yaml
