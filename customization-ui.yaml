@@ -249,6 +249,11 @@
       - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold/complete/Ubuntu%20Mono%20Bold%20Nerd%20Font%20Complete%20Mono.ttf
       - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold-Italic/complete/Ubuntu%20Mono%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf
 
+    fonts_apt:
+      - ttf-mscorefonts-installer
+      - fonts-crosextra-carlito
+      - fonts-crosextra-caladea
+
     gnome_extensions:
       # Dash to Panel (Windows-style bottom task bar)
       - name: dash-to-panel@jderose9.github.com
@@ -286,6 +291,12 @@
       command: gnome-shell-extension-tool -e "{{ item.item.name }}"
       loop: "{{ new_extensions.results }}"
       when: not is_wsl and item.changed
+
+    - name: Install Microsoft Fonts
+      become: yes
+      apt:
+        package: "{{ item }}"
+      loop: "{{ fonts_apt }}"
 
     - name: Install Fonts
       become: yes
