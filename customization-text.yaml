@@ -69,7 +69,7 @@
         block: |
           echo ""
           neofetch
-          fortune | lolcat
+          fortune
 
     - name: Disable sudo password requirement
       become: yes
