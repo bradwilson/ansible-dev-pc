@@ -6,6 +6,8 @@
     docker_distro_release: "{{ ansible_distribution_release if ansible_distribution_release != 'eoan' else 'disco' }}"
 
   tasks:
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
     - name: Install Docker pre-requisites
       become: yes
       apt:
@@ -33,16 +35,23 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Docker
+    - name: Install Docker CLI components
       become: yes
       apt:
         package:
-          - docker-ce
+          - docker-ce-cli
           - docker-compose
 
-    - name: Enable Docker for current user
+    - name: Install Docker engine
+      become: yes
+      apt:
+        package: docker-ce
+      when: not is_wsl
+
+    - name: Enable Docker engine for current user
       become: yes
       user:
         name={{ lookup('env', "USER") }}
         groups=docker
         append=yes
+      when: not is_wsl
