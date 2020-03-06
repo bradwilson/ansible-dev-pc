@@ -9,5 +9,5 @@
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
         - formulahendry.dotnet-test-explorer    # .NET Core Test Explorer
-        - ms-vscode.csharp                      # C#
         - k--kato.docomment                     # C# XML Documentation Comments
+        - ms-dotnettools.csharp                 # C#

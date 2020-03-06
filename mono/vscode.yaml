@@ -8,5 +8,5 @@
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
-        - ms-vscode.csharp     # C#
-        - k--kato.docomment    # C# XML Documentation Comments
+        - k--kato.docomment        # C# XML Documentation Comments
+        - ms-dotnettools.csharp    # C#
