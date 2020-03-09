@@ -30,7 +30,8 @@
 
     - name: Override neofetch configuration
       copy:
-        dest: ~/.config/neofetch/config.conf
+        dest: ~/.config/neofetch/config
+        mode: 0755
         content: |
           print_info() {
               info title
