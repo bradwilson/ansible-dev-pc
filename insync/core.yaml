@@ -5,23 +5,23 @@
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: Add Insync APT package key
+    - name: Add Insync APT package key (Ubuntu)
       become: yes
       apt_key:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: ACCAF35C
-      when: not is_wsl
+      when: not is_wsl and ansible_distribution == 'Ubuntu'
 
-    - name: Add Insync APT package repository
+    - name: Add Insync APT package repository (Ubuntu)
       become: yes
       apt_repository:
         repo: deb http://apt.insynchq.com/ubuntu bionic non-free contrib
         filename: insync
         update_cache: no
       register: apt_repository
-      when: not is_wsl
+      when: not is_wsl and ansible_distribution == 'Ubuntu'
 
-    - name: Update APT package list
+    - name: Update APT package list (Ubuntu)
       become: yes
       apt:
         update_cache: yes
@@ -30,10 +30,10 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Insync
+    - name: Install Insync (Ubuntu)
       become: yes
       apt:
         package:
           - insync
           - insync-nautilus
-      when: not is_wsl
+      when: not is_wsl and ansible_distribution == 'Ubuntu'

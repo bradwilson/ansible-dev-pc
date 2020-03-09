@@ -7,8 +7,7 @@
       - "2.1"
       - "3.0"
       - "3.1"
-    dotnet_distro_release: "{{ ansible_distribution_release if ansible_distribution_release != 'eoan' else 'disco' }}"
-    dotnet_distro_version: "{{ ansible_distribution_version if ansible_distribution_release != 'eoan' else '19.04' }}"
+    dotnet_distro_version: "{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else ansible_distribution_version }}"    # MSFT uses '19.04' for Ubuntu, and just '10' for Debian
 
   tasks:
     - name: Add Microsoft APT package key
@@ -19,7 +18,7 @@
     - name: Add Microsoft APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/ubuntu/{{ dotnet_distro_version }}/prod {{ dotnet_distro_release }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/{{ ansible_distribution | lower }}/{{ dotnet_distro_version }}/prod {{ ansible_distribution_release }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository

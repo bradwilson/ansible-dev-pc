@@ -7,8 +7,10 @@
       become: yes
       apt:
         package:
+          - gcc
           - libssl-dev
           - libreadline-dev
+          - make
           - zlib1g-dev
 
     - name: Install rbenv

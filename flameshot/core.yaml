@@ -9,4 +9,4 @@
       become: yes
       apt:
         package: flameshot
-      when: not is_wsl
+      when: not is_wsl and ansible_distribution_release != 'stretch'

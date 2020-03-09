@@ -32,7 +32,7 @@
       - key: /org/gnome/settings-daemon/plugins/xsettings/antialiasing
         value: "'grayscale'"
       - key: /org/gnome/shell/favorite-apps
-        value: "['alacritty.desktop', 'brave-browser.desktop', 'firefox.desktop', 'google-chrome.desktop', 'postman.desktop', 'slack.desktop', 'teams.desktop', 'virt-manager.desktop', 'code.desktop', 'jetbrains-rider.desktop', 'jetbrains-pycharm-ce.desktop', 'sublime_text.desktop', 'sublime_merge.desktop', 'spotify.desktop', 'org.remmina.Remmina.desktop']"
+        value: "['alacritty.desktop', 'com.alacritty.Alacritty.desktop' 'brave-browser.desktop', 'firefox.desktop', 'google-chrome.desktop', 'postman.desktop', 'slack.desktop', 'teams.desktop', 'virt-manager.desktop', 'code.desktop', 'jetbrains-rider.desktop', 'jetbrains-pycharm-ce.desktop', 'sublime_text.desktop', 'sublime_merge.desktop', 'spotify.desktop', 'org.remmina.Remmina.desktop']"
       - key: /org/gnome/shell/extensions/desktop-icons/show-home
         value: "false"
       - key: /org/gnome/shell/extensions/desktop-icons/show-trash
@@ -250,7 +250,6 @@
       - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold-Italic/complete/Ubuntu%20Mono%20Bold%20Italic%20Nerd%20Font%20Complete%20Mono.ttf
 
     fonts_apt:
-      - ttf-mscorefonts-installer
       - fonts-crosextra-carlito
       - fonts-crosextra-caladea
 
@@ -264,8 +263,6 @@
       # TopIcons Redux (shows legacy app icons in Gnome 3)
       - name: topicons-redux@pop-planet.info
         url: https://extensions.gnome.org/extension-data/topicons-redux%40pop-planet.info.v6.shell-extension.zip
-
-    snwh_distro_release: "{{ ansible_distribution_release if ansible_distribution_release != 'eoan' else 'disco' }}"
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -292,13 +289,20 @@
       loop: "{{ new_extensions.results }}"
       when: not is_wsl and item.changed
 
-    - name: Install Microsoft Fonts
+    - name: Install Fonts (via APT)
       become: yes
       apt:
         package: "{{ item }}"
       loop: "{{ fonts_apt }}"
+      when: not is_wsl
 
-    - name: Install Fonts
+    - name: Install Microsoft TTF fonts
+      become: yes
+      apt:
+        package: ttf-mscorefonts-installer
+      when: not is_wsl and ansible_distribution != 'Debian'
+
+    - name: Install Fonts (downloaded)
       become: yes
       get_url:
         url: "{{ item }}"
@@ -319,30 +323,28 @@
         id: 89993A70
       when: not is_wsl
 
-    - name: Add Gnome themes APT package repository
+    - name: Install Gnome Tweaks
       become: yes
-      apt_repository:
-        repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ snwh_distro_release }} main
-        filename: snwh
-        update_cache: no
-      register: apt_repository
+      apt:
+        package: gnome-tweaks
+      when: not is_wsl and ansible_distribution_release != 'stretch'
+
+    - name: Install numix Gnome theme
+      become: yes
+      apt:
+        package: numix-gtk-theme
       when: not is_wsl
 
-    - name: Update APT package list
-      become: yes
-      apt:
-        update_cache: yes
-      when: not is_wsl and apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
+    - name: Download paper Gnome icon theme
+      get_url:
+        url: https://snwh.org/paper/download.php?owner=snwh&ppa=ppa&pkg=paper-icon-theme,18.04
+        dest: /tmp/paper-icon-theme.deb
+      when: not is_wsl
 
-    - name: Install Gnome themes
+    - name: Install paper Gnome icon theme
       become: yes
       apt:
-        package:
-          - numix-gtk-theme
-          - paper-icon-theme
+        deb: /tmp/paper-icon-theme.deb
       when: not is_wsl
 
     - name: Install PIP

@@ -1,45 +1,20 @@
 # Linux Dev Machine Setup
 
-This repository contains useful scripts to set up a Linux development machine. They assume Ubuntu 18.04 or later, and have been tested with the following OSes:
+This repository contains useful scripts to set up a Linux development machine. They have been tested with the following OSes:
 
-- Ubuntu ([download](https://www.ubuntu.com/download/desktop))
-  - 18.04 (bionic)
-  - 18.10 (cosmic)
-  - 19.04 (disco)
-  - 19.10 (eoan)
-- Pop!_OS ([download](https://system76.com/pop))
-  - 18.04
-  - 18.10
-  - 19.04
-  - 19.10
+| Distro                                                          | SKU     | Version(s)   |
+| --------------------------------------------------------------- | ------- | ------------ |
+| [Pop!_OS](https://system76.com/pop)                             | Desktop | 18.04, 19.10 |
+| [Ubuntu](https://www.ubuntu.com/download/desktop)               | Desktop | 18.04, 19.10 |
+| [Ubuntu](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6) | WSL 2   | 18.04        |
+| [Debian](https://www.debian.org/distrib/netinst)                | Desktop | 9, 10        |
+| [Debian](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6) | WSL 2   | 10           |
 
-_Note: The scripts have been updated to support [Ubuntu on WSL](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6) ("Windows Subsystem for Linux"), though some features require WSL 2.
-In addition, some software does not fully support 19.10 yet, so 19.04 versions are installed when necessary._
-
-Other Ubuntu variants may work (like Mint) but they have not been tested. Non-Ubuntu variants are unsupported (with no
-intention of supporting them). Similarly, text shell for customization work is `bash`, and UI shell customization work is for
-Gnome; other shells are left as an exercise to the reader.
+Text shell customization assumes you're using bash. GUI shell customization assumes you're using Gnome. Alternate distros and/or shells are left as an exercise for the reader.
 
 ## Please fork this and customize it
 
-The purpose here is to document what I use for my personal Linux-based development. You will likely want to make changes
-to my customizations, including adding/removing software, choosing different defaults, etc. While you can make those changes
-locally, if you plan to use these scripts long-term, it will likely be more beneficial for you if you fork this project so
-you can preserve your changes and easily merge newer versions of these scripts.
-
-## Getting Microsoft Teams working in Chrome
-
-You can get Teams to be fully functional inside of Chrome (and only Chrome, not Chromium) by installing these two extensions.
-The Ansible scripts do not install these extensions because Google has prohibited extension installation through any
-mechanism other than the interactive UI (to help prevent malware attacks against Chrome that install extensions).
-
-- [Microsoft Teams Screen sharing](https://chrome.google.com/webstore/detail/microsoft-teams-screen-sh/dhheiegalgcabbcobinipgmhepkkeidk)
-- [Enable Teams Calling](https://chrome.google.com/webstore/detail/enable-teams-calling/ifgnnjhhfdpjpjokajkolhioakajhidc)
-
-Once these two extensions are installed, you should have full functionality inside Teams, including audio calls, video
-calls, and screen sharing. Note that unlike on Windows, screen sharing cannot be limited to a single monitor; you only get
-"all screens" or "single application" sharing. This appears to be a limitation of the functionality exposed by Chrome on
-Linux for screen capture.
+The purpose here is to document what I use for my personal Linux-based development. You will likely want to make changes to my customizations, including adding/removing software, choosing different defaults, etc. While you can make those changes locally, if you plan to use these scripts long-term, it will likely be more beneficial for you if you fork this project so you can preserve your changes and easily merge newer versions of these scripts.
 
 # Pre-Requisites
 
@@ -58,11 +33,23 @@ Linux for screen capture.
 
 3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
 
+## Additional pre-requisites for Ubuntu/Pop!_OS desktop 19.10 users
+
+You need to install a Python3 package before running the Ansible playbook:
+
+```bash
+$ sudo apt -y install python3-distutils
+```
+
+If you forget this step, running the playbook will yield several messages like `[WARNING]: Skipping plugin (/.../filename) as it seems to be invalid: No module named 'distutils.spawn'`.
+
+## Additional pre-requisites for Debian desktop 9 users
+
+The version of Ansible that ships with Debian 9 is not new enough for these scripts. You can find [installation instructions here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian) to get a current version installed.
+
 # Running
 
-Before running the scripts, please review `_all.yaml` and `_all_no_customization.yaml`, and comment out software you don't
-want installed. In particular, most folders contain `customization.yaml` files which tend to contain my personal opinions on
-customizations; feel free to comment out sections of those files, or ignore them entirely.
+Before running the scripts, please review `_all.yaml` and `_all_no_customization.yaml`, and comment out software you don't want installed. In particular, most folders contain `customization.yaml` files which tend to contain my personal opinions on customizations; feel free to comment out sections of those files, or ignore them entirely.
 
 To run the setup:
 
@@ -70,9 +57,33 @@ To run the setup:
 $ ansible-playbook -K _all.yaml
 ```
 
-You can also run individual files if you'd prefer to take more control over what's executed.
+You will be prompted for your password, so that administrative-level software can be installed. _**You must be a sudoer to run these scripts, otherwise the installation process will fail.**_ You can also run individual files if you'd prefer to take more control over what's executed.
 
-You will be prompted for your sudo password. Most of the operations performed by these scripts require root access.
+Since core OS packages are upgraded, it is safest to reboot the PC/VM after running these scripts. At a bare minimum, many UI shell customizations done here will require you to log out and log back in.
 
-_**Since core OS packages are upgraded, it is safest to reboot the PC/VM after running these scripts. At a bare minimum,
-many UI shell customizations done here will require you to log out and log back in.**_
+# Notes on differences between Linux distros
+
+In general, these scripts are optimized around the experience of users of Ubuntu desktop distributions. These
+
+## Desktop vs. WSL 2 distributions
+
+Special affordances are made to enable support for WSL 2. Most of the GUI customization is not done, though some GUI applications are installed. Users will need to install an X server on their machine to run those GUI applications. I use (and strongly recommend) X410, which can be found in the [Microsoft Store](https://www.microsoft.com/en-us/p/x410/9nlp712zmn9q?activetab=pivot:overviewtab).
+
+## Debian (all versions)
+
+* Alacritty is not available on Debian.
+* Insync is not available on Debian.
+* Microsoft TTF fonts are not available on Debian.
+
+## Debian 9
+
+* Flameshot is not available on Debian 9.
+* Gnome Tweaks tool is not available on Debian 9.
+
+## Debian 10
+
+* PowerShell Core is not (yet) supported on Debian 10. You can [download a v7 preview build manually](https://github.com/powershell/powershell#get-powershell) in the meantime.
+
+## Pop!_OS desktop 19.10 / Ubuntu desktop 19.10
+
+* The "Dash to Panel" Gnome extension appears to be broken.

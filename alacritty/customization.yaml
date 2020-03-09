@@ -9,7 +9,7 @@
       file:
         path: ~/.config/alacritty
         state: directory
-      when: not is_wsl
+      when: not is_wsl and ansible_distribution == 'Ubuntu'
 
     - name: Update ~/.config/alacritty/alacritty.yml
       copy:
@@ -245,4 +245,4 @@
             - { key: F11,      mods: Super,   chars: "\x1b[23;3~"                      }
             - { key: F12,      mods: Super,   chars: "\x1b[24;3~"                      }
             - { key: NumpadEnter,             chars: "\n"                              }
-      when: not is_wsl
+      when: not is_wsl and ansible_distribution == 'Ubuntu'

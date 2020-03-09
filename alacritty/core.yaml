@@ -5,14 +5,24 @@
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: Install Alacritty (Pop!_OS)
+    - name: Add APT package source (Ubuntu)
+      become: yes
+      apt_repository:
+        repo: ppa:mmstick76/alacritty
+      register: apt_repository
+      when: not is_wsl and ansible_distribution == 'Ubuntu' and 'Pop!_OS' not in hostvars[inventory_hostname].ansible_facts.lsb.description
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install Alacritty
       become: yes
       apt:
         package: alacritty
-      when: "not is_wsl and 'Pop!_OS' in hostvars[inventory_hostname].ansible_facts.lsb.description"
-
-    - name: Install Alacritty (Ubuntu)
-      become: yes
-      apt:
-        deb: https://github.com/jwilm/alacritty/releases/download/v0.3.2/Alacritty-v0.3.2-ubuntu_18_04_amd64.deb
-      when: "not is_wsl and 'Pop!_OS' not in hostvars[inventory_hostname].ansible_facts.lsb.description"
+      when: not is_wsl and ansible_distribution == 'Ubuntu'

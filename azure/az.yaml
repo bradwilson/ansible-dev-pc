@@ -2,9 +2,6 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    azcli_distro_release: "{{ ansible_distribution_release if ansible_distribution_release != 'eoan' else 'disco' }}"
-
   tasks:
     - name: Add Microsoft APT package key
       become: yes
@@ -14,7 +11,7 @@
     - name: Add Azure CLI APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ azcli_distro_release }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ ansible_distribution_release }} main
         filename: azure-cli
         update_cache: no
       register: apt_repository

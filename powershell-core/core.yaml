@@ -2,40 +2,43 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    pwsh_distro_version: "{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else ansible_distribution_version }}"    # MSFT uses '19.04' for Ubuntu, and just '10' for Debian
+
   tasks:
-    - name: Add Microsoft APT package key (18.04)
+    - name: Add Microsoft APT package key
       become: yes
       apt_key:
         url: https://packages.microsoft.com/keys/microsoft.asc
-      when: ansible_distribution_release == 'bionic'
+      when: ansible_distribution == 'Debian' or ansible_distribution_release == 'bionic'
 
-    - name: Add Microsoft APT package repository (18.04)
+    - name: Add Microsoft APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/ubuntu/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/{{ ansible_distribution | lower }}/{{ pwsh_distro_version }}/prod {{ ansible_distribution_release }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository
-      when: ansible_distribution_release == 'bionic'
+      when: ansible_distribution == 'Debian' or ansible_distribution_release == 'bionic'
 
-    - name: Update APT package list (18.04)
+    - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: ansible_distribution_release == 'bionic' and apt_repository.changed
+      when: apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: Install PowerShell Core (18.04)
+    - name: Install PowerShell Core via APT (Debian/Ubuntu 18.04)
       become: yes
       apt:
         package: powershell
-      when: ansible_distribution_release == 'bionic'
+      when: ansible_distribution == 'Debian' or ansible_distribution_release == 'bionic'
 
-    - name: Install PowerShell Core (18.10 or later)
+    - name: Install PowerShell Core via SNAP (Ubuntu 18.10+)
       become: yes
       command: snap install --classic powershell
       args:
         creates: /snap/bin/pwsh
-      when: ansible_distribution_release != 'bionic'
+      when: ansible_distribution == 'Ubuntu' and ansible_distribution_release != 'bionic'

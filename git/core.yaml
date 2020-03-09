@@ -2,20 +2,33 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    - RIPGREP_VERSION: "11.0.2"
+
   tasks:
-    - name: Add Git APT package repository
+    - name: Add Git APT package repository (Ubuntu)
       become: yes
       apt_repository:
         repo: ppa:git-core/ppa
         filename: git
         update_cache: no
-      register: apt_repository
+      register: apt_repository_1
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Add Backports repository (Debian Stretch)
+      become: yes
+      apt_repository:
+        repo: deb http://deb.debian.org/debian stretch-backports main
+        filename: backports
+        update_cache: no
+      register: apt_repository_2
+      when: ansible_distribution_release == 'stretch'
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository.changed
+      when: apt_repository_1.changed or apt_repository_2.changed
       register: apt_update
       retries: 5
       until: apt_update is success
@@ -30,14 +43,14 @@
           - gitk
         state: latest
 
-    - name: Install ripgrep (18.04)
+    - name: Install ripgrep (Ubuntu 18.04 / Debian Stretch)
       become: yes
       apt:
-        deb: https://github.com/BurntSushi/ripgrep/releases/download/11.0.1/ripgrep_11.0.1_amd64.deb
-      when: ansible_distribution_release == 'bionic'
+        deb: https://github.com/BurntSushi/ripgrep/releases/download/{{ RIPGREP_VERSION }}/ripgrep_{{ RIPGREP_VERSION }}_amd64.deb
+      when: ansible_distribution_release == 'bionic' or ansible_distribution_release == 'stretch'
 
-    - name: Install ripgrep (18.10 or later)
+    - name: Install ripgrep (others)
       become: yes
       apt:
         package: ripgrep
-      when: ansible_distribution_release != 'bionic'
+      when: ansible_distribution_release != 'bionic' and ansible_distribution_release != 'stretch'

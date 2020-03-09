@@ -16,12 +16,12 @@
     - name: Add Docker APT package key
       become: yes
       apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
+        url: https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg
 
     - name: Add Docker APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ docker_distro_release }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ docker_distro_release }} stable
         filename: docker
         update_cache: no
       register: apt_repository
