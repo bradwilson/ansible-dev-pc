@@ -29,7 +29,6 @@
           scrolling:
             history: 10000
             multiplier: 3
-            faux_multiplier: 3
             auto_scroll: false
 
           tabspaces: 8
@@ -84,10 +83,10 @@
 
           colors:
             primary:
-              background: '0xfbfbfb'
+              background: '0xeeeeee'
               foreground: '0x696b67'
             normal:
-              black:   '0xfbfbfb'
+              black:   '0xeeeeee'
               blue:    '0x729fcf'
               cyan:    '0x2ec3c3'
               green:   '0x79c32e'
