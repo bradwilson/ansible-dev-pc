@@ -6,11 +6,10 @@
   // Text editor
   "breadcrumbs.enabled": true,
   "editor.autoClosingBrackets": "never",
-  "editor.find.autoFindInSelection": true,
+  "editor.find.autoFindInSelection": "never",
   "editor.fontFamily": "UbuntuMono Nerd Font Mono",
   "editor.fontSize": 16,
   "editor.formatOnPaste": true,
-  "editor.gotoLocation.multiple": "goto",
   "editor.minimap.enabled": false,
   "editor.parameterHints.enabled": false,
   "editor.renderWhitespace": "boundary",
@@ -66,7 +65,7 @@
     // "terminal.foreground": "#b5bbae",
 
     ///// Light colors
-    "terminal.ansiBlack": "#fbfbfb",
+    "terminal.ansiBlack": "#eeeeee",
     "terminal.ansiBlue": "#729fcf",
     "terminal.ansiBrightBlack": "#b5bbae",
     "terminal.ansiBrightBlue": "#3265a4",
@@ -82,18 +81,18 @@
     "terminal.ansiRed": "#f49797",
     "terminal.ansiWhite": "#696b67",
     "terminal.ansiYellow": "#c4a000",
-    "terminal.background": "#fbfbfb",
+    "terminal.background": "#eeeeee",
     "terminal.foreground": "#696b67",
 
     "terminal.selectionBackground": "#3465a440",
     "[GitHub Plus]": {
-      "editor.background": "#fbfbfb",
+      "editor.background": "#eeeeee",
       "editor.foreground": "#2e3436",
       "gitDecoration.ignoredResourceForeground": "#d0d0d0",
-      "panel.background": "#fbfbfb3d",
+      "panel.background": "#eeeeee3d",
       "statusBar.background": "#3465a4",
       "statusBar.border": "#3465a4",
-      "statusBar.foreground": "#fbfbfb",
+      "statusBar.foreground": "#eeeeee"
     }
   },
   "workbench.colorTheme": "GitHub Plus",
