@@ -8,5 +8,6 @@
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
+        - bierner.github-markdown-preview
         - eamodio.gitlens
         - github.vscode-pull-request-github
