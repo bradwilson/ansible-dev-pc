@@ -56,6 +56,13 @@
             fi
           }
 
+          function echoGoVersion() {
+            if which go > /dev/null; then
+              CURRENT_GO=$(go version | awk '{print $3; exit;}')
+              echo -ne " \033[38;5;16;48;5;80m  $CURRENT_GO \033[0m"
+            fi
+          }
+
           function echoPath() {
             echo -ne " \033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[0m"
           }
@@ -71,7 +78,7 @@
           # Pre- and post-status prompt strings
           GIT_PROMPT_COMMAND_FAIL="${ResetColor} \`echoColor 131 227\` ✘ _LAST_COMMAND_STATE_ ${ResetColor}"
           GIT_PROMPT_COMMAND_OK=""
-          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoKubeContext\`\`echoAksAccount\`"
+          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoGoVersion\`\`echoKubeContext\`\`echoAksAccount\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
           GIT_PROMPT_END_USER="${ResetColor}\`echoPath\` \n${BoldGreen} sh$ ${ResetColor}"
           GIT_PROMPT_END_ROOT="${ResetColor}\`echoPath\` \n${BoldRed} sh# ${ResetColor}"
