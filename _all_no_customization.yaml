@@ -56,8 +56,8 @@
 - import_playbook: kubectl/core.yaml
 - import_playbook: kubectl/vscode.yaml
 
-# QEMU/KVM (virtualization platform)
-- import_playbook: kvm/core.yaml
+# Virtualization (QEMU/KVM on Linux, VirtualBox on macOS)
+- import_playbook: virtualization/core.yaml
 
 # Mono (.NET Framework)
 - import_playbook: mono/core.yaml

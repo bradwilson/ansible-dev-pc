@@ -1,4 +1,4 @@
-- name: QEMU/KVM
+- name: Virtualization
   hosts: 127.0.0.1
   connection: local
 
@@ -8,7 +8,9 @@
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: Install QEMU/KVM
+    # Linux
+
+    - name: Install QEMU/KVM (Linux)
       become: yes
       apt:
         package: "{{ item }}"
@@ -28,3 +30,10 @@
         groups=libvirt
         append=yes
       when: not is_mac and not is_wsl
+
+    # macOS
+
+    - name: Install VirtualBox (macOS)
+      homebrew_cask:
+        name: virtualbox
+      when: is_mac
