@@ -1,4 +1,4 @@
-- name: Insync
+- name: Google Backup and Sync
   hosts: 127.0.0.1
   connection: local
 
@@ -44,3 +44,10 @@
         - insync
         - insync-nautilus
       when: is_ubuntu and not is_wsl
+
+    # macOS
+
+    - name: Install Google Backup and Sync (macOS)
+      homebrew_cask:
+        name: google-backup-and-sync
+      when: is_mac
