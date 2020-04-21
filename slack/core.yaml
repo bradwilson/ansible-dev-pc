@@ -2,14 +2,19 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and ookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
+    # Linux
 
     - name: Add Slack APT package key
       become: yes
       apt_key:
         url: https://packagecloud.io/slacktechnologies/slack/gpgkey
-      when: not is_wsl
+      when: not is_mac and not is_wsl
 
     - name: Add Slack APT package repository
       become: yes
@@ -18,19 +23,26 @@
         filename: slack
         update_cache: no
       register: apt_repository
-      when: not is_wsl
+      when: not is_mac and not is_wsl
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: not is_wsl and apt_repository.changed
+      when: apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: Install Slack Desktop
+    - name: Install Slack Desktop (Linux)
       become: yes
       apt:
         package: slack-desktop
-      when: not is_wsl
+      when: not is_mac and not is_wsl
+
+    # macOS
+
+    - name: Install Slack Desktop (macOS)
+      homebrew_cask:
+        name: slack
+      when: is_mac

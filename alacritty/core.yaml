@@ -2,15 +2,22 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    is_popos: "{{ not is_mac and 'Pop!_OS' in hostvars[inventory_hostname].ansible_facts.lsb.description }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
+    # Linux
 
     - name: Add APT package source (Ubuntu)
       become: yes
       apt_repository:
         repo: ppa:mmstick76/alacritty
       register: apt_repository
-      when: not is_wsl and ansible_distribution == 'Ubuntu' and 'Pop!_OS' not in hostvars[inventory_hostname].ansible_facts.lsb.description
+      when: is_ubuntu and not is_wsl and not is_popos
 
     - name: Update APT package list
       become: yes
@@ -21,8 +28,15 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Alacritty
+    - name: Install Alacritty (Linux)
       become: yes
       apt:
         package: alacritty
-      when: not is_wsl and ansible_distribution == 'Ubuntu'
+      when: is_ubuntu and not is_wsl
+
+    # macOS
+
+    - name: Install Alacritty (macOS)
+      homebrew_cask:
+        name: alacritty
+      when: is_mac

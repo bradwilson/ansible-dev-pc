@@ -2,7 +2,25 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
+    # Common
+
+    - name: Create ~/bin
+      file:
+        path: ~/bin
+        state: directory
+        mode: 0700
+
+    - name: Add ~/bin to PATH
+      lineinfile:
+        path: ~/.bashrc
+        line: export PATH=$PATH:~/bin
+
+    # Linux
+
     - name: Enable HTTPS APT support
       become: yes
       apt:
@@ -12,6 +30,7 @@
           - apt-transport-https
           - ca-certificates
           - software-properties-common
+      when: not is_mac
 
     - name: Update APT package list
       become: yes
@@ -20,49 +39,68 @@
       register: apt_update
       retries: 5
       until: apt_update is success
+      when: not is_mac
 
     - name: Upgrade to latest APT packages
       become: yes
       apt:
         upgrade: yes
+      when: not is_mac
 
     - name: Install core packages
       become: yes
       apt:
-        package:
-          - curl
-          - dconf-editor
-          - exfat-fuse
-          - exfat-utils
-          - htop
-          - inetutils-traceroute
-          - jq
-          - net-tools
-          - snapd
-          - uuid
-          - xclip
-
-    - name: Create ~/bin
-      file:
-        path: ~/bin
-        state: directory
-
-    - name: Add ~/bin to PATH
-      lineinfile:
-        path: ~/.bashrc
-        line: export PATH=$PATH:~/bin
+        package: "{{ item }}"
+      loop:
+        - curl
+        - dconf-editor
+        - exfat-fuse
+        - exfat-utils
+        - htop
+        - inetutils-traceroute
+        - jq
+        - net-tools
+        - snapd
+        - uuid
+        - xclip
+      when: not is_mac
 
     - name: Add /snap/bin to PATH
       lineinfile:
         path: ~/.bashrc
         line: export PATH=$PATH:/snap/bin
+      when: not is_mac
 
     - name: Get installed package list
       package_facts: {}
+      when: not is_mac
 
     - name: Add dm-crypt to /etc/initramfs-tools/modules
       become: yes
       lineinfile:
         path: /etc/initramfs-tools/modules
         line: dm-crypt
-      when: ansible_facts.packages["cryptsetup-initramfs"] is defined
+      when: not is_mac and ansible_facts.packages["cryptsetup-initramfs"] is defined
+
+    # macOS
+
+    - name: Update Homebrew and all packages
+      homebrew:
+        update_homebrew: yes
+        upgrade_all: yes
+      when: is_mac
+
+    - name: Install core packages
+      homebrew:
+        name: "{{ item }}"
+      loop:
+        - gnu-tar
+        - htop
+        - jq
+      when: is_mac
+
+    - name: Add GNU tar to the PATH
+      lineinfile:
+        path: ~/.bashrc
+        line: export PATH=/usr/local/opt/gnu-tar/libexec/gnubin:$PATH
+      when: is_mac

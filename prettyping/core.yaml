@@ -3,9 +3,8 @@
   connection: local
 
   tasks:
-    - name: Download prettyping
-      become: yes
+    - name: Install prettyping
       get_url:
         url: https://raw.githubusercontent.com/denilsonsa/prettyping/master/prettyping
-        dest: /usr/local/bin/prettyping
+        dest: ~/bin/prettyping
         mode: 0755

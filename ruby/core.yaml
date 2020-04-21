@@ -2,16 +2,25 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
+    # Linux
+
     - name: Install pre-requisites
       become: yes
       apt:
-        package:
-          - gcc
-          - libssl-dev
-          - libreadline-dev
-          - make
-          - zlib1g-dev
+        package: "{{ item }}"
+      loop:
+        - gcc
+        - libssl-dev
+        - libreadline-dev
+        - make
+        - zlib1g-dev
+      when: not is_mac
+
+    # Common
 
     - name: Install rbenv
       git:

@@ -2,8 +2,13 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: Add Remmina APT package repository (Ubuntu)
       become: yes
@@ -12,7 +17,7 @@
         filename: remmina
         update_cache: no
       register: apt_repository_1
-      when: not is_wsl and ansible_distribution == 'Ubuntu'
+      when: is_ubuntu and not is_wsl
 
     - name: Add Backports repository (Debian Stretch)
       become: yes
@@ -21,7 +26,7 @@
         filename: backports
         update_cache: no
       register: apt_repository_2
-      when: not is_wsl and ansible_distribution_release == 'stretch'
+      when: is_debian_stretch and not is_wsl
 
     - name: Update APT package list
       become: yes
@@ -37,10 +42,10 @@
       apt:
         package: remmina
         default_release: stretch-backports
-      when: not is_wsl and ansible_distribution_release == 'stretch'
+      when: is_debian_stretch and not is_wsl
 
-    - name: Install Remmina (others)
+    - name: Install Remmina (other Linux)
       become: yes
       apt:
         package: remmina
-      when: not is_wsl and ansible_distribution_release != 'stretch'
+      when: not is_mac and not is_debian_stretch and not is_wsl

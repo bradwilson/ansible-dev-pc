@@ -15,7 +15,7 @@
 - import_playbook: customization-ui.yaml
 - import_playbook: vscode/customization.yaml
 - import_playbook: docker/customization.yaml
-- import_playbook: dotnet-core/customization.yaml
+- import_playbook: dotnet/customization.yaml
 - import_playbook: git/customization.yaml
 - import_playbook: kubectl/customization.yaml
 - import_playbook: no-screen-blank/core.yaml

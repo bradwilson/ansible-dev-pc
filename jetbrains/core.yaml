@@ -3,28 +3,31 @@
   connection: local
 
   vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     toolbox_ver: 1.14.5179
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: Determine if Toolbox is installed
+    # Linux
+
+    - name: Determine if JetBrains Toolbox is installed
       stat:
         path: /usr/local/bin/jetbrains-toolbox
       register: toolbox_path
-      when: not is_wsl
+      when: not is_mac and not is_wsl
 
     - block:
 
       # TODO: Find out if there is a canonical "latest" URL
-      - name: Extract Toolbox
+      - name: Extract JetBrains Toolbox
         unarchive:
           src: https://download.jetbrains.com/toolbox/jetbrains-toolbox-{{ toolbox_ver }}.tar.gz
           dest: /tmp
           remote_src: yes
           creates: /tmp/jetbrains-toolbox-{{ toolbox_ver }}/jetbrains-toolbox
 
-      - name: Install Toolbox
+      - name: Install JetBrains Toolbox (Linux)
         become: yes
         copy:
           src: /tmp/jetbrains-toolbox-{{ toolbox_ver }}/jetbrains-toolbox
@@ -37,7 +40,14 @@
           path: /tmp/jetbrains-toolbox-{{ toolbox_ver }}
           state: absent
 
-      - name: Launch Jetbrains Toolbox (first run experience)
+      - name: Launch JetBrains Toolbox (first run experience)
         command: jetbrains-toolbox
 
-      when: not is_wsl and toolbox_path.stat.exists == False
+      when: not is_mac and not is_wsl and toolbox_path.stat.exists == False
+
+    # macOS
+
+    - name: Install JetBrains Toolbox (macOS)
+      homebrew_cask:
+        name: jetbrains-toolbox
+      when: is_mac

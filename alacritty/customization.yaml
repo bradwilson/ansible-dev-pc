@@ -2,14 +2,18 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_debian: "{{ ansible_distribution == 'Debian' }}"
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: Ensure Alacritty configuration folder exists
       file:
         path: ~/.config/alacritty
         state: directory
-      when: not is_wsl and ansible_distribution == 'Ubuntu'
+      when: not is_wsl and not is_debian
 
     - name: Update ~/.config/alacritty/alacritty.yml
       copy:
@@ -29,9 +33,6 @@
           scrolling:
             history: 10000
             multiplier: 3
-            auto_scroll: false
-
-          tabspaces: 8
 
           font:
             normal:
@@ -245,4 +246,4 @@
             - { key: F11,      mods: Super,   chars: "\x1b[23;3~"                      }
             - { key: F12,      mods: Super,   chars: "\x1b[24;3~"                      }
             - { key: NumpadEnter,             chars: "\n"                              }
-      when: not is_wsl and ansible_distribution == 'Ubuntu'
+      when: not is_wsl and not is_debian

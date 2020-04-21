@@ -2,14 +2,19 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
+    # Linux
 
     - name: Add Spotify APT package key
       become: yes
       apt_key:
         url: https://download.spotify.com/debian/pubkey.gpg
-      when: not is_wsl
+      when: not is_mac and not is_wsl
 
     - name: Add Spotify APT package repository
       become: yes
@@ -18,19 +23,26 @@
         filename: spotify
         update_cache: no
       register: apt_repository
-      when: not is_wsl
+      when: not is_mac and not is_wsl
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: not is_wsl and apt_repository.changed
+      when: apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: Install Spotify
+    - name: Install Spotify (Linux)
       become: yes
       apt:
         package: spotify-client
-      when: not is_wsl
+      when: not is_mac and not is_wsl
+
+    # macOS
+
+    - name: Install Spotify (macOS)
+      homebrew_cask:
+        name: spotify
+      when: is_mac

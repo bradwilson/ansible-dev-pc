@@ -2,15 +2,21 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
+    # Linux
 
     - name: Add Insync APT package key (Ubuntu)
       become: yes
       apt_key:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: ACCAF35C
-      when: not is_wsl and ansible_distribution == 'Ubuntu'
+      when: is_ubuntu and not is_wsl
 
     - name: Add Insync APT package repository (Ubuntu)
       become: yes
@@ -19,13 +25,13 @@
         filename: insync
         update_cache: no
       register: apt_repository
-      when: not is_wsl and ansible_distribution == 'Ubuntu'
+      when: is_ubuntu and not is_wsl
 
     - name: Update APT package list (Ubuntu)
       become: yes
       apt:
         update_cache: yes
-      when: not is_wsl and apt_repository.changed
+      when: apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
@@ -33,7 +39,8 @@
     - name: Install Insync (Ubuntu)
       become: yes
       apt:
-        package:
-          - insync
-          - insync-nautilus
-      when: not is_wsl and ansible_distribution == 'Ubuntu'
+        package: "{{ item }}"
+      loop:
+        - insync
+        - insync-nautilus
+      when: is_ubuntu and not is_wsl

@@ -1,6 +1,6 @@
 # Linux Dev Machine Setup
 
-This repository contains useful scripts to set up a Linux development machine. They have been tested with the following OSes:
+This repository contains useful scripts to set up a Unix-y development machine. They have been tested with the following OSes:
 
 | Distro                                                          | SKU     | Version(s)   |
 | --------------------------------------------------------------- | ------- | ------------ |
@@ -9,8 +9,9 @@ This repository contains useful scripts to set up a Linux development machine. T
 | [Ubuntu](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6) | WSL 2   | 18.04        |
 | [Debian](https://www.debian.org/distrib/netinst)                | Desktop | 9, 10        |
 | [Debian](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6) | WSL 2   | 10           |
+| [macOS](https://www.apple.com/macos/)                           | Desktop | 10.15        |
 
-Text shell customization assumes you're using bash. GUI shell customization assumes you're using Gnome. Alternate distros and/or shells are left as an exercise for the reader.
+Text shell customization assumes you're using bash (macOS in particular now ships with zsh as the default shell). GUI shell customization assumes you're using Gnome on Linux. Alternate distros and/or shells are left as an exercise for the reader.
 
 ## Please fork this and customize it
 

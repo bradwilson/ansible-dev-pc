@@ -2,20 +2,24 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: Install QEMU/KVM
       become: yes
       apt:
-        package:
-          - bridge-utils
-          - libvirt-clients
-          - libvirt-daemon-system
-          - ovmf
-          - qemu-kvm
-          - virt-manager
-      when: not is_wsl
+        package: "{{ item }}"
+      loop:
+        - bridge-utils
+        - libvirt-clients
+        - libvirt-daemon-system
+        - ovmf
+        - qemu-kvm
+        - virt-manager
+      when: not is_mac and not is_wsl
 
     - name: Enable QEMU/KVM for current user
       become: yes
@@ -23,4 +27,4 @@
         name={{ lookup('env', "USER") }}
         groups=libvirt
         append=yes
-      when: not is_wsl
+      when: not is_mac and not is_wsl

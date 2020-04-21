@@ -38,8 +38,8 @@
 - import_playbook: docker/vscode.yaml
 
 # .NET Core
-- import_playbook: dotnet-core/core.yaml
-- import_playbook: dotnet-core/vscode.yaml
+- import_playbook: dotnet/core.yaml
+- import_playbook: dotnet/vscode.yaml
 
 # Flameshot
 - import_playbook: flameshot/core.yaml

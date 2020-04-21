@@ -2,9 +2,10 @@
   hosts: 127.0.0.1
   connection: local
 
-  tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
+  tasks:
     - name: Install VS Code Extensions
       command: code --install-extension {{ item }}
       args:
@@ -20,6 +21,19 @@
         - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
         - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
 
+    - name: Ensure ~/.config folder exists
+      file:
+        path: ~/.config
+        state: directory
+        mode: 0700
+
+    - name: Link '~/Library/Application Support/Code' to '~/.config/Code' (macOS)
+      file:
+        path: ~/.config/Code
+        src: ~/Library/Application Support/Code
+        state: link
+      when: is_mac
+
     - name: Override default VS Code preferences
       copy:
         src: settings.json
@@ -29,15 +43,3 @@
       copy:
         src: keybindings.json
         dest: ~/.config/Code/User/keybindings.json
-
-    - name: Use VS Code as default editor via GUI, nano via SSH
-      blockinfile:
-        path: ~/.bashrc
-        marker: "### {mark} Ansible managed: Default editor"
-        block: |
-          if [ -z "$SSH_CONNECTION" ]; then
-            export EDITOR='code --wait'
-          else
-            export EDITOR='nano'
-          fi
-      when: not is_wsl

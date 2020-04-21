@@ -3,9 +3,15 @@
   connection: local
 
   vars:
-    - RIPGREP_VERSION: "11.0.2"
+    is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+    is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
+    RIPGREP_VERSION: "12.0.1"
 
   tasks:
+    # Linux
+
     - name: Add Git APT package repository (Ubuntu)
       become: yes
       apt_repository:
@@ -13,7 +19,7 @@
         filename: git
         update_cache: no
       register: apt_repository_1
-      when: ansible_distribution == 'Ubuntu'
+      when: is_ubuntu
 
     - name: Add Backports repository (Debian Stretch)
       become: yes
@@ -22,7 +28,7 @@
         filename: backports
         update_cache: no
       register: apt_repository_2
-      when: ansible_distribution_release == 'stretch'
+      when: is_debian_stretch
 
     - name: Update APT package list
       become: yes
@@ -33,24 +39,38 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install APT packages
+    - name: Install APT package
       become: yes
       apt:
-        package:
-          - git
-          - git-gui
-          - git-lfs
-          - gitk
-        state: latest
+        package: "{{ item }}"
+      loop:
+        - git
+        - git-gui
+        - git-lfs
+        - gitk
+      when: not is_mac
 
     - name: Install ripgrep (Ubuntu 18.04 / Debian Stretch)
       become: yes
       apt:
         deb: https://github.com/BurntSushi/ripgrep/releases/download/{{ RIPGREP_VERSION }}/ripgrep_{{ RIPGREP_VERSION }}_amd64.deb
-      when: ansible_distribution_release == 'bionic' or ansible_distribution_release == 'stretch'
+      when: is_ubuntu_bionic or is_debian_stretch
 
-    - name: Install ripgrep (others)
+    - name: Install ripgrep (other Linux)
       become: yes
       apt:
         package: ripgrep
-      when: ansible_distribution_release != 'bionic' and ansible_distribution_release != 'stretch'
+      when: not is_mac and not is_ubuntu_bionic and not is_debian_stretch
+
+    # macOS
+
+    - name: Install Homebrew packages
+      homebrew:
+        name: "{{ item }}"
+      loop:
+        - git
+        - git-gui
+        - git-lfs
+        - gpg
+        - gnu-sed
+        - ripgrep

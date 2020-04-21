@@ -2,11 +2,17 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
+    # Linux
+
     - name: Add Kubernetes APT package key
       become: yes
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+      when: not is_mac
 
     - name: Add Kubernetes APT package repository
       become: yes
@@ -15,6 +21,7 @@
         filename: kubernetes
         update_cache: no
       register: apt_repository
+      when: not is_mac
 
     - name: Update APT package list
       become: yes
@@ -25,10 +32,27 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install kubectl
+    - name: Install kubectl (Linux)
       become: yes
       apt:
         package: kubectl
+      when: not is_mac
+
+    # macOS
+
+    - name: Install bash completion support
+      homebrew:
+        name: bash-completion
+      register: bash_completion
+      when: is_mac
+
+    - name: Add bash completion support to shell
+      lineinfile:
+        path: ~/.bashrc
+        line: source $(brew --prefix)/etc/bash_completion
+      when: bash_completion.changed
+
+    # Common
 
     - name: Enable bash completion for kubectl
       blockinfile:
