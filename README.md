@@ -1,4 +1,4 @@
-# Linux Dev Machine Setup
+# Unix-y Developer Machine Setup
 
 This repository contains useful scripts to set up a Unix-y development machine. They have been tested with the following OSes:
 
