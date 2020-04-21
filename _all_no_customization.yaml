@@ -27,9 +27,6 @@
 - import_playbook: azure/storage-explorer.yaml
 - import_playbook: azure/vscode.yaml
 
-# Brave
-- import_playbook: brave/core.yaml
-
 # Broot
 - import_playbook: broot/core.yaml
 
@@ -87,7 +84,13 @@
 # Alacritty (high performance terminal application)
 - import_playbook: alacritty/core.yaml
 
-# Google Chrome browser
+# Brave
+- import_playbook: brave/core.yaml
+
+# Firefox
+- import_playbook: firefox/core.yaml
+
+# Google Chrome
 - import_playbook: google-chrome/core.yaml
 
 # Prettier version of ping w/ graphs
