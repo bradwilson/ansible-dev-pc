@@ -19,6 +19,30 @@ The purpose here is to document what I use for my personal Linux-based developme
 
 # Pre-Requisites
 
+## macOS
+
+1. Install [Homebrew](https://docs.brew.sh/Installation)
+
+2. Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-macos)
+
+3. Change the default shell from zsh to bash:
+
+   ```bash
+   $ chsh -s /bin/bash
+   $ echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> ~/.bashrc
+   $ chmod 700 ~/.bashrc
+   $ ln -s ~/.bashrc ~/.bash_profile
+   ```
+
+4. Set up Python 3 as the default version of Python:
+
+   ```bash
+   $ echo "alias python='python3'" >> ~/.bashrc
+   $ echo "export PATH=$HOME/Library/Python/3.7/bin:$PATH" >> ~/.bashrc
+   ```
+
+## Linux
+
 1. Make sure you're up to date:
 
    ```bash
@@ -34,7 +58,7 @@ The purpose here is to document what I use for my personal Linux-based developme
 
 3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
 
-## Additional pre-requisites for Ubuntu/Pop!_OS desktop 19.10 users
+### Additional pre-requisites for Ubuntu/Pop!_OS desktop 19.10 users
 
 You need to install a Python3 package before running the Ansible playbook:
 
@@ -44,7 +68,7 @@ $ sudo apt -y install python3-distutils
 
 If you forget this step, running the playbook will yield several messages like `[WARNING]: Skipping plugin (/.../filename) as it seems to be invalid: No module named 'distutils.spawn'`.
 
-## Additional pre-requisites for Debian desktop 9 users
+### Additional pre-requisites for Debian desktop 9 users
 
 The version of Ansible that ships with Debian 9 is not new enough for these scripts. You can find [installation instructions here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian) to get a current version installed.
 
@@ -64,7 +88,7 @@ Since core OS packages are upgraded, it is safest to reboot the PC/VM after runn
 
 # Notes on differences between Linux distros
 
-In general, these scripts are optimized around the experience of users of Ubuntu desktop distributions. These
+In general, these scripts are optimized around the experience of users of Ubuntu desktop distributions. These scripts install GUI-based applications, and manipulate the GUI shell for development purposes. They will probably most work on a server-based distribution if that's what you use for development, though they will require significant reworking.
 
 ## Desktop vs. WSL 2 distributions
 
@@ -88,3 +112,12 @@ Special affordances are made to enable support for WSL 2. Most of the GUI custom
 ## Pop!_OS desktop 19.10 / Ubuntu desktop 19.10
 
 * The "Dash to Panel" Gnome extension appears to be broken.
+
+## macOS
+
+Most software does work on macOS, with a few exceptions noted below:
+
+* Insync is replaced with the native Google Backup and Sync
+* QEMU/KVM is replaced with VirtualBox (note that installing VirtualBox might fail the first time because of required permissions)
+* Remmina is not available, and [Microsoft Remote Desktop Client](https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-mac) must be installed from the App Store
+* Gnome-specific tweaks and applications are not supported
