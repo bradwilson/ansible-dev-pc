@@ -6,7 +6,7 @@
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    - set_fact: is_wsl={{ not is_mac and ookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     # Linux
 
