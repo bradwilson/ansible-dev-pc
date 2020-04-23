@@ -74,3 +74,4 @@
         - gpg
         - gnu-sed
         - ripgrep
+      when: is_mac
