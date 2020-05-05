@@ -64,6 +64,9 @@
 - import_playbook: nodejs/core.yaml
 - import_playbook: nodejs/vscode.yaml
 
+# Nomad
+- import_playbook: nomad/core.yaml
+
 # Postman
 - import_playbook: postman/core.yaml
 

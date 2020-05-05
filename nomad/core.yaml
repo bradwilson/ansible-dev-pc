@@ -1,0 +1,17 @@
+- name: Nomad
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    nomad_version: 0.11.1
+    url_linux: https://releases.hashicorp.com/nomad/{{ nomad_version }}/nomad_{{ nomad_version }}_linux_amd64.zip
+    url_mac: https://releases.hashicorp.com/nomad/{{ nomad_version }}/nomad_{{ nomad_version }}_darwin_amd64.zip
+
+  tasks:
+    - name: Install Nomad
+      unarchive:
+        src: "{{ url_mac if is_mac else url_linux }}"
+        dest: "~/bin"
+        creates: "~/bin/nomad"
+        remote_src: yes
