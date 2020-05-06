@@ -15,3 +15,8 @@
         dest: "~/bin"
         creates: "~/bin/nomad"
         remote_src: yes
+      register: nomad_installed
+
+    - name: Add Nomad autocomplete
+      shell: nomad --autocomplete-install
+      when: nomad_installed.changed
