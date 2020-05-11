@@ -18,5 +18,5 @@
       register: nomad_installed
 
     - name: Add Nomad autocomplete
-      shell: nomad --autocomplete-install
+      shell: ~/bin/nomad --autocomplete-install
       when: nomad_installed.changed

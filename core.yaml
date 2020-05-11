@@ -61,6 +61,7 @@
         - jq
         - net-tools
         - snapd
+        - unzip
         - uuid
         - xclip
       when: not is_mac
