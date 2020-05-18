@@ -3,7 +3,18 @@
   connection: local
 
   tasks:
-    - name: Install VS Code Extention
-      command: code --install-extension rebornix.ruby
+    - name: Install Ruby gems
+      command: ~/.rbenv/shims/gem install {{ item }}
       args:
-        creates: ~/.vscode/extensions/rebornix.ruby-*/package.json
+        creates: ~/.rbenv/shims/{{ item }}
+      loop:
+        - readapt
+        - solargraph
+
+    - name: Install VS Code Extentions
+      command: code --install-extension {{ item }}
+      args:
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - castwide.ruby-debug
+        - castwide.solargraph
