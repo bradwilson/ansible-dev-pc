@@ -38,6 +38,12 @@
         package: bcompare
       when: not is_mac
 
+    - name: Add bcomp alias
+      file:
+        path: ~/bin/bcomp
+        src: /usr/bin/bcompare
+        state: link
+
     # macOS
 
     - name: Install Beyond Compare (macOS)
