@@ -55,7 +55,7 @@
       when: is_mac
 
     - name: Install .NET SDK (macOS)
-      shell: dotnet-install -c {{ item }}
+      shell: ~/bin/dotnet-install -c {{ item }}
       register: dotnet_sdk_installed_mac
       loop: "{{ dotnet_versions }}"
       args:
