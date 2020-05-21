@@ -43,6 +43,7 @@
         path: ~/bin/bcomp
         src: /usr/bin/bcompare
         state: link
+      when: not is_mac
 
     # macOS
 
