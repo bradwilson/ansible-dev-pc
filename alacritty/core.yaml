@@ -5,7 +5,7 @@
   vars:
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_popos: "{{ not is_mac and 'Pop!_OS' in hostvars[inventory_hostname].ansible_facts.lsb.description }}"
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}

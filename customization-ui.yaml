@@ -267,6 +267,7 @@
     is_debian: "{{ ansible_distribution == 'Debian' }}"
     is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -353,13 +354,16 @@
         deb: /tmp/paper-icon-theme.deb
       when: not is_mac and not is_wsl
 
-    - name: Install PIP
+    - name: Install PIP 2 (Ubuntu 18.04)
       become: yes
       apt:
-        package: "{{ item }}"
-      loop:
-        - python-pip
-        - python3-pip
+        package: python-pip
+      when: is_ubuntu_bionic
+
+    - name: Install PIP 3
+      become: yes
+      apt:
+        package: python3-pip
       when: not is_mac and not is_wsl
 
     - name: Install psutil Python package

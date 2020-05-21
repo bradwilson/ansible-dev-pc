@@ -3,6 +3,7 @@
   connection: local
 
   vars:
+    az_distribution_release: "{{ 'eoan' if ansible_distribution_release == 'focal' else ansible_distribution_release }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
@@ -17,7 +18,7 @@
     - name: Add Azure CLI APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ ansible_distribution_release }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli {{ az_distribution_release }} main
         filename: azure-cli
         update_cache: no
       register: apt_repository

@@ -1,53 +1,20 @@
+- import_playbook: ../dotnet/core.yaml    # PowerShell Core depends on having .NET Core available
+
 - name: PowerShell Core
   hosts: 127.0.0.1
   connection: local
 
   vars:
-    is_debian: "{{ ansible_distribution == 'Debian' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
-    is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
-    pwsh_distro_version: "{{ ansible_distribution_major_version if is_debian else ansible_distribution_version }}"    # MSFT uses '19.04' for Ubuntu, and just '10' for Debian
 
   tasks:
     # Linux
 
-    - name: Add Microsoft APT package key
-      become: yes
-      apt_key:
-        url: https://packages.microsoft.com/keys/microsoft.asc
-      when: is_debian or is_ubuntu_bionic
-
-    - name: Add Microsoft APT package repository
-      become: yes
-      apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/{{ ansible_distribution | lower }}/{{ pwsh_distro_version }}/prod {{ ansible_distribution_release }} main
-        filename: microsoft-prod
-        update_cache: no
-      register: apt_repository
-      when: is_debian or is_ubuntu_bionic
-
-    - name: Update APT package list
-      become: yes
-      apt:
-        update_cache: yes
-      when: apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
-
-    - name: Install PowerShell Core (Debian/Ubuntu 18.04)
-      become: yes
-      apt:
-        package: powershell
-      when: is_debian or is_ubuntu_bionic
-
-    - name: Install PowerShell Core (Ubuntu 18.10+)
-      become: yes
-      command: snap install --classic powershell
+    - name: Install PowerShell Core (Linux)
+      command: dotnet tool install -g powershell
       args:
-        creates: /snap/bin/pwsh
-      when: is_ubuntu and not is_ubuntu_bionic
+        creates: ~/.dotnet/tools/pwsh
+      when: not is_mac
 
     # macOS
 

@@ -5,9 +5,9 @@
   vars:
     dotnet_versions:
       - "2.1"
-      - "3.0"
       - "3.1"
-    dotnet_distro_version: "{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else ansible_distribution_version }}"    # MSFT uses '19.04' for Ubuntu, and just '10' for Debian
+    dotnet_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
+    dotnet_distribution_version: "{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else ansible_distribution_version }}"    # MSFT uses '19.04' for Ubuntu, and just '10' for Debian
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
@@ -22,7 +22,7 @@
     - name: Add Microsoft APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/{{ ansible_distribution | lower }}/{{ dotnet_distro_version }}/prod {{ ansible_distribution_release }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/{{ dotnet_distribution }}/{{ dotnet_distribution_version }}/prod {{ ansible_distribution_release }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository

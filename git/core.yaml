@@ -5,7 +5,7 @@
   vars:
     is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
     RIPGREP_VERSION: "12.0.1"
 
