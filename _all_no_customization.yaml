@@ -73,9 +73,6 @@
 # Alacritty (high performance terminal application)
 - import_playbook: alacritty/core.yaml
 
-# Brave
-- import_playbook: brave/core.yaml
-
 # Firefox
 - import_playbook: firefox/core.yaml
 
