@@ -18,51 +18,40 @@
 # Visual Studio Code
 - import_playbook: vscode/core.yaml
 
-# Ansible
-- import_playbook: ansible/vscode.yaml
-
 # Azure
 - import_playbook: azure/az.yaml
 - import_playbook: azure/azshell.yaml
 - import_playbook: azure/storage-explorer.yaml
-- import_playbook: azure/vscode.yaml
 
 # Broot
 - import_playbook: broot/core.yaml
 
 # Docker
 - import_playbook: docker/core.yaml
-- import_playbook: docker/vscode.yaml
 
 # .NET Core
 - import_playbook: dotnet/core.yaml
-- import_playbook: dotnet/vscode.yaml
 
 # Flameshot
 - import_playbook: flameshot/core.yaml
 
 # git
 - import_playbook: git/core.yaml
-- import_playbook: git/vscode.yaml
 
 # golang
 - import_playbook: golang/core.yaml
-- import_playbook: golang/vscode.yaml
 
 # Kubernetes
 - import_playbook: kubectl/core.yaml
-- import_playbook: kubectl/vscode.yaml
 
 # Virtualization (QEMU/KVM on Linux, VirtualBox on macOS)
 - import_playbook: virtualization/core.yaml
 
 # Mono (.NET Framework)
 - import_playbook: mono/core.yaml
-- import_playbook: mono/vscode.yaml
 
 # NodeJS
 - import_playbook: nodejs/core.yaml
-- import_playbook: nodejs/vscode.yaml
 
 # Nomad
 - import_playbook: nomad/core.yaml
@@ -72,15 +61,12 @@
 
 # PowerShell Core
 - import_playbook: powershell-core/core.yaml
-- import_playbook: powershell-core/vscode.yaml
 
 # Python
 - import_playbook: python/core.yaml
-- import_playbook: python/vscode.yaml
 
 # Ruby
 - import_playbook: ruby/core.yaml
-- import_playbook: ruby/vscode.yaml
 
 ##### Applications (free)
 

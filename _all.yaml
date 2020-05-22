@@ -11,14 +11,47 @@
 
 - import_playbook: _all_no_customization.yaml
 
+##### Operating system packages and configuration
+
 - import_playbook: customization-text.yaml
 - import_playbook: customization-ui.yaml
+
+##### Developer tools
+
 - import_playbook: vscode/customization.yaml
+
+- import_playbook: ansible/vscode.yaml
+
+- import_playbook: azure/vscode.yaml
+
 - import_playbook: docker/customization.yaml
+- import_playbook: docker/vscode.yaml
+
 - import_playbook: dotnet/customization.yaml
+- import_playbook: dotnet/vscode.yaml
+
 - import_playbook: git/customization.yaml
+- import_playbook: git/vscode.yaml
+
+- import_playbook: golang/vscode.yaml
+
 - import_playbook: kubectl/customization.yaml
+- import_playbook: kubectl/vscode.yaml
+
+- import_playbook: mono/vscode.yaml
+
 - import_playbook: no-screen-blank/core.yaml
+
 - import_playbook: nodejs/customization.yaml
+- import_playbook: nodejs/vscode.yaml
+
+- import_playbook: powershell-core/vscode.yaml
+
+- import_playbook: python/vscode.yaml
+
 - import_playbook: ruby/customization.yaml
+- import_playbook: ruby/vscode.yaml
+
+##### Applications (free)
+
 - import_playbook: alacritty/customization.yaml
