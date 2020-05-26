@@ -1,0 +1,23 @@
+- name: GitHub (gh)
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    gh_version: "0.9.0"
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
+  tasks:
+    # Linux
+
+    - name: Install gh CLI (Linux)
+      become: yes
+      apt:
+        deb: https://github.com/cli/cli/releases/download/v{{ gh_version }}/gh_{{ gh_version }}_linux_amd64.deb
+      when: not is_mac
+
+    # macOS
+
+    - name: Install gh CLI (macOS)
+      homebrew:
+        name: gh
+      when: is_mac

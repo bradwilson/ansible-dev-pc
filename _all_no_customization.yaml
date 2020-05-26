@@ -38,6 +38,10 @@
 # git
 - import_playbook: git/core.yaml
 
+# GitHub
+- import_playbook: github/gh.yaml
+- import_playbook: github/hub.yaml
+
 # golang
 - import_playbook: golang/core.yaml
 
