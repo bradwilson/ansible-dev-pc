@@ -8,6 +8,6 @@
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
-        - ms-vscode.go
+        - golang.go
         - premparihar.gotestexplorer
         - maxmedia.go-prof
