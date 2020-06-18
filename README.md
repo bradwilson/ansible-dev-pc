@@ -72,6 +72,10 @@ If you forget this step, running the playbook will yield several messages like `
 
 The version of Ansible that ships with Debian 9 is not new enough for these scripts. You can find [installation instructions here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian) to get a current version installed.
 
+### Additional pre-requisites for WSL 2 users
+
+Follow [these instructions](https://forum.snapcraft.io/t/running-snaps-on-wsl2-insiders-only-for-now/13033/1) to enable support for snap before running the Ansible playbook. Alternately, comment out the features that use snap (search for "snap" in the YAML files).
+
 # Running
 
 Before running the scripts, please review `_all.yaml` and `_all_no_customization.yaml`, and comment out software you don't want installed. In particular, most folders contain `customization.yaml` files which tend to contain my personal opinions on customizations; feel free to comment out sections of those files, or ignore them entirely.
