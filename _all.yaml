@@ -18,8 +18,6 @@
 
 ##### Developer tools
 
-- import_playbook: vscode/customization.yaml
-
 - import_playbook: ansible/vscode.yaml
 
 - import_playbook: azure/vscode.yaml
@@ -55,3 +53,7 @@
 ##### Applications (free)
 
 - import_playbook: alacritty/customization.yaml
+
+##### This has to be last, because it enables WSL Remote, which breaks installing Code extensions in WSL 2
+
+- import_playbook: vscode/customization.yaml
