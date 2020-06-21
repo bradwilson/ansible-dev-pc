@@ -60,6 +60,7 @@
         - inetutils-traceroute
         - jq
         - net-tools
+        - p7zip-full
         - snapd
         - unzip
         - uuid
