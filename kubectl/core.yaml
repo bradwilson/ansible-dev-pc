@@ -52,6 +52,11 @@
         line: source $(brew --prefix)/etc/bash_completion
       when: bash_completion.changed
 
+    - name: Install kubectl (macOS)
+      homebrew:
+        name: kubectl
+      when: is_mac
+
     # Common
 
     - name: Enable bash completion for kubectl
