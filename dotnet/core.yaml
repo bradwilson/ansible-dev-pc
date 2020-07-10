@@ -45,6 +45,10 @@
       loop: "{{ dotnet_versions }}"
       when: not is_mac
 
+    - name: Perform first-run experience (Linux)
+      command: dotnet new
+      when: dotnet_sdk_installed_linux.changed
+
     # macOS
 
     - name: Install .NET SDK installer
@@ -69,11 +73,11 @@
         state: link
       when: is_mac
 
-    # Common
+    - name: Perform first-run experience (macOS)
+      command: ~/bin/dotnet new
+      when: dotnet_sdk_installed_mac.changed
 
-    - name: Perform first-run experience
-      command: dotnet new
-      when: dotnet_sdk_installed_linux.changed or dotnet_sdk_installed_mac.changed
+    # Common
 
     - name: Update environment for .NET Core
       blockinfile:

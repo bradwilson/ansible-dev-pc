@@ -23,9 +23,7 @@ The purpose here is to document what I use for my personal Linux-based developme
 
 1. Install [Homebrew](https://docs.brew.sh/Installation)
 
-2. Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-macos)
-
-3. Change the default shell from zsh to bash:
+2. Change the default shell from zsh to bash:
 
    ```bash
    $ chsh -s /bin/bash
@@ -34,12 +32,14 @@ The purpose here is to document what I use for my personal Linux-based developme
    $ ln -s ~/.bashrc ~/.bash_profile
    ```
 
-4. Set up Python 3 as the default version of Python:
+3. Set up Python 3 as the default version of Python:
 
    ```bash
    $ echo "alias python='python3'" >> ~/.bashrc
    $ echo "export PATH=$HOME/Library/Python/3.7/bin:$PATH" >> ~/.bashrc
    ```
+
+4. Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-macos)
 
 ## Linux
 
