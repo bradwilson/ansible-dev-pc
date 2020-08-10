@@ -15,13 +15,13 @@
       become: yes
       apt:
         package: gnupg-agent
-      when: not is_mac
+      when: not is_mac and not is_wsl
 
     - name: Add Docker APT package key
       become: yes
       apt_key:
         url: https://download.docker.com/linux/{{ docker_distribution }}/gpg
-      when: not is_mac
+      when: not is_mac and not is_wsl
 
     - name: Add Docker APT package repository
       become: yes
@@ -30,7 +30,7 @@
         filename: docker
         update_cache: no
       register: apt_repository
-      when: not is_mac
+      when: not is_mac and not is_wsl
 
     - name: Update APT package list
       become: yes
@@ -41,19 +41,14 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Docker CLI components (Linux)
+    - name: Install Docker (Linux)
       become: yes
       apt:
         package: "{{ item }}"
       loop:
+        - docker-ce
         - docker-ce-cli
         - docker-compose
-      when: not is_mac
-
-    - name: Install Docker engine (Linux)
-      become: yes
-      apt:
-        package: docker-ce
       when: not is_mac and not is_wsl
 
     - name: Enable Docker engine for current user
