@@ -37,16 +37,6 @@
           alias ls='ls -Fh --color'
       when: not is_mac
 
-    - name: Enable 24-bit color in ConEmu
-      blockinfile:
-        path: ~/.bashrc
-        marker: "### {mark} Ansible managed: 24-bit color in ConEmu"
-        block: |
-          echo -ne "\e[9999H\e[9999A"
-          alias clear='clear; echo -ne "\e[9999H\e[9999A"'
-          bind -x '"\C-l": clear'
-      when: is_wsl
-
     - name: Install APT packages
       become: yes
       apt:
