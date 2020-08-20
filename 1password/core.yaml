@@ -1,0 +1,21 @@
+- name: 1password
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
+  tasks:
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
+    # macOS
+
+    - name: Install 1password (macOS)
+      homebrew_cask:
+        name: 1password
+      when: is_mac
+
+
+
+
+https://app-updates.agilebits.com/download/OPM7

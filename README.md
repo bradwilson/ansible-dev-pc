@@ -121,7 +121,5 @@ Special affordances are made to enable support for WSL 2. Most of the GUI custom
 
 Most software does work on macOS, with a few exceptions noted below:
 
-* Insync is replaced with the native Google Backup and Sync
 * QEMU/KVM is replaced with VirtualBox (note that installing VirtualBox might fail the first time because of required permissions)
-* Remmina is not available, and [Microsoft Remote Desktop Client](https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-mac) must be installed from the App Store
 * Gnome-specific tweaks and applications are not supported

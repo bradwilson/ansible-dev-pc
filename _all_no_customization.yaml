@@ -15,6 +15,9 @@
 
 ##### Developer tools
 
+# 1password
+- import_playbook: 1password/core.yaml
+
 # Visual Studio Code
 - import_playbook: vscode/core.yaml
 
@@ -82,9 +85,6 @@
 
 # Prettier version of ping w/ graphs
 - import_playbook: prettyping/core.yaml
-
-# RDP/X/VNC/SSH client
-- import_playbook: remmina/core.yaml
 
 # Slack desktop application
 - import_playbook: slack/core.yaml
