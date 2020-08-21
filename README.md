@@ -123,3 +123,16 @@ Most software does work on macOS, with a few exceptions noted below:
 
 * QEMU/KVM is replaced with VirtualBox (note that installing VirtualBox might fail the first time because of required permissions)
 * Gnome-specific tweaks and applications are not supported
+
+# List of apps kfcampbell is missing
+
+- magnet (mac app store)
+- ulysses (mac app store)
+- protonvpn (???)
+- alfred (???)
+- flux (mac app store)
+- tadam (mac app store)
+
+## Other things to make sure are taken care of
+
+- .zshrc
