@@ -7,21 +7,19 @@
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
-
     # Linux
 
     - name: Install Docker pre-requisites
       become: yes
       apt:
         package: gnupg-agent
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     - name: Add Docker APT package key
       become: yes
       apt_key:
         url: https://download.docker.com/linux/{{ docker_distribution }}/gpg
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     - name: Add Docker APT package repository
       become: yes
@@ -30,7 +28,7 @@
         filename: docker
         update_cache: no
       register: apt_repository
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     - name: Update APT package list
       become: yes
@@ -49,7 +47,7 @@
         - docker-ce
         - docker-ce-cli
         - docker-compose
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     - name: Enable Docker engine for current user
       become: yes
@@ -57,7 +55,7 @@
         name={{ lookup('env', "USER") }}
         groups=docker
         append=yes
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     # macOS
 

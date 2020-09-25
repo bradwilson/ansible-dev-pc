@@ -6,15 +6,13 @@
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
-
     # Linux
 
     - name: Add Kubernetes APT package key
       become: yes
       apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     - name: Add Kubernetes APT package repository
       become: yes
@@ -23,7 +21,7 @@
         filename: kubernetes
         update_cache: no
       register: apt_repository
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     - name: Update APT package list
       become: yes
@@ -38,7 +36,7 @@
       become: yes
       apt:
         package: kubectl
-      when: not is_mac and not is_wsl
+      when: not is_mac
 
     # macOS
 
