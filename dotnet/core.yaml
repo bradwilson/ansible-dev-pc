@@ -6,6 +6,7 @@
     dotnet_versions:
       - "2.1"
       - "3.1"
+      - "5.0"
     dotnet_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
     dotnet_distribution_version: "{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else ansible_distribution_version }}"    # MSFT uses '19.04' for Ubuntu, and just '10' for Debian
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
