@@ -3,9 +3,14 @@
   connection: local
 
   vars:
-    ruby_version: 2.7.1
+    ruby_version: 2.7.2
 
   tasks:
+    # Need to update versions in case this is being re-run to get a newer Ruby
+    - name: Update available Ruby versions
+      shell: git -C ~/.rbenv/plugins/ruby-build pull
+      ignore_errors: yes
+
     - name: Install Ruby {{ ruby_version }}
       shell: ~/.rbenv/bin/rbenv install {{ ruby_version }}
       args:
