@@ -69,22 +69,3 @@
         block: |
           export PATH=$PATH:$HOME/dev/go/bin
           export GOPATH=$HOME/dev/go
-
-          function switchgo() {
-            version=$1
-            if [ -z $version ]; then
-              echo "Usage: switchgo [version]"
-              return
-            fi
-            if ! command -v "go$version" > /dev/null 2>&1; then
-              echo "version does not exist, downloading with commands: "
-              echo "  go get golang.org/dl/go${version}"
-              echo "  go${version} download"
-              echo ""
-              go get "golang.org/dl/go${version}"
-              go${version} download
-            fi
-            go_bin_path=$(command -v "go$version")
-            ln -sf "$go_bin_path" "$HOME/bin/go"
-            echo "Switched to ${go_bin_path}"
-          }
