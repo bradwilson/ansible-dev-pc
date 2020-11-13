@@ -58,7 +58,7 @@
 
           function echoGoVersion() {
             if which go > /dev/null; then
-              CURRENT_GO=$(go version | awk '{print $3; exit;}')
+              CURRENT_GO=$(go version | awk '{print $3; exit;}' | cut -c3-)
               echo -ne " \033[38;5;16;48;5;80m  $CURRENT_GO \033[0m"
             fi
           }
