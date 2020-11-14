@@ -13,7 +13,7 @@
     - name: Add Spotify APT package key
       become: yes
       apt_key:
-        url: https://download.spotify.com/debian/pubkey.gpg
+        url: https://download.spotify.com/debian/pubkey_0D811D58.gpg
       when: not is_mac and not is_wsl
 
     - name: Add Spotify APT package repository
