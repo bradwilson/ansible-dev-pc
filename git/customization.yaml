@@ -50,8 +50,8 @@
           }
 
           function echoRubyVersion() {
-            if which rbenv > /dev/null; then
-              CURRENT_RUBY=$(rbenv version-name)
+            if which ruby > /dev/null; then
+              CURRENT_RUBY=$(ruby --version | awk '{ print $2; exit; }')
               echo -ne " \033[38;5;210;48;5;52m  \033[38;5;254m$CURRENT_RUBY \033[0m"
             fi
           }
