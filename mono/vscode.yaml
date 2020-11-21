@@ -10,3 +10,4 @@
       loop:
         - k--kato.docomment        # C# XML Documentation Comments
         - ms-dotnettools.csharp    # C#
+        - ms-vscode.mono-debug     # Mono Debug
