@@ -1,19 +1,6 @@
 // Place your key bindings in this file to overwrite the defaults
 [
   {
-    "key": "ctrl+f4",
-    "command": "workbench.action.closeActiveEditor"
-  },
-  {
-    "key": "ctrl+w",
-    "command": "-workbench.action.closeActiveEditor"
-  },
-  {
-    "key": "ctrl+w",
-    "command": "-workbench.action.closeWindow",
-    "when": "!editorIsOpen"
-  },
-  {
     "key": "ctrl+k ctrl+d",
     "command": "editor.action.formatDocument",
     "when": "editorTextFocus && !editorReadonly"

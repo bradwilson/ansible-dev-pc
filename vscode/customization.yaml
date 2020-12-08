@@ -13,7 +13,7 @@
       loop:
         - streetsidesoftware.code-spell-checker           # Code Spell Checker
         - editorconfig.editorconfig                       # EditorConfig for VS Code
-        - thenikso.github-plus-theme                      # GitHub Plus Theme
+        # - thenikso.github-plus-theme                      # GitHub Plus Theme
         - ms-vsliveshare.vsliveshare-pack                 # Live Share Extension Pack
         - pkief.material-icon-theme                       # Material Icon Theme
         - eamodio.toggle-excluded-files                   # Toggle Excluded Files

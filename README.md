@@ -132,7 +132,27 @@ Most software does work on macOS, with a few exceptions noted below:
 - alfred (???)
 - flux (mac app store)
 - tadam (mac app store)
+- obsidian
+
 
 ## Other things to make sure are taken care of
 
-- .zshrc
+- .zshrc (switch to bash?)
+- themes are all light mode
+  - manually changing this now
+- gopath is not consistent with my preferred folder structure
+- workspaces are disabled/have weird shortcuts
+  - setting keyboard shortcuts manually in settings
+  - first reset all, then manually change the "switch to workspace" settings
+- close buttons, etc. are on right, not left
+  - fixed manually in tweaks
+- vscode escape not working
+  - manually switch dispatch setting to `keyCode`
+- dash to panel
+  - disable entirely?
+  - can monkey with settings by right-clicking --> extensions
+
+### other other things to do
+
+- need to `sudo apt upgrade`
+- need to restart/log off/on in order for full changes to take effect

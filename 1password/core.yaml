@@ -14,8 +14,4 @@
       homebrew_cask:
         name: 1password
       when: is_mac
-
-
-
-
-https://app-updates.agilebits.com/download/OPM7
+      

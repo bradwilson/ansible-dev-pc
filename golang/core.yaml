@@ -26,13 +26,13 @@
       register: go_download_linux
       when: not is_mac
 
-    - name: Create symlink to /usr/local/go
-      become: yes
-      file:
-        path: /usr/local/go
-        src: /opt/google/go{{ go_version }}/go
-        state: link
-      when: not is_mac
+#   - name: Create symlink to /usr/local/go
+#     become: yes
+#     file:
+#       path: /usr/local/go
+#       src: /opt/google/go{{ go_version }}/go
+#       state: link
+#     when: not is_mac
 
     - name: Add Go to the PATH
       lineinfile:
