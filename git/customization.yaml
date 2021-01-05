@@ -25,25 +25,29 @@
         marker: "### {mark} Ansible managed: bash-git-prompt customization"
         block: |
           function echoKubeContext() {
-            if which kubectl > /dev/null; then
-              CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null)
-              if [[ $CURRENT_CONTEXT != "" ]]; then
-                echo -ne " \033[38;5;112;48;5;242m  \033[38;5;254m$CURRENT_CONTEXT \033[0m"
+            if [ -z "${PRIVATE_PROMPT}" ]; then
+              if which kubectl > /dev/null; then
+                CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null)
+                if [[ $CURRENT_CONTEXT != "" ]]; then
+                  echo -ne " \033[38;5;112;48;5;242m  \033[38;5;254m$CURRENT_CONTEXT \033[0m"
+                fi
               fi
             fi
           }
 
           function echoAksAccount() {
-            if [ -f ~/.azure/clouds.config ]; then
-              if which gsed > /dev/null; then
-                CURRENT_SUB=$(gsed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
-              else
-                CURRENT_SUB=$(sed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
-              fi
-              if [[ $CURRENT_SUB != "" ]]; then
-                CURRENT_ACCOUNT=$(cat ~/.azure/azureProfile.json | jq -r ".subscriptions[] | select(.id==\"$CURRENT_SUB\") | .name")
-                if [[ $CURRENT_ACCOUNT != "" ]]; then
-                  echo -ne " \033[38;5;227;48;5;30m  \033[38;5;254m$CURRENT_ACCOUNT \033[0m"
+            if [ -z "${PRIVATE_PROMPT}" ]; then
+              if [ -f ~/.azure/clouds.config ]; then
+                if which gsed > /dev/null; then
+                  CURRENT_SUB=$(gsed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
+                else
+                  CURRENT_SUB=$(sed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
+                fi
+                if [[ $CURRENT_SUB != "" ]]; then
+                  CURRENT_ACCOUNT=$(cat ~/.azure/azureProfile.json | jq -r ".subscriptions[] | select(.id==\"$CURRENT_SUB\") | .name")
+                  if [[ $CURRENT_ACCOUNT != "" ]]; then
+                    echo -ne " \033[38;5;227;48;5;30m  \033[38;5;254m$CURRENT_ACCOUNT \033[0m"
+                  fi
                 fi
               fi
             fi
