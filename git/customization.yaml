@@ -63,6 +63,13 @@
             fi
           }
 
+          function echoDotNetVersion() {
+            if which dotnet > /dev/null; then
+              CURRENT_DOTNET=$(dotnet --version)
+              echo -ne " \033[38;5;231;48;5;54m  ${CURRENT_DOTNET} \033[0m"
+            fi
+          }
+
           function echoPath() {
             echo -ne " \033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[0m"
           }
@@ -78,7 +85,7 @@
           # Pre- and post-status prompt strings
           GIT_PROMPT_COMMAND_FAIL="${ResetColor} \`echoColor 131 227\` ✘ _LAST_COMMAND_STATE_ ${ResetColor}"
           GIT_PROMPT_COMMAND_OK=""
-          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoGoVersion\`\`echoKubeContext\`\`echoAksAccount\`"
+          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoGoVersion\`\`echoDotNetVersion\`\`echoKubeContext\`\`echoAksAccount\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
           GIT_PROMPT_END_USER="${ResetColor}\`echoPath\` \n${BoldGreen} sh$ ${ResetColor}"
           GIT_PROMPT_END_ROOT="${ResetColor}\`echoPath\` \n${BoldRed} sh# ${ResetColor}"
