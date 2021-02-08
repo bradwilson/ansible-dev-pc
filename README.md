@@ -2,14 +2,14 @@
 
 This repository contains useful scripts to set up a Unix-y development machine. They have been tested with the following OSes:
 
-| Distro                                                          | SKU     | Version(s)          |
-| --------------------------------------------------------------- | ------- | ------------------- |
-| [Pop!_OS](https://system76.com/pop)                             | Desktop | 18.04, 19.10, 20.04 |
-| [Ubuntu](https://www.ubuntu.com/download/desktop)               | Desktop | 18.04, 19.10, 20.04 |
-| [Ubuntu](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6) | WSL 2   | 18.04, 20.04        |
-| [Debian](https://www.debian.org/distrib/netinst)                | Desktop | 9, 10               |
-| [Debian](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6) | WSL 2   | 10                  |
-| [macOS](https://www.apple.com/macos/)                           | Desktop | 10.15               |
+| Distro                                                          | SKU     | Version(s)   |
+| --------------------------------------------------------------- | ------- | ------------ |
+| [Pop!_OS](https://system76.com/pop)                             | Desktop | 18.04, 20.04 |
+| [Ubuntu](https://www.ubuntu.com/download/desktop)               | Desktop | 18.04, 20.04 |
+| [Ubuntu](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6) | WSL 2   | 18.04, 20.04 |
+| [Debian](https://www.debian.org/distrib/netinst)                | Desktop | 9, 10        |
+| [Debian](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6) | WSL 2   | 10           |
+| [macOS](https://www.apple.com/macos/)                           | Desktop | 10.15        |
 
 Text shell customization assumes you're using bash (macOS in particular now ships with zsh as the default shell). GUI shell customization assumes you're using Gnome on Linux. Alternate distros and/or shells are left as an exercise for the reader.
 
@@ -62,16 +62,6 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
 
-### Additional pre-requisites for Ubuntu/Pop!_OS desktop 19.10 users
-
-You need to install a Python3 package before running the Ansible playbook:
-
-```bash
-$ sudo apt -y install python3-distutils
-```
-
-If you forget this step, running the playbook will yield several messages like `[WARNING]: Skipping plugin (/.../filename) as it seems to be invalid: No module named 'distutils.spawn'`.
-
 ### Additional pre-requisites for Debian desktop 9 users
 
 The version of Ansible that ships with Debian 9 is not new enough for these scripts. You can find [installation instructions here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian) to get a current version installed.
@@ -116,10 +106,6 @@ Special affordances are made to enable support for WSL 2. Most of the GUI custom
 ## Debian 10
 
 * PowerShell Core is not (yet) supported on Debian 10. You can [download a v7 preview build manually](https://github.com/powershell/powershell#get-powershell) in the meantime.
-
-## Pop!_OS desktop 19.10 / Ubuntu desktop 19.10
-
-* The "Dash to Panel" Gnome extension appears to be broken.
 
 ## macOS
 
