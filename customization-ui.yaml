@@ -295,6 +295,7 @@
               <dir>{{ windir.stdout }}/Fonts</dir>
               <dir>{{ userprofile.stdout }}/AppData/Local/Microsoft/Windows/Fonts</dir>
           </fontconfig>
+      when: is_wsl
 
     # Linux
 
