@@ -27,7 +27,7 @@
         path: ~/gdrive
         src: "{{ userprofile.stdout }}/Google Drive"
         state: link
-      when: gdrive_path.stat.exists
+      when: is_wsl and gdrive_path.stat.exists
 
     # Linux
 
