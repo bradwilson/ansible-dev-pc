@@ -34,6 +34,18 @@
         state: link
       when: is_mac
 
+    - name: Install VS Live Share dependencies (Linux)
+      become: yes
+      apt:
+        name: "{{ item }}"
+      loop:
+        - openssl
+        - gnome-keyring
+        - libsecret-1-0
+        - desktop-file-utils
+        - x11-utils
+      when: not is_mac
+
     - name: Override default VS Code preferences
       copy:
         src: settings.json
