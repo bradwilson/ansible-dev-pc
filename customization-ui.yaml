@@ -279,17 +279,17 @@
 
     # WSL
 
-    - name: Get Windows font path (WSL)
+    - name: Get Windows font path
       shell: wslpath "$(cmd.exe /c "echo %WINDIR%" 2>/dev/null)"
       register: windir
       when: is_wsl
 
-    - name: Get user's Windows home path (WSL)
+    - name: Get user's Windows home path
       shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
       register: userprofile
       when: is_wsl
 
-    - name: Link Windows fonts into Linux (WSL)
+    - name: Link Windows fonts into WSL
       become: yes
       copy:
         dest: /etc/fonts/local.conf
@@ -365,6 +365,12 @@
       apt:
         package: gnome-tweaks
       when: not is_mac and not is_wsl and not is_debian_stretch
+
+    - name: Enable chrome-gnome-shell
+      become: yes
+      apt:
+        package: chrome-gnome-shell
+      when: not is_mac and not is_wsl
 
     - name: Install numix Gnome theme
       become: yes
