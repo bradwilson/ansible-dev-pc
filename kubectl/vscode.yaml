@@ -3,7 +3,9 @@
   connection: local
 
   tasks:
-    - name: Install VS Code Extention
-      command: code --install-extension ms-kubernetes-tools.vscode-kubernetes-tools
+    - name: Install VS Code extensions
+      command: ../vscode/invoke-code --install-extension {{ item }}
       args:
-        creates: ~/.vscode/extensions/ms-kubernetes-tools.vscode-kubernetes-tools-*/package.json
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - ms-kubernetes-tools.vscode-kubernetes-tools

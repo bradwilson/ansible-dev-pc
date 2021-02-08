@@ -3,7 +3,9 @@
   connection: local
 
   tasks:
-    - name: Install VS Code Extention
-      command: code --install-extension ms-python.python
+    - name: Install VS Code extensions
+      command: ../vscode/invoke-code --install-extension {{ item }}
       args:
-        creates: ~/.vscode/extensions/ms-python.python-*/package.json
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - ms-python.python

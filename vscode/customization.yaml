@@ -6,20 +6,7 @@
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    - name: Install VS Code Extensions
-      command: code --install-extension {{ item }}
-      args:
-        creates: ~/.vscode/extensions/{{ item }}-*/package.json
-      loop:
-        - streetsidesoftware.code-spell-checker           # Code Spell Checker
-        - editorconfig.editorconfig                       # EditorConfig for VS Code
-        - thenikso.github-plus-theme                      # GitHub Plus Theme
-        - ms-vsliveshare.vsliveshare-pack                 # Live Share Extension Pack
-        - pkief.material-icon-theme                       # Material Icon Theme
-        - eamodio.toggle-excluded-files                   # Toggle Excluded Files
-        - pflannery.vscode-versionlens                    # Version Lens
-        - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
-        - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
+    # Common
 
     - name: Ensure ~/.config folder exists
       file:
@@ -27,12 +14,16 @@
         state: directory
         mode: 0700
 
+    # macOS
+
     - name: Link '~/Library/Application Support/Code' to '~/.config/Code' (macOS)
       file:
         path: ~/.config/Code
         src: ~/Library/Application Support/Code
         state: link
       when: is_mac
+
+    # Linux
 
     - name: Install VS Live Share dependencies (Linux)
       become: yes
@@ -45,6 +36,23 @@
         - desktop-file-utils
         - x11-utils
       when: not is_mac
+
+    # Common
+
+    - name: Install VS Code extensions
+      command: ./invoke-code --install-extension {{ item }}
+      args:
+        creates: ~/.vscode/extensions/{{ item }}-*/package.json
+      loop:
+        - eamodio.toggle-excluded-files                   # Toggle Excluded Files
+        - editorconfig.editorconfig                       # EditorConfig for VS Code
+        - ms-vsliveshare.vsliveshare-pack                 # Live Share Extension Pack
+        - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
+        - pkief.material-icon-theme                       # Material Icon Theme
+        - pflannery.vscode-versionlens                    # Version Lens
+        - streetsidesoftware.code-spell-checker           # Code Spell Checker
+        - thenikso.github-plus-theme                      # GitHub Plus Theme
+        - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
 
     - name: Override default VS Code preferences
       copy:

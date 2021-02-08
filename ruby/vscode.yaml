@@ -11,8 +11,8 @@
         - readapt
         - solargraph
 
-    - name: Install VS Code Extentions
-      command: code --install-extension {{ item }}
+    - name: Install VS Code extensions
+      command: ../vscode/invoke-code --install-extension {{ item }}
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:

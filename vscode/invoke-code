@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+#
+# Adapted from the `code` command that ships with VS Code for Bash users, stripped down
+# so that it always calls the Windows-side Code.exe even when the "Remote - WSL" extension
+# is installed (because otherwise we break our ability to install extensions). It will
+# fall back to just calling `code` with the command line options when not in WSL.
+#
+# Original copyright header:
+#   Copyright (c) Microsoft Corporation. All rights reserved.
+#   Licensed under the MIT License. See https://github.com/microsoft/vscode/blob/afd102cbd2e17305a510701d7fd963ec2528e4ea/LICENSE.txt for license information.
+
+CODE_PATH="$(which code)"
+
+if [ -z "${CODE_PATH}" ]; then
+  if [ -n "${WSL_DISTRO_NAME}" ]; then
+	  echo 2>&1 "error(1): Cannot find 'code' on the path; is VS Code installed in Windows?"
+  else
+	  echo 2>&1 "error(1): Cannot find 'code' on the path; is VS Code installed?"
+  fi
+
+	exit 1
+fi
+
+if [ -n "${WSL_DISTRO_NAME}" ]; then
+  VSCODE_PATH="$(dirname "$(dirname "$(realpath "${CODE_PATH}")")")"
+  ELECTRON="${VSCODE_PATH}/Code.exe"
+
+  export WSLENV="ELECTRON_RUN_AS_NODE/w:$WSLENV"
+  CLI=$(wslpath -m "$VSCODE_PATH/resources/app/out/cli.js")
+
+  ELECTRON_RUN_AS_NODE=1 "$ELECTRON" "$CLI" "$@"
+else
+  code "$@"
+fi
+
+exit $?
