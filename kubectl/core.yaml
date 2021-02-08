@@ -66,4 +66,6 @@
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Enable kubectl auto-complete"
         block: |
-          eval "$(kubectl completion bash)"
+          if which kubectl > /dev/null; then
+            eval "$(kubectl completion bash)"
+          fi
