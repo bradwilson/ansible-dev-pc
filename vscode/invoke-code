@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Adapted from the `code` command that ships with VS Code for Bash users, stripped down
 # so that it always calls the Windows-side Code.exe even when the "Remote - WSL" extension
