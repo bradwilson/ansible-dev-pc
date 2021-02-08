@@ -32,7 +32,7 @@
 
           font:
             normal:
-              family: UbuntuMono Nerd Font Mono
+              family: JetBrainsMono Nerd Font Mono
             size: 14.0
 
           draw_bold_text_with_bright_colors: true
