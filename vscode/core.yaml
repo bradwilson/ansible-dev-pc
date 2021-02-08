@@ -40,10 +40,15 @@
         package: code
       when: not is_wsl and not is_mac
 
+    - name: Get user's Windows home path (WSL)
+      shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
+      register: userprofile
+      when: is_wsl
+
     - name: Create shortcut to Windows ~/.vscode (WSL)
       file:
         path: ~/.vscode
-        src: /mnt/c/Users/{{ lookup('ENV', 'USER' )}}/.vscode
+        src: "{{ userprofile.stdout }}/.vscode"
         state: link
       when: is_wsl
 
@@ -56,7 +61,7 @@
     - name: Create shortcut to Windows ~/.config/Code (WSL)
       file:
         path: ~/.config/Code
-        src: /mnt/c/Users/{{ lookup('ENV', 'USER' )}}/AppData/Roaming/Code
+        src: "{{ userprofile.stdout }}/AppData/Roaming/Code"
         state: link
       when: is_wsl
 
