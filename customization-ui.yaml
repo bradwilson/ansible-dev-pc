@@ -272,6 +272,30 @@
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
+    # WSL
+
+    - name: Get Windows font path (WSL)
+      shell: wslpath "$(cmd.exe /c "echo %WINDIR%" 2>/dev/null)"
+      register: windir
+      when: is_wsl
+
+    - name: Get user's Windows home path (WSL)
+      shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
+      register: userprofile
+      when: is_wsl
+
+    - name: Link Windows fonts into Linux (WSL)
+      become: yes
+      copy:
+        dest: /etc/fonts/local.conf
+        content: |
+          <?xml version="1.0"?>
+          <!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+          <fontconfig>
+              <dir>{{ windir.stdout }}/Fonts</dir>
+              <dir>{{ userprofile.stdout }}/AppData/Local/Microsoft/Windows/Fonts</dir>
+          </fontconfig>
+
     # Linux
 
     - name: Create GNOME extension directory
