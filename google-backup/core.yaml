@@ -9,6 +9,26 @@
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
+    # WSL
+
+    - name: Get user's Windows home path (WSL)
+      shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
+      register: userprofile
+      when: is_wsl
+
+    - name: Check for Google Drive folder (WSL)
+      stat:
+        path: "{{ userprofile.stdout }}/Google Drive"
+      register: gdrive_path
+      when: is_wsl
+
+    - name: Create symlink to ~/gdrive (WSL)
+      file:
+        path: ~/gdrive
+        src: "{{ userprofile.stdout }}/Google Drive"
+        state: link
+      when: gdrive_path.stat.exists
+
     # Linux
 
     - name: Add Insync APT package key (Ubuntu)
