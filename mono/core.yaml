@@ -4,10 +4,7 @@
 
   vars:
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
-    # Mono only ships packages for LTS versions of Ubuntu, so we need to stick to 18.04 (Bionic)
     mono_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
-    mono_distribution_release: "{{ ansible_distribution_release if ansible_distribution == 'Debian' else 'bionic' }}"
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -24,7 +21,7 @@
     - name: Add Mono APT package repository
       become: yes
       apt_repository:
-        repo: deb https://download.mono-project.com/repo/{{ mono_distribution }} stable-{{ mono_distribution_release }} main
+        repo: deb https://download.mono-project.com/repo/{{ mono_distribution }} stable-{{ ansible_distribution_release }} main
         filename: mono-official-stable
         update_cache: no
       register: apt_repository

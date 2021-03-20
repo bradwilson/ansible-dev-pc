@@ -70,6 +70,25 @@ The version of Ansible that ships with Debian 9 is not new enough for these scri
 
 Follow [these instructions](https://forum.snapcraft.io/t/running-snaps-on-wsl2-insiders-only-for-now/13033/1) to enable support for snap before running the Ansible playbook. Alternately, comment out the features that use snap (search for "snap" in the YAML files).
 
+<strong>Important note:</strong> The instructions above were written for Ubuntu 18.04. They may need some modification for other OSes (for example, the path to `daemonize` has moved from `/usr/sbin` in 18.04 to `/usr/bin` in 20.04, and failure to use the correct path when creating your startup files will render your WSL shell un-runnable). I <strong>strongly</strong> recommend that you do not exit your functional WSL terminal prompt that you use to make these changes until you've verified with a <em>new</em> terminal prompt that those changes were successful.
+
+You'll be able to tell it was successful because your terminal prompt should now include the standard systemd welcome banner, like the one shown here:
+
+```
+Welcome to Ubuntu 20.04.2 LTS (GNU/Linux 5.4.72-microsoft-standard-WSL2 x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sat Mar 20 12:52:47 PDT 2021
+
+  System load:  2.09               Processes:               50
+  Usage of /:   2.4% of 250.98GB   Users logged in:         0
+  Memory usage: 24%                IPv4 address for eth0:   172.19.25.197
+  Swap usage:   0%                 IPv4 address for virbr0: 192.168.122.1
+```
+
 # Running
 
 Before running the scripts, please review `_all.yaml` and `_all_no_customization.yaml`, and comment out software you don't want installed. In particular, most folders contain `customization.yaml` files which tend to contain my personal opinions on customizations; feel free to comment out sections of those files, or ignore them entirely.
