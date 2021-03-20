@@ -3,10 +3,16 @@
   connection: local
 
   vars:
+    is_debian: "{{ ansible_distribution == 'Debian' }}"
     is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
+    linux_git_packages:
+      - git
+      - git-gui
+      - git-lfs
+      - gitk
     RIPGREP_VERSION: "12.0.1"
 
   tasks:
@@ -21,14 +27,14 @@
       register: apt_repository_1
       when: is_ubuntu
 
-    - name: Add Backports repository (Debian Stretch)
+    - name: Add Backports repository (Debian)
       become: yes
       apt_repository:
-        repo: deb http://deb.debian.org/debian stretch-backports main
+        repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
         filename: backports
         update_cache: no
       register: apt_repository_2
-      when: is_debian_stretch
+      when: is_debian
 
     - name: Update APT package list
       become: yes
@@ -39,16 +45,20 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install APT package
+    - name: Install APT package (Debian)
       become: yes
       apt:
         package: "{{ item }}"
-      loop:
-        - git
-        - git-gui
-        - git-lfs
-        - gitk
-      when: not is_mac
+        default_release: "{{ ansible_distribution_release }}-backports"
+      loop: "{{ linux_git_packages }}"
+      when: is_debian
+
+    - name: Install APT package (Other Linux)
+      become: yes
+      apt:
+        package: "{{ item }}"
+      loop: "{{ linux_git_packages }}"
+      when: not is_mac and not is_debian
 
     - name: Install ripgrep (Ubuntu 18.04 / Debian Stretch)
       become: yes
