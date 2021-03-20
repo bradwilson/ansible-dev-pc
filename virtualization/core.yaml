@@ -13,7 +13,7 @@
     - name: Test for hypervisor (Linux)
       shell: dmesg | grep -i "hypervisor detected" || true
       register: hypervisor
-      when: not is_mac
+      when: not is_mac and not is_wsl
 
     - name: Install QEMU/KVM (Linux)
       become: yes
@@ -26,7 +26,7 @@
         - ovmf
         - qemu-kvm
         - virt-manager
-      when: not is_mac and hypervisor.stdout == ""
+      when: not is_mac and not is_wsl and hypervisor.stdout == ""
 
     - name: Enable QEMU/KVM for current user (Linux)
       become: yes
@@ -34,7 +34,7 @@
         name={{ lookup('env', "USER") }}
         groups=libvirt
         append=yes
-      when: not is_mac and hypervisor.stdout == ""
+      when: not is_mac and not is_wsl and hypervisor.stdout == ""
 
     # macOS
 
