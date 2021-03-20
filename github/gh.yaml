@@ -3,16 +3,40 @@
   connection: local
 
   vars:
-    gh_version: "1.4.0"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
     # Linux
 
+    - name: Add APT package key
+      become: yes
+      apt_key:
+        keyserver: hkp://keyserver.ubuntu.com:80
+        id: C99B11DEB97541F0
+      when: not is_mac
+
+    - name: Add APT package source
+      become: yes
+      apt_repository:
+        repo: deb https://cli.github.com/packages {{ ansible_distribution_release }} main
+      register: apt_repository
+      when: not is_mac
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
     - name: Install gh CLI (Linux)
       become: yes
       apt:
-        deb: https://github.com/cli/cli/releases/download/v{{ gh_version }}/gh_{{ gh_version }}_linux_amd64.deb
+        package: "{{ item }}"
+      loop:
+        - gh
       when: not is_mac
 
     # macOS
