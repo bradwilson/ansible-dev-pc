@@ -66,6 +66,17 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 The version of Ansible that ships with Debian 9 is not new enough for these scripts. You can find [installation instructions here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian) to get a current version installed.
 
+### Additional pre-requisites for Debian 10 users (including WSL 2)
+
+Docker requires iptables-legacy for networking support. Some Debian installations may be using iptables-nft by default. Ensure that the iptables alternative is set correctly before running `docker/core.yaml`:
+
+```
+$ sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+update-alternatives: using /usr/sbin/iptables-legacy to provide /usr/sbin/iptables (iptables) in manual mode
+```
+
+After running this command, it's strongly recommended that you reboot before running the Ansible playbooks.
+
 ### Additional pre-requisites for WSL 2 users
 
 Follow [these instructions](https://forum.snapcraft.io/t/running-snaps-on-wsl2-insiders-only-for-now/13033/1) to enable support for snap before running the Ansible playbook. Alternately, comment out the features that use snap (search for "snap" in the YAML files).
