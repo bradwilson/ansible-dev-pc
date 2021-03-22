@@ -270,6 +270,7 @@
     is_debian: "{{ ansible_distribution == 'Debian' }}"
     is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
 
   tasks:
@@ -376,17 +377,41 @@
         package: numix-gtk-theme
       when: not is_mac and not is_wsl
 
+    - name: Add paper Gnome icon theme APT package source
+      become: yes
+      apt_repository:
+        repo: ppa:snwh/ppa
+      register: apt_repository
+      when: is_ubuntu and not is_wsl
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: is_ubuntu and not is_wsl and apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install paper Gnome icon theme (Ubuntu)
+      become: yes
+      apt:
+        package: "{{ item }}"
+      loop:
+        - paper-icon-theme
+      when: is_ubuntu and not is_wsl
+
     - name: Download paper Gnome icon theme
       get_url:
         url: https://snwh.org/paper/download.php?owner=snwh&ppa=ppa&pkg=paper-icon-theme,18.04
         dest: /tmp/paper-icon-theme.deb
-      when: not is_mac and not is_wsl
+      when: is_debian and not is_wsl
 
-    - name: Install paper Gnome icon theme
+    - name: Install paper Gnome icon theme (Debian)
       become: yes
       apt:
         deb: /tmp/paper-icon-theme.deb
-      when: not is_mac and not is_wsl
+      when: is_debian and not is_wsl
 
     - name: Install PIP 2 (Ubuntu 18.04)
       become: yes
