@@ -15,6 +15,21 @@
         package: gnupg-agent
       when: not is_mac
 
+    - name: Determine Docker Compose latest version
+      shell:
+        cmd: "curl -s https://api.github.com/repos/docker/compose/releases/latest | grep \"browser_download_url.*Linux-x86_64\\\"\" | cut -d : -f 2,3 | tr -d \\\""
+        warn: false
+      register: docker_compose_version
+      when: not is_mac
+
+    - name: Install Docker Compose (Linux)
+      become: yes
+      get_url:
+        url: "{{ docker_compose_version.stdout }}"
+        dest: /usr/local/bin/docker-compose
+        mode: 0755
+      when: not is_mac
+
     - name: Add Docker APT package key
       become: yes
       apt_key:
@@ -39,14 +54,13 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Docker (Linux)
+    - name: Install Docker engine (Linux)
       become: yes
       apt:
         package: "{{ item }}"
       loop:
         - docker-ce
         - docker-ce-cli
-        - docker-compose
       when: not is_mac
 
     - name: Enable Docker engine for current user
@@ -59,7 +73,7 @@
 
     # macOS
 
-    - name: Install Docker CLI components (macOS)
+    - name: Install Docker Compose (macOS)
       homebrew:
         name: docker-compose
       when: is_mac
