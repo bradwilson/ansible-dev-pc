@@ -13,7 +13,6 @@
       - git-gui
       - git-lfs
       - gitk
-    RIPGREP_VERSION: "12.0.1"
 
   tasks:
     # Linux
@@ -60,10 +59,17 @@
       loop: "{{ linux_git_packages }}"
       when: not is_mac and not is_debian
 
+    - name: Determine latest version (Ubuntu 18.04 / Debian Stretch)
+      shell:
+        cmd: "curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep \"browser_download_url.*deb\" | grep amd64 | cut -d : -f 2,3 | tr -d \\\""
+        warn: false
+      register: ripgrep_version
+      when: is_ubuntu_bionic or is_debian_stretch
+
     - name: Install ripgrep (Ubuntu 18.04 / Debian Stretch)
       become: yes
       apt:
-        deb: https://github.com/BurntSushi/ripgrep/releases/download/{{ RIPGREP_VERSION }}/ripgrep_{{ RIPGREP_VERSION }}_amd64.deb
+        deb: "{{ ripgrep_version.stdout }}"
       when: is_ubuntu_bionic or is_debian_stretch
 
     - name: Install ripgrep (other Linux)
