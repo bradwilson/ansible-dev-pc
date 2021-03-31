@@ -25,7 +25,7 @@
         marker: "### {mark} Ansible managed: bash-git-prompt customization"
         block: |
           function echoError() {
-            echo -ne "\033[38;5;0;48;5;131m\033[38;5;227m  ${1} \033[38;5;131;48;5;0m"
+            echo -ne "\033[38;5;131;48;5;0m\033[38;5;227;48;5;131m  ${1} \033[38;5;0;48;5;131m"
           }
 
           function echoKubeContext() {
@@ -33,7 +33,7 @@
               if which kubectl > /dev/null; then
                 CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null)
                 if [[ ${CURRENT_CONTEXT} != "" ]]; then
-                  echo -ne "\033[38;5;0;48;5;242m\033[38;5;112m  \033[38;5;254m${CURRENT_CONTEXT} \033[38;5;242;48;5;0m"
+                  echo -ne "\033[38;5;242;48;5;0m\033[38;5;112;48;5;242m  \033[38;5;254m${CURRENT_CONTEXT} \033[38;5;0;48;5;242m"
                 fi
               fi
             fi
@@ -50,7 +50,7 @@
                 if [[ ${CURRENT_SUB} != "" ]]; then
                   CURRENT_ACCOUNT=$(cat ~/.azure/azureProfile.json | jq -r ".subscriptions[] | select(.id==\"${CURRENT_SUB}\") | .name")
                   if [[ ${CURRENT_ACCOUNT} != "" ]]; then
-                    echo -ne "\033[38;5;0;48;5;30m\033[38;5;227m  \033[38;5;254m${CURRENT_ACCOUNT} \033[38;5;30;48;5;0m"
+                    echo -ne "\033[38;5;30;48;5;0m\033[38;5;227;48;5;30m  \033[38;5;254m${CURRENT_ACCOUNT} \033[38;5;0;48;5;30m"
                   fi
                 fi
               fi
@@ -60,26 +60,26 @@
           function echoRubyVersion() {
             if which ruby > /dev/null; then
               CURRENT_RUBY=$(ruby --version | awk '{ print $2; exit; }')
-              echo -ne "\033[38;5;0;48;5;52m\033[38;5;210m  \033[38;5;254m${CURRENT_RUBY} \033[38;5;52;48;5;0m"
+              echo -ne "\033[38;5;52;48;5;0m\033[38;5;210;48;5;52m  \033[38;5;254m${CURRENT_RUBY} \033[38;5;0;48;5;52m"
             fi
           }
 
           function echoGoVersion() {
             if which go > /dev/null; then
               CURRENT_GO=$(go version | awk '{print $3; exit;}' | cut -c3-)
-              echo -ne "\033[38;5;0;48;5;80m\033[38;5;16m  ${CURRENT_GO} \033[38;5;80;48;5;0m"
+              echo -ne "\033[38;5;80;48;5;0m\033[38;5;16;48;5;80m  ${CURRENT_GO} \033[38;5;0;48;5;80m"
             fi
           }
 
           function echoDotNetVersion() {
             if which dotnet > /dev/null; then
               CURRENT_DOTNET=$(dotnet --version)
-              echo -ne "\033[38;5;0;48;5;54m\033[38;5;231m  ${CURRENT_DOTNET} \033[38;5;54;48;5;0m"
+              echo -ne "\033[38;5;54;48;5;0m\033[38;5;231;48;5;54m  ${CURRENT_DOTNET} \033[38;5;0;48;5;54m"
             fi
           }
 
           function echoPath() {
-            echo -ne "\033[38;5;0;48;5;28m\033[38;5;227m  \033[38;5;254m$(dirs +0) \033[38;5;28;48;5;0m"
+            echo -ne "\033[38;5;28;48;5;0m\033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[38;5;0;48;5;28m"
           }
 
           function echoColor() {
@@ -104,7 +104,7 @@
           GIT_PROMPT_CHANGED="\`echoColor 25 227\` ~"
           GIT_PROMPT_CLEAN=""
           GIT_PROMPT_CONFLICTS="\`echoColor 25 210\`  "
-          GIT_PROMPT_PREFIX="\`echoColor 25 0\` "
+          GIT_PROMPT_PREFIX="\`echoColor 0 25\`\`echoColor 25 0\` "
           GIT_PROMPT_REMOTE=""
           GIT_PROMPT_SEPARATOR=""
           GIT_PROMPT_STAGED="\`echoColor 25 113\` ±"
