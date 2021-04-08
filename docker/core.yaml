@@ -5,6 +5,7 @@
   vars:
     docker_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    machine_arch: "{{ 'Darwin-x86_64' if is_mac else 'Linux-x86_64' }}"
 
   tasks:
     # Linux
@@ -82,3 +83,18 @@
       homebrew_cask:
         name: docker
       when: is_mac
+
+    # Common
+
+    - name: Determine Docker Machine latest version
+      shell:
+        cmd: "curl -s https://api.github.com/repos/docker/machine/releases/latest | grep \"browser_download_url.*{{ machine_arch }}\\\"\" | cut -d : -f 2,3 | tr -d \\\""
+        warn: false
+      register: docker_machine_version
+
+    - name: Install Docker Machine
+      become: yes
+      get_url:
+        url: "{{ docker_machine_version.stdout }}"
+        dest: /usr/local/bin/docker-machine
+        mode: 0755
