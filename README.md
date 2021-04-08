@@ -2,14 +2,12 @@
 
 This repository contains useful scripts to set up a Unix-y development machine. They have been tested with the following OSes:
 
-| Distro                                                          | CPU            | SKU     | Version(s)   |
-| --------------------------------------------------------------- | -------------- | ------- | ------------ |
-| [Pop!_OS](https://system76.com/pop)                             | Intel (64-bit) | Desktop | 18.04, 20.04 |
-| [Ubuntu](https://www.ubuntu.com/download/desktop)               | Intel (64-bit) | Desktop | 18.04, 20.04 |
-| [Ubuntu](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6) | Intel (64-bit) | WSL 2   | 18.04, 20.04 |
-| [Debian](https://www.debian.org/distrib/netinst)                | Intel (64-bit) | Desktop | 9, 10        |
-| [Debian](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6) | Intel (64-bit) | WSL 2   | 10           |
-| [macOS](https://www.apple.com/macos/)                           | Intel (64-bit) | Desktop | 10.15        |
+Distro  | Version(s)   | CPU            | SKU
+------- | ------------ | -------------- | ---
+Ubuntu  | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
+Pop!_OS | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://system76.com/pop)
+Debian  | 9, 10        | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
+macOS   | 10.15        | Intel (64-bit) | [Desktop](https://www.apple.com/macos/)
 
 Text shell customization assumes you're using bash (macOS in particular now ships with zsh as the default shell). GUI shell customization assumes you're using Gnome on Linux. Alternate distros and/or shells are left as an exercise for the reader.
 
