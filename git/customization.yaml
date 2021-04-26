@@ -3,6 +3,20 @@
   connection: local
 
   tasks:
+    - name: Download git-completion.bash
+      get_url:
+        url:  https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
+        dest: ~/.git-completion.bash
+
+    - name: Add bash completion for git
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: git-completion.bash"
+        block: |
+          if [ -f ~/.git-completion.bash ]; then
+            . ~/.git-completion.bash
+          fi
+
     - name: Download bash-git-prompt
       git:
         repo: https://github.com/magicmonty/bash-git-prompt
