@@ -114,6 +114,3 @@
 
 # Spotify
 - import_playbook: spotify/core.yaml
-
-# Sublime Text and Sublime Merge
-- import_playbook: sublime/core.yaml
