@@ -46,7 +46,7 @@
 - import_playbook: golang/core.yaml
 
 # Kubernetes
-- import_playbook: kubectl/core.yaml
+- import_playbook: kubernetes/core.yaml
 
 # Virtualization (QEMU/KVM on Linux, VirtualBox on macOS)
 - import_playbook: virtualization/core.yaml

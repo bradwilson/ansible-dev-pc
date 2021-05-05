@@ -1,4 +1,4 @@
-- name: kubectl
+- name: kubernetes
   hosts: 127.0.0.1
   connection: local
 
@@ -38,6 +38,38 @@
         package: kubectl
       when: not is_mac
 
+    - name: Determine k9s latest version
+      shell:
+        cmd: "curl -s https://api.github.com/repos/derailed/k9s/releases/latest | jq -r .name"
+        warn: false
+      register: k9s_version
+      when: not is_mac
+
+    - name: Create k9s output folder
+      become: yes
+      file:
+        path: /opt/derailed/k9s/{{ k9s_version.stdout }}
+        state: directory
+        mode: 0755
+      when: not is_mac
+
+    - name: Install k9s (Linux)
+      become: yes
+      unarchive:
+        remote_src: yes
+        src: https://github.com/derailed/k9s/releases/download/{{ k9s_version.stdout }}/k9s_Linux_x86_64.tar.gz
+        dest: /opt/derailed/k9s/{{ k9s_version.stdout }}
+        creates: /opt/derailed/k9s/{{ k9s_version.stdout }}/k9s
+      when: not is_mac
+
+    - name: Symlink k9s
+      become: yes
+      file:
+        path: /usr/local/bin/k9s
+        src: /opt/derailed/k9s/{{ k9s_version.stdout }}/k9s
+        state: link
+      when: not is_mac
+
     # macOS
 
     - name: Install bash completion support
@@ -55,6 +87,11 @@
     - name: Install kubectl (macOS)
       homebrew:
         name: kubectl
+      when: is_mac
+
+    - name: Install k9s (macOS)
+      homebrew:
+        name: k9s
       when: is_mac
 
     # Common

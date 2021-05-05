@@ -31,8 +31,8 @@
 
 - import_playbook: golang/vscode.yaml
 
-- import_playbook: kubectl/customization.yaml
-- import_playbook: kubectl/vscode.yaml
+- import_playbook: kubernetes/customization.yaml
+- import_playbook: kubernetes/vscode.yaml
 
 - import_playbook: mono/vscode.yaml
 
