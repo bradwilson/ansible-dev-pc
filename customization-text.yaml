@@ -142,7 +142,7 @@
               esac
             }
           else
-          # Write current path in the terminal title bar
+            # Write current path in the terminal title bar
             function writeCwdInTitlebar() {
               case "$TERM" in
                 xterm*|rxvt*)
@@ -154,7 +154,8 @@
             }
 
             # Set up support for X server in WSL
-            export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+            export WSL_HOST_IP="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')"
+            export DISPLAY="${WSL_HOST_IP}:0.0"
           fi
 
           # Force newline when things don't end cleanly
