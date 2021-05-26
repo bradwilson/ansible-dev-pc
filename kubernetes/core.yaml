@@ -57,7 +57,7 @@
       become: yes
       unarchive:
         remote_src: yes
-        src: https://github.com/derailed/k9s/releases/download/{{ k9s_version.stdout }}/k9s_Linux_x86_64.tar.gz
+        src: https://github.com/derailed/k9s/releases/download/{{ k9s_version.stdout }}/k9s_{{ k9s_version.stdout }}_Linux_x86_64.tar.gz
         dest: /opt/derailed/k9s/{{ k9s_version.stdout }}
         creates: /opt/derailed/k9s/{{ k9s_version.stdout }}/k9s
       when: not is_mac
