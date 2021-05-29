@@ -8,11 +8,34 @@
   tasks:
     # Linux
 
+    - name: Determine hub latest version URL
+      shell:
+        cmd: "curl -s https://api.github.com/repos/github/hub/releases/latest | grep \"browser_download_url.*linux-amd64\" | cut -d : -f 2,3 | tr -d \\\"[:space:]"
+        warn: false
+      register: hub_url
+      when: not is_mac
+
+    - name: Get hub archive filename from URL
+      shell:
+        cmd: "basename {{ hub_url.stdout }} | rev | cut -f 2- -d '.' | rev"
+      register: hub_filename
+      when: not is_mac
+
     - name: Install hub CLI (Linux)
       become: yes
-      command: snap install --classic hub
-      args:
-        creates: /snap/bin/hub
+      unarchive:
+        src: "{{ hub_url.stdout }}"
+        dest: /opt
+        remote_src: yes
+        creates: /opt/{{ hub_filename.stdout }}/bin/hub
+      when: not is_mac
+
+    - name: Make symlink for hub
+      become: yes
+      file:
+        path: /usr/local/bin/hub
+        src: /opt/{{ hub_filename.stdout }}/bin/hub
+        state: link
       when: not is_mac
 
     # macOS

@@ -8,6 +8,8 @@
     machine_arch: "{{ 'Darwin-x86_64' if is_mac else 'Linux-x86_64' }}"
 
   tasks:
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
     # Linux
 
     - name: Install Docker pre-requisites
@@ -63,6 +65,14 @@
         - docker-ce
         - docker-ce-cli
       when: not is_mac
+
+    - name: Add Docker startup on WSL boot
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Docker startup"
+        block: |
+          [ -S /var/run/docker.sock ] || sudo service docker start
+      when: is_wsl
 
     - name: Enable Docker engine for current user
       become: yes
