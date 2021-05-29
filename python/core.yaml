@@ -20,5 +20,5 @@
         block: |
           export PYENV_ROOT=$HOME/.pyenv
           export PATH=$PATH:$PYENV_ROOT/bin:$PYENV_ROOT/plugins/pyenv-virtualenv/bin
-          eval "$(pyenv init -)"
+          eval "$(pyenv init --path)"
           eval "$(pyenv virtualenv-init -)"
