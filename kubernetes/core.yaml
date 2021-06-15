@@ -70,6 +70,38 @@
         state: link
       when: not is_mac
 
+    - name: Determine Kubeval latest version
+      shell:
+        cmd: "curl -s https://api.github.com/repos/instrumenta/kubeval/releases/latest | jq -r .name"
+        warn: false
+      register: kubeval_version
+      when: not is_mac
+
+    - name: Create Kubeval output folder
+      become: yes
+      file:
+        path: /opt/instrumenta/kubeval/{{ kubeval_version.stdout }}
+        state: directory
+        mode: 0755
+      when: not is_mac
+
+    - name: Install Kubeval (Linux)
+      become: yes
+      unarchive:
+        remote_src: yes
+        src: "https://github.com/instrumenta/kubeval/releases/download/{{ kubeval_version.stdout }}/kubeval-linux-amd64.tar.gz"
+        dest: /opt/instrumenta/kubeval/{{ kubeval_version.stdout }}
+        creates: /opt/instrumenta/kubeval/{{ kubeval_version.stdout }}/kubeval
+      when: not is_mac
+
+    - name: Symlink kubeval
+      become: yes
+      file:
+        path: /usr/local/bin/kubeval
+        src: /opt/instrumenta/kubeval/{{ kubeval_version.stdout }}/kubeval
+        state: link
+      when: not is_mac
+
     # macOS
 
     - name: Install bash completion support
@@ -92,6 +124,16 @@
     - name: Install k9s (macOS)
       homebrew:
         name: k9s
+      when: is_mac
+
+    - name: Add Kubeval homebrew tap
+      homebrew_tap:
+        name: instrumenta/instrumenta
+      when: is_mac
+
+    - name: Install Kubeval (macOS)
+      homebrew:
+        name: kubeval
       when: is_mac
 
     # Common
