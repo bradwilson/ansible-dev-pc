@@ -77,12 +77,6 @@
 # Alacritty (high performance terminal application)
 - import_playbook: alacritty/core.yaml
 
-# Firefox
-- import_playbook: firefox/core.yaml
-
-# Google Chrome
-- import_playbook: google-chrome/core.yaml
-
 # Prettier version of ping w/ graphs
 - import_playbook: prettyping/core.yaml
 
@@ -91,9 +85,6 @@
 
 # Slack desktop application
 - import_playbook: slack/core.yaml
-
-# Microsoft Teams
-- import_playbook: teams/core.yaml
 
 # VideoLan Client (primarily for codecs)
 - import_playbook: vlc/core.yaml
@@ -111,6 +102,3 @@
 
 # JetBrains Toolbox (used to install/updated JetBrains tools)
 - import_playbook: jetbrains/core.yaml
-
-# Spotify
-- import_playbook: spotify/core.yaml
