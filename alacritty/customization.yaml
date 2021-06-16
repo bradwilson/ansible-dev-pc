@@ -5,7 +5,6 @@
   vars:
     is_debian: "{{ ansible_distribution == 'Debian' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-    window_decorations: "{{ 'transparent' if is_mac else 'full' }}"
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -28,12 +27,14 @@
               x: 8
               y: 8
             dynamic_padding: true
-            decorations: {{ window_decorations }}
+            decorations: full
+            startup_mode: Maximized
 
           font:
             normal:
               family: JetBrainsMono Nerd Font Mono
             size: 10.0
+            use_thin_strokes: true
 
           draw_bold_text_with_bright_colors: true
 
@@ -86,10 +87,6 @@
               red:     '0xae5e5e'
               white:   '0x2e3436'
               yellow:  '0x9b7f00'
-
-          mouse:
-            url:
-              modifiers: Control
 
           key_bindings:
             - { key: T, mods: Control|Shift, action: SpawnNewInstance }
