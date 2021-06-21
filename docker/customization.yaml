@@ -2,7 +2,12 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+
   tasks:
+    # Common
+
     - name: Add custom Docker commands
       blockinfile:
         path: ~/.bashrc
@@ -14,4 +19,42 @@
 
             _images=$(docker images --all --quiet --filter 'dangling=true')
             [[ -z ${_images// } ]] || docker rmi $_images
+          }
+
+    # Linux
+
+    - name: Ensure configuration folder exists (Linux)
+      become: yes
+      file:
+        path: /etc/docker
+        state: directory
+      when: is_mac
+
+    - name: Configure default Docker network (Linux)
+      become: yes
+      copy:
+        dest: /etc/docker/daemon.json
+        content: |
+          {
+            "default-address-pools": [
+              { "base": "192.168.240.0/20", "size": 24 }
+            ]
+          }
+
+    # macOS
+
+    - name: Ensure configuration folder exists (macOS)
+      file:
+        path: ~/.docker
+        state: directory
+      when: is_mac
+
+    - name: Configure default Docker network (macOS)
+      copy:
+        dest: ~/.docker/daemon.json
+        content: |
+          {
+            "default-address-pools": [
+              { "base": "192.168.240.0/20", "size": 24 }
+            ]
           }
