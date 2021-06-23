@@ -3,7 +3,7 @@
   connection: local
 
   vars:
-    ruby_version: 2.7.2
+    ruby_version: 2.7.3
 
   tasks:
     # Need to update versions in case this is being re-run to get a newer Ruby
