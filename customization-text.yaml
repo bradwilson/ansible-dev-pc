@@ -153,9 +153,11 @@
               esac
             }
 
-            # Set up support for X server in WSL
-            export WSL_HOST_IP="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')"
-            export DISPLAY="${WSL_HOST_IP}:0.0"
+            # Set up support for X server in WSL if we don't have the built-in Wayland support
+            if [ -z "${WAYLAND_DISPLAY}" ]; then
+              export WSL_HOST_IP="$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}')"
+              export DISPLAY="${WSL_HOST_IP}:0.0"
+            fi
           fi
 
           # Force newline when things don't end cleanly
