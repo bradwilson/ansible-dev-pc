@@ -11,6 +11,6 @@
         - coverlet.console
         - dotnet-depends
         - dotnet-format
-        - dotnet-outdated
+        - dotnet-outdated-tool
         - dotnet-reportgenerator-globaltool
         - dotnet-retire
