@@ -5,6 +5,7 @@
   vars:
     docker_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
+    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     machine_arch: "{{ 'Darwin-x86_64' if is_mac else 'Linux-x86_64' }}"
 
   tasks:
@@ -45,14 +46,14 @@
         repo: deb [arch=amd64] https://download.docker.com/linux/{{ docker_distribution }} {{ ansible_distribution_release }} stable
         filename: docker
         update_cache: no
-      register: apt_repository
+      register: apt_repository_docker
       when: not is_mac
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository.changed
+      when: apt_repository_docker.changed
       register: apt_update
       retries: 5
       until: apt_update is success
@@ -81,6 +82,68 @@
         groups=docker
         append=yes
       when: not is_mac
+
+    # Linux (Ubuntu)
+
+    - name: Add Mesa package source
+      become: yes
+      apt_repository:
+        repo: ppa:kisak/kisak-mesa
+      register: apt_repository_mesa
+      when: is_ubuntu
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: is_ubuntu and apt_repository_mesa.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install Mesa libraries and utilities
+      become: yes
+      apt:
+        package: "{{ item }}"
+      loop:
+        - libglapi-mesa
+        - libglx-mesa0
+        - mesa-utils
+      when: is_ubuntu
+
+    - name: Get distribution ID
+      shell: ". /etc/os-release; echo ${ID}${VERSION_ID}"
+      register: distro_id
+      when: is_ubuntu
+
+    - name: Add NVIDIA container runtime APT package key
+      become: yes
+      apt_key:
+        url: https://nvidia.github.io/nvidia-container-runtime/gpgkey
+      when: is_ubuntu
+
+    - name: Add NVIDIA container runtime APT package source
+      become: yes
+      get_url:
+        dest: /etc/apt/sources.list.d/nvidia-container-runtime.list
+        url: https://nvidia.github.io/nvidia-container-runtime/{{ distro_id.stdout }}/nvidia-container-runtime.list
+      register: apt_repository_nvidia
+      when: is_ubuntu
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: is_ubuntu and apt_repository_nvidia.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install NVIDIA container runtime
+      become: yes
+      apt:
+        package: nvidia-container-runtime
+      when: is_ubuntu
 
     # macOS
 
