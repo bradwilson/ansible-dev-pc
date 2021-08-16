@@ -38,7 +38,8 @@
           {
             "default-address-pools": [
               { "base": "192.168.240.0/20", "size": 24 }
-            ]
+            ],
+            "experimental": true
           }
 
     # macOS
@@ -56,6 +57,7 @@
           {
             "default-address-pools": [
               { "base": "192.168.240.0/20", "size": 24 }
-            ]
+            ],
+            "experimental": true
           }
       when: is_mac
