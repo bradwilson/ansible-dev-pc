@@ -48,6 +48,8 @@
 - import_playbook: ruby/customization.yaml
 - import_playbook: ruby/vscode.yaml
 
+- import_playbook: rust-lang/vscode.yaml
+
 ##### Applications (free)
 
 - import_playbook: alacritty/customization.yaml

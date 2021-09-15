@@ -1,8 +1,15 @@
+- import_playbook: ../rust-lang/core.yaml    # diffr is installed with Rust's cargo package manager
+
 - name: git (customization)
   hosts: 127.0.0.1
   connection: local
 
   tasks:
+    - name: Install diffr
+      command: ~/.cargo/bin/cargo install diffr
+      args:
+        creates: ~/.cargo/bin/diffr
+
     - name: Download git-completion.bash
       get_url:
         url:  https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
@@ -92,6 +99,13 @@
             fi
           }
 
+          function echoRustVersion() {
+            if which rustc > /dev/null; then
+              CURRENT_RUST=$(rustc --version | awk '{print $2; exit;}')
+              echo -ne "\033[38;5;178;40m\033[38;5;16;48;5;178m  ${CURRENT_RUST} \033[38;5;178;40m"
+            fi
+          }
+
           function echoPath() {
             echo -ne "\033[38;5;28;48;5;0m\033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[38;5;0;48;5;28m"
           }
@@ -108,7 +122,7 @@
           # Pre- and post-status prompt strings
           GIT_PROMPT_COMMAND_FAIL=" \`echoError _LAST_COMMAND_STATE_\`"
           GIT_PROMPT_COMMAND_OK=" "
-          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoGoVersion\`\`echoDotNetVersion\`\`echoKubeContext\`\`echoAksAccount\`"
+          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoGoVersion\`\`echoRustVersion\`\`echoDotNetVersion\`\`echoKubeContext\`\`echoAksAccount\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
           GIT_PROMPT_END_USER="\`echoPath\`${ResetColor} \n${BoldGreen} sh$ ${ResetColor}"
           GIT_PROMPT_END_ROOT="\`echoPath\`${ResetColor} \n${BoldRed} sh# ${ResetColor}"

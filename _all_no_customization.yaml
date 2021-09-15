@@ -72,6 +72,9 @@
 # Ruby
 - import_playbook: ruby/core.yaml
 
+# rust-lang
+- import_playbook: rust-lang/core.yaml
+
 ##### Applications (free)
 
 # Alacritty (high performance terminal application)
