@@ -28,7 +28,7 @@
       file:
         path: /etc/docker
         state: directory
-      when: is_mac
+      when: not is_mac
 
     - name: Configure default Docker network (Linux)
       become: yes
@@ -41,6 +41,7 @@
             ],
             "experimental": true
           }
+      when: not is_mac
 
     # macOS
 

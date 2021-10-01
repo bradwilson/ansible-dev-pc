@@ -21,7 +21,7 @@
 
     - name: Determine Docker Compose latest version
       shell:
-        cmd: "curl -s https://api.github.com/repos/docker/compose/releases/latest | grep \"browser_download_url.*Linux-x86_64\\\"\" | cut -d : -f 2,3 | tr -d \\\""
+        cmd: "curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -i \"browser_download_url.*linux-x86_64\\\"\" | cut -d : -f 2,3 | tr -d \\\""
         warn: false
       register: docker_compose_version
       when: not is_mac

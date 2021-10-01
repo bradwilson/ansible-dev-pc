@@ -46,7 +46,12 @@
       register: mono_install
       when: not is_mac
 
-    - name: Disable .NET app auto-run with Mono (WSL)
+    - name: Disable .NET app auto-run with Mono now (WSL)
+      become: yes
+      shell: update-binfmts --disable cli
+      when: is_wsl
+
+    - name: Disable .NET app auto-run with Mono on startup (WSL)
       blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Disable Mono auto-run for Windows apps (WSL)"
