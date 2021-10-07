@@ -44,7 +44,7 @@
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
-        - eamodio.toggle-excluded-files                   # Toggle Excluded Files
+        - amodio.toggle-excluded-files                    # Toggle Excluded Files
         - editorconfig.editorconfig                       # EditorConfig for VS Code
         - ms-vsliveshare.vsliveshare-pack                 # Live Share Extension Pack
         - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
