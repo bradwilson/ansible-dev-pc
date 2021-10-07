@@ -74,6 +74,13 @@
         package: snapd
       when: not is_mac and not is_wsl
 
+    - name: Install snap core
+      become: yes
+      command: snap install core
+      args:
+        creates: /snap/core/current/bin/bash
+      when: not is_mac and not is_wsl
+
     - name: Add /snap/bin to PATH
       lineinfile:
         path: ~/.bashrc
