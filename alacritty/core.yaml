@@ -4,35 +4,18 @@
 
   vars:
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-    is_popos: "{{ not is_mac and 'Pop!_OS' in hostvars[inventory_hostname].ansible_facts.lsb.description }}"
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     # Linux
 
-    - name: Add APT package source (Ubuntu)
-      become: yes
-      apt_repository:
-        repo: ppa:mmstick76/alacritty
-      register: apt_repository
-      when: is_ubuntu and not is_wsl and not is_popos
-
-    - name: Update APT package list
-      become: yes
-      apt:
-        update_cache: yes
-      when: apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
-
     - name: Install Alacritty (Linux)
       become: yes
-      apt:
-        package: alacritty
-      when: is_ubuntu and not is_wsl
+      command: snap install alacritty --classic
+      args:
+        creates: /snap/bin/alacritty
+      when: not is_mac and not is_wsl
 
     # macOS
 

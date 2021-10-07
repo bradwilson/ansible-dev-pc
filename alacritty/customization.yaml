@@ -3,7 +3,6 @@
   connection: local
 
   vars:
-    is_debian: "{{ ansible_distribution == 'Debian' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
@@ -13,7 +12,7 @@
       file:
         path: ~/.config/alacritty
         state: directory
-      when: not is_wsl and not is_debian
+      when: not is_wsl
 
     - name: Update ~/.config/alacritty/alacritty.yml
       copy:
@@ -90,4 +89,4 @@
 
           key_bindings:
             - { key: T, mods: Control|Shift, action: SpawnNewInstance }
-      when: not is_wsl and not is_debian
+      when: not is_wsl
