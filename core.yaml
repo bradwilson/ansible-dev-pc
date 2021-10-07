@@ -6,6 +6,8 @@
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
+    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
     # Common
 
     - name: Create ~/bin
@@ -65,6 +67,18 @@
         - uuid
         - xclip
       when: not is_mac
+
+    - name: Install snapd
+      become: yes
+      apt:
+        package: snapd
+      when: not is_mac and not is_wsl
+
+    - name: Add /snap/bin to PATH
+      lineinfile:
+        path: ~/.bashrc
+        line: export PATH=$PATH:/snap/bin
+      when: not is_mac and not is_wsl
 
     - name: Get installed package list
       package_facts: {}
