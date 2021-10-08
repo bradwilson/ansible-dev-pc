@@ -1,3 +1,5 @@
+- import_playbook: ../rust-lang/core.yaml    # Need cargo to install Alacritty
+
 - name: Alacritty
   hosts: 127.0.0.1
   connection: local
@@ -10,11 +12,58 @@
 
     # Linux
 
-    - name: Install Alacritty (Linux)
+    - name: Install pre-requisites
       become: yes
-      command: snap install alacritty --classic
+      apt:
+        package: "{{ item }}"
+      loop:
+        - cmake
+        - libfontconfig1-dev
+        - libfreetype6-dev
+        - libxcb-xfixes0-dev
+        - libxkbcommon-dev
+        - pkg-config
+        - python3
+      when: not is_mac and not is_wsl
+
+    - name: Install Alacritty (Linux)
+      command: cargo install alacritty
       args:
-        creates: /snap/bin/alacritty
+        creates: ~/.cargo/bin/alacritty
+      when: not is_mac and not is_wsl
+
+    - name: Ensure local applications folder exists
+      file:
+        path: ~/.local/share/applications
+        state: directory
+      when: not is_mac and not is_wsl
+
+    - name: Add Alacritty desktop file
+      copy:
+        src: alacritty.desktop
+        dest: ~/.local/share/applications/alacritty.desktop
+      when: not is_mac and not is_wsl
+
+    - name: Find Alacritty icon file
+      find:
+        paths: ~/.cargo/registry/src
+        patterns: alacritty.png
+        recurse: yes
+      register: alacritty_icons
+      when: not is_mac and not is_wsl
+
+    - name: Update Alacritty desktop file for binary
+      replace:
+        path: ~/.local/share/applications/alacritty.desktop
+        regexp: __HOME__
+        replace: "{{ lookup('env', 'HOME') }}"
+      when: not is_mac and not is_wsl
+
+    - name: Update Alacritty desktop file for icon
+      replace:
+        path: ~/.local/share/applications/alacritty.desktop
+        regexp: __ICON__
+        replace: "{{ alacritty_icons.files[0].path }}"
       when: not is_mac and not is_wsl
 
     # macOS
