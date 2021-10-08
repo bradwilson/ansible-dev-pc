@@ -3,6 +3,7 @@
   connection: local
 
   vars:
+    is_debian_bullseye: "{{ ansible_distribution_release == 'bullseye' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
@@ -33,6 +34,15 @@
       register: apt_update
       retries: 5
       until: apt_update is success
+
+    - name: Install pre-requisites (Debian 11)
+      become: yes
+      apt:
+        deb: "http://ftp.mx.debian.org/debian/pool/main/{{ item }}"
+      loop:
+        - libi/libindicator/libindicator3-7_0.5.0-3+b1_amd64.deb
+        - liba/libappindicator/libappindicator3-1_0.4.92-7_amd64.deb
+      when: is_debian_bullseye and not is_wsl
 
     - name: Install Slack Desktop (Linux)
       become: yes

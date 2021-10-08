@@ -6,7 +6,7 @@ Distro  | Version(s)   | CPU            | SKU
 ------- | ------------ | -------------- | ---
 Ubuntu  | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
 Pop!_OS | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://system76.com/pop)
-Debian  | 9, 10        | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
+Debian  | 9, 10, 11    | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
 macOS   | 10.15        | Intel (64-bit) | [Desktop](https://www.apple.com/macos/)
 
 Text shell customization assumes you're using bash (macOS in particular now ships with zsh as the default shell). GUI shell customization assumes you're using Gnome on Linux. Alternate distros and/or shells are left as an exercise for the reader.
