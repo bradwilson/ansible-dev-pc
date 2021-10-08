@@ -27,7 +27,7 @@
       when: not is_mac and not is_wsl
 
     - name: Install Alacritty (Linux)
-      command: cargo install alacritty
+      command: ~/.cargo/bin/cargo install alacritty
       args:
         creates: ~/.cargo/bin/alacritty
       when: not is_mac and not is_wsl
