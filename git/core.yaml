@@ -4,7 +4,6 @@
 
   vars:
     is_debian: "{{ ansible_distribution == 'Debian' }}"
-    is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
@@ -59,24 +58,24 @@
       loop: "{{ linux_git_packages }}"
       when: not is_mac and not is_debian
 
-    - name: Determine latest version (Ubuntu 18.04 / Debian Stretch)
+    - name: Determine latest version (Ubuntu 18.04)
       shell:
         cmd: "curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep \"browser_download_url.*deb\" | grep amd64 | cut -d : -f 2,3 | tr -d \\\""
         warn: false
       register: ripgrep_version
-      when: is_ubuntu_bionic or is_debian_stretch
+      when: is_ubuntu_bionic
 
-    - name: Install ripgrep (Ubuntu 18.04 / Debian Stretch)
+    - name: Install ripgrep (Ubuntu 18.04)
       become: yes
       apt:
         deb: "{{ ripgrep_version.stdout }}"
-      when: is_ubuntu_bionic or is_debian_stretch
+      when: is_ubuntu_bionic
 
     - name: Install ripgrep (other Linux)
       become: yes
       apt:
         package: ripgrep
-      when: not is_mac and not is_ubuntu_bionic and not is_debian_stretch
+      when: not is_mac and not is_ubuntu_bionic
 
     # macOS
 

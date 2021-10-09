@@ -6,7 +6,7 @@ Distro  | Version(s)   | CPU            | SKU
 ------- | ------------ | -------------- | ---
 Ubuntu  | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
 Pop!_OS | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://system76.com/pop)
-Debian  | 9, 10, 11    | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
+Debian  | 10, 11       | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
 macOS   | 10.15        | Intel (64-bit) | [Desktop](https://www.apple.com/macos/)
 
 Text shell customization assumes you're using bash (macOS in particular now ships with zsh as the default shell). GUI shell customization assumes you're using Gnome on Linux. Alternate distros and/or shells are left as an exercise for the reader.
@@ -60,11 +60,7 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
 
-### Additional pre-requisites for Debian desktop 9 users
-
-The version of Ansible that ships with Debian 9 is not new enough for these scripts. You can find [installation instructions here](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-debian) to get a current version installed.
-
-### Additional pre-requisites for Debian 10 users (including WSL 2)
+### Additional pre-requisites for Debian users (including WSL 2)
 
 Docker requires iptables-legacy for networking support. Some Debian installations may be using iptables-nft by default. Ensure that the iptables alternative is set correctly before running `docker/core.yaml`:
 
@@ -95,22 +91,11 @@ In general, these scripts are optimized around the experience of users of Ubuntu
 
 ## Desktop vs. WSL 2 distributions
 
-Special affordances are made to enable support for WSL 2. Most of the GUI customization is not done, though some GUI applications are installed. Users will need to install an X server on their machine to run those GUI applications. I use (and strongly recommend) X410, which can be found in the [Microsoft Store](https://www.microsoft.com/en-us/p/x410/9nlp712zmn9q?activetab=pivot:overviewtab).
+Special affordances are made to enable support for WSL 2. Most of the GUI customization is not done, though some GUI applications are installed. Users will need to use Windows 11 (for WSLg) or install an X server on their machine to run those GUI applications. Instructions for enabling WSLg are available on [the WSLg GitHub project README](https://github.com/microsoft/wslg/blob/HEAD/README.md).
 
 ## Debian (all versions)
 
-* Alacritty is not available on Debian.
 * Insync is not available on Debian.
-* Microsoft TTF fonts are not available on Debian.
-
-## Debian 9
-
-* Flameshot is not available on Debian 9.
-* Gnome Tweaks tool is not available on Debian 9.
-
-## Debian 10
-
-* PowerShell Core is not (yet) supported on Debian 10. You can [download a v7 preview build manually](https://github.com/powershell/powershell#get-powershell) in the meantime.
 
 ## macOS
 

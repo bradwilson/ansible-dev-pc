@@ -268,7 +268,6 @@
         url: https://extensions.gnome.org/extension-data/topicons-redux%40pop-planet.info.v6.shell-extension.zip
 
     is_debian: "{{ ansible_distribution == 'Debian' }}"
-    is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
@@ -363,7 +362,7 @@
       become: yes
       apt:
         package: gnome-tweaks
-      when: not is_mac and not is_wsl and not is_debian_stretch
+      when: not is_mac and not is_wsl
 
     - name: Enable chrome-gnome-shell
       become: yes

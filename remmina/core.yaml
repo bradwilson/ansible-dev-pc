@@ -3,7 +3,6 @@
   connection: local
 
   vars:
-    is_debian_stretch: "{{ ansible_distribution_release == 'stretch' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
 
@@ -16,36 +15,20 @@
         repo: ppa:remmina-ppa-team/remmina-next
         filename: remmina
         update_cache: no
-      register: apt_repository_1
+      register: apt_repository
       when: is_ubuntu and not is_wsl
-
-    - name: Add Backports repository (Debian Stretch)
-      become: yes
-      apt_repository:
-        repo: deb http://deb.debian.org/debian stretch-backports main
-        filename: backports
-        update_cache: no
-      register: apt_repository_2
-      when: is_debian_stretch and not is_wsl
 
     - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: apt_repository_1.changed or apt_repository_2.changed
+      when: is_ubuntu and not is_wsl and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: Install Remmina (Debian Stretch)
+    - name: Install Remmina
       become: yes
       apt:
         package: remmina
-        default_release: stretch-backports
-      when: is_debian_stretch and not is_wsl
-
-    - name: Install Remmina (other Linux)
-      become: yes
-      apt:
-        package: remmina
-      when: not is_mac and not is_debian_stretch and not is_wsl
+      when: not is_mac and not is_wsl
