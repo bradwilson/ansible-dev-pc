@@ -13,12 +13,6 @@
 
     # Linux
 
-    - name: Install Docker pre-requisites
-      become: yes
-      apt:
-        package: gnupg-agent
-      when: not is_mac
-
     - name: Determine Docker Compose latest version
       shell:
         cmd: "curl -s https://api.github.com/repos/docker/compose/releases/latest | grep -i \"browser_download_url.*linux-x86_64\\\"\" | cut -d : -f 2,3 | tr -d \\\""
