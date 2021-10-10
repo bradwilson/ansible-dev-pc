@@ -331,11 +331,34 @@
       loop: "{{ fonts_apt }}"
       when: not is_mac and not is_wsl
 
+    - name: Add Debian contrib (main) package source
+      become: yes
+      lineinfile:
+        path: /etc/apt/sources.list
+        line: deb http://http.us.debian.org/debian {{ ansible_distribution_release }} main contrib non-free
+      when: is_debian and not is_wsl
+
+    - name: Add Debian contrib (security) package source
+      become: yes
+      lineinfile:
+        path: /etc/apt/sources.list
+        line: deb http://security.debian.org {{ ansible_distribution_release }}/updates main contrib non-free
+      when: is_debian and not is_wsl
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+      when: is_debian and not is_wsl
+
     - name: Install Microsoft TTF fonts
       become: yes
       apt:
         package: ttf-mscorefonts-installer
-      when: not is_mac and not is_wsl and not is_debian
+      when: not is_mac and not is_wsl
 
     - name: Install Fonts (downloaded)
       become: yes
