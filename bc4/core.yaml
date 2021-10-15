@@ -17,7 +17,7 @@
     - name: Add Beyond Compare APT package repository
       become: yes
       apt_repository:
-        repo: deb http://www.scootersoftware.com/ bcompare4 non-free
+        repo: deb https://www.scootersoftware.com/ bcompare4 non-free
         filename: scootersoftware
         update_cache: no
       register: apt_repository
