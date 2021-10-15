@@ -93,9 +93,9 @@ In general, these scripts are optimized around the experience of users of Ubuntu
 
 Special affordances are made to enable support for WSL 2. Most of the GUI customization is not done, though some GUI applications are installed. Users will need to use Windows 11 (for WSLg) or install an X server on their machine to run those GUI applications. Instructions for enabling WSLg are available on [the WSLg GitHub project README](https://github.com/microsoft/wslg/blob/HEAD/README.md).
 
-## Debian (all versions)
+## Debian 11
 
-* Insync is not available on Debian.
+* Insync is not yet available on Debian Bullseye.
 
 ## macOS
 

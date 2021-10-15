@@ -3,26 +3,28 @@
   connection: local
 
   vars:
+    insync_distribution: "{{ ansible_distribution | lower }}"
+    insync_distribution_release: "{{ 'bionic' if ansible_distribution_release == 'focal' else ansible_distribution_release }}"
+    is_debian_bullseye: "{{ ansible_distribution_release == 'bullseye' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     # WSL
 
-    - name: Get user's Windows home path (WSL)
+    - name: Get user's Windows home path
       shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
       register: userprofile
       when: is_wsl
 
-    - name: Check for Google Drive folder (WSL)
+    - name: Check for Google Drive folder
       stat:
         path: "{{ userprofile.stdout }}/Google Drive"
       register: gdrive_path
       when: is_wsl
 
-    - name: Create symlink to ~/gdrive (WSL)
+    - name: Create symlink to ~/gdrive
       file:
         path: ~/gdrive
         src: "{{ userprofile.stdout }}/Google Drive"
@@ -31,39 +33,39 @@
 
     # Linux
 
-    - name: Add Insync APT package key (Ubuntu)
+    - name: Add Insync APT package key
       become: yes
       apt_key:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: ACCAF35C
-      when: is_ubuntu and not is_wsl
+      when: not is_mac and not is_debian_bullseye and not is_wsl
 
-    - name: Add Insync APT package repository (Ubuntu)
+    - name: Add Insync APT package repository
       become: yes
       apt_repository:
-        repo: deb http://apt.insynchq.com/ubuntu bionic non-free contrib
+        repo: deb http://apt.insynchq.com/{{ insync_distribution }} {{ insync_distribution_release }} non-free contrib
         filename: insync
         update_cache: no
       register: apt_repository
-      when: is_ubuntu and not is_wsl
+      when: not is_mac and not is_debian_bullseye and not is_wsl
 
-    - name: Update APT package list (Ubuntu)
+    - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
       when: apt_repository.changed
       register: apt_update
       retries: 5
-      until: apt_update is success
+      when: not is_mac and not is_debian_bullseye and not is_wsl
 
-    - name: Install Insync (Ubuntu)
+    - name: Install Insync
       become: yes
       apt:
         package: "{{ item }}"
       loop:
         - insync
         - insync-nautilus
-      when: is_ubuntu and not is_wsl
+      when: not is_mac and not is_debian_bullseye and not is_wsl
 
     # macOS
 
