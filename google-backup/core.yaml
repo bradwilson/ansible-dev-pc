@@ -56,7 +56,6 @@
       when: apt_repository.changed
       register: apt_update
       retries: 5
-      when: not is_mac and not is_debian_bullseye and not is_wsl
 
     - name: Install Insync
       become: yes
