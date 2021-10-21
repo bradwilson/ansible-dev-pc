@@ -271,6 +271,8 @@
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
+    snwh_ppa_distribution_release_fallback:
+      'impish': 'focal'
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -402,7 +404,9 @@
     - name: Add paper Gnome icon theme APT package source
       become: yes
       apt_repository:
-        repo: ppa:snwh/ppa
+        repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ snwh_ppa_distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
+        filename: ppa_snwh_ppa_{{ snwh_ppa_distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}
+        update_cache: no
       register: apt_repository
       when: is_ubuntu and not is_wsl
 

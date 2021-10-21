@@ -3,10 +3,12 @@
   connection: local
 
   vars:
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution_release_fallback:
+      'bullseye': 'buster'
+      'impish': 'focal'
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-    mono_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
-    # No support in Mono for Debian 11 yet
-    mono_release: "{{ 'buster' if ansible_distribution_release == 'bullseye' else ansible_distribution_release }}"
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -23,7 +25,7 @@
     - name: Add Mono APT package repository
       become: yes
       apt_repository:
-        repo: deb https://download.mono-project.com/repo/{{ mono_distribution }} stable-{{ mono_release }} main
+        repo: deb https://download.mono-project.com/repo/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} stable-{{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
         filename: mono-official-stable
         update_cache: no
       register: apt_repository

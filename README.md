@@ -2,12 +2,12 @@
 
 This repository contains useful scripts to set up a Unix-y development machine. They have been tested with the following OSes:
 
-Distro  | Version(s)   | CPU            | SKU
-------- | ------------ | -------------- | ---
-Ubuntu  | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
-Pop!_OS | 18.04, 20.04 | Intel (64-bit) | [Desktop](https://system76.com/pop)
-Debian  | 10, 11       | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
-macOS   | 10.15        | Intel (64-bit) | [Desktop](https://www.apple.com/macos/)
+Distro  | Version(s)          | CPU            | SKU
+------- | ------------------- | -------------- | ---
+Ubuntu  | 18.04, 20.04, 21.10 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
+Pop!_OS | 18.04, 20.04        | Intel (64-bit) | [Desktop](https://system76.com/pop)
+Debian  | 10, 11              | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
+macOS   | 10.15               | Intel (64-bit) | [Desktop](https://www.apple.com/macos/)
 
 Text shell customization assumes you're using bash (macOS in particular now ships with zsh as the default shell). GUI shell customization assumes you're using Gnome on Linux. Alternate distros and/or shells are left as an exercise for the reader.
 
@@ -27,7 +27,7 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 2. Change the default shell from zsh to bash:
 
-   ```bash
+   ```shell
    $ chsh -s /bin/bash
    $ echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> ~/.bashrc
    $ chmod 700 ~/.bashrc
@@ -36,7 +36,7 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 3. Set up Python 3 as the default version of Python:
 
-   ```bash
+   ```shell
    $ echo "alias python='python3'" >> ~/.bashrc
    $ echo "export PATH=$HOME/Library/Python/3.7/bin:$PATH" >> ~/.bashrc
    ```
@@ -47,29 +47,18 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 1. Make sure you're up to date:
 
-   ```bash
+   ```shell
    $ sudo apt update
    $ sudo apt -y upgrade
    ```
 
 2. Install Ansible:
 
-   ```bash
+   ```shell
    $ sudo apt -y install ansible
    ```
 
 3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
-
-### Additional pre-requisites for Debian users (including WSL 2)
-
-Docker requires iptables-legacy for networking support. Some Debian installations may be using iptables-nft by default. Ensure that the iptables alternative is set correctly before running `docker/core.yaml`:
-
-```
-$ sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
-update-alternatives: using /usr/sbin/iptables-legacy to provide /usr/sbin/iptables (iptables) in manual mode
-```
-
-After running this command, it's strongly recommended that you reboot before running the Ansible playbooks.
 
 # Running
 
@@ -77,7 +66,7 @@ Before running the scripts, please review `_all.yaml` and `_all_no_customization
 
 To run the setup:
 
-```bash
+```shell
 $ ansible-playbook -K _all.yaml
 ```
 
@@ -105,3 +94,41 @@ Most software does work on macOS, with a few exceptions noted below:
 * QEMU/KVM is replaced with VirtualBox (note that installing VirtualBox might fail the first time because of required permissions)
 * Remmina is not available, and [Microsoft Remote Desktop Client](https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-mac) must be installed from the App Store
 * Gnome-specific tweaks and applications are not supported
+
+## Having issues with Docker not starting on Linux (including WSL 2)?
+
+If you're noticing that Docker isn't running:
+
+```shell
+$ sudo service docker start
+
+* Starting Docker: docker
+
+$ docker ps
+
+Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+```
+
+Check the Docker logs with `tail /var/log/docker.log`. If you see a line like this:
+
+```shell
+failed to start daemon: Error initializing network controller: error obtaining controller instance: unable to add return rule in DOCKER-ISOLATION-STAGE-1 chain:  (iptables failed: iptables --wait -A DOCKER-ISOLATION-STAGE-1 -j RETURN: iptables v1.8.7 (nf_tables):  RULE_APPEND failed (No such file or directory): rule in chain DOCKER-ISOLATION-STAGE-1 (exit status 4))
+```
+
+That means you need to enable `iptables-legacy` for Docker networking to function properly (your distro is likely using something else, like `iptables-nft` as indicated in the error message above). I've noticed this the most with Debian 10+ and Ubuntu 21.10+. Run these command:
+
+```shell
+$ sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+
+update-alternatives: using /usr/sbin/iptables-legacy to provide /usr/sbin/iptables (iptables) in manual mode
+
+$ sudo service docker start
+
+* Starting Docker: docker
+
+$ docker ps
+
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+```
+
+It is strongly recommended that you reboot after making this change, so that it filters throughout the entire networking stack.

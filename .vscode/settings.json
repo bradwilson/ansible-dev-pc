@@ -3,5 +3,12 @@
     "files.exclude": {
       "**/.git": true,
       "*.retry": true
-    }
+    },
+    "cSpell.words": [
+      "affordances",
+      "distro",
+      "distros",
+      "Insync",
+      "sudoer"
+    ]
 }

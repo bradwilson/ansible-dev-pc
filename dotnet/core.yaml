@@ -3,8 +3,12 @@
   connection: local
 
   vars:
-    dotnet_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
-    dotnet_distribution_version: "{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else ansible_distribution_version }}"    # MSFT uses '19.04' for Ubuntu, and just '10' for Debian
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution_release_fallback:
+      'impish': 'hirsute'
+    distribution_version_fallback:
+      '21.10': '21.04'
     dotnet_runtime_versions:
       - "3.1"
     dotnet_sdk_version: "5.0"
@@ -22,7 +26,7 @@
     - name: Add Microsoft APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/{{ dotnet_distribution }}/{{ dotnet_distribution_version }}/prod {{ ansible_distribution_release }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }}/{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else distribution_version_fallback[ansible_distribution_version] | default(ansible_distribution_version) }}/prod {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository

@@ -3,10 +3,15 @@
   connection: local
 
   vars:
-    docker_distribution: "{{ 'ubuntu' if ansible_distribution == 'Pop!_OS' else ansible_distribution | lower }}"
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution_release_fallback:
+      'impish': 'hirsute'
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     machine_arch: "{{ 'Darwin-x86_64' if is_mac else 'Linux-x86_64' }}"
+    nvidia_distribution_version_fallback:
+      '21.10': '20.04'
 
   tasks:
     - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -31,13 +36,13 @@
     - name: Add Docker APT package key
       become: yes
       apt_key:
-        url: https://download.docker.com/linux/{{ docker_distribution }}/gpg
+        url: https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }}/gpg
       when: not is_mac
 
     - name: Add Docker APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/{{ docker_distribution }} {{ ansible_distribution_release }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} stable
         filename: docker
         update_cache: no
       register: apt_repository_docker
@@ -105,11 +110,6 @@
         - mesa-utils
       when: is_ubuntu
 
-    - name: Get distribution ID
-      shell: ". /etc/os-release; echo ${ID}${VERSION_ID}"
-      register: distro_id
-      when: is_ubuntu
-
     - name: Add NVIDIA container runtime APT package key
       become: yes
       apt_key:
@@ -120,7 +120,7 @@
       become: yes
       get_url:
         dest: /etc/apt/sources.list.d/nvidia-container-runtime.list
-        url: https://nvidia.github.io/nvidia-container-runtime/{{ distro_id.stdout }}/nvidia-container-runtime.list
+        url: https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ nvidia_distribution_version_fallback[ansible_distribution_version] | default(ansible_distribution_version) }}/nvidia-container-runtime.list
       register: apt_repository_nvidia
       when: is_ubuntu
 

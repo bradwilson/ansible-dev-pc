@@ -3,8 +3,11 @@
   connection: local
 
   vars:
-    insync_distribution: "{{ ansible_distribution | lower }}"
-    insync_distribution_release: "{{ 'bionic' if ansible_distribution_release == 'focal' else ansible_distribution_release }}"
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution_release_fallback:
+      'focal': 'bionic'
+      'impish': 'bionic'
     is_debian_bullseye: "{{ ansible_distribution_release == 'bullseye' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
@@ -43,7 +46,7 @@
     - name: Add Insync APT package repository
       become: yes
       apt_repository:
-        repo: deb http://apt.insynchq.com/{{ insync_distribution }} {{ insync_distribution_release }} non-free contrib
+        repo: deb http://apt.insynchq.com/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} non-free contrib
         filename: insync
         update_cache: no
       register: apt_repository
@@ -63,7 +66,6 @@
         package: "{{ item }}"
       loop:
         - insync
-        - insync-nautilus
       when: not is_mac and not is_debian_bullseye and not is_wsl
 
     # macOS

@@ -34,7 +34,7 @@
       set_fact:
         gnome_shell_version: "{{ gnome_shell_raw.stdout | regex_search(regexp, '\\1') }}"
       vars:
-        regexp: 'GNOME Shell ((\d+)\.(\d+))\.\d+'
+        regexp: 'GNOME Shell ((\d+)\.(\d+))'
       when: folder.changed
 
     - name: Create extension manifest
