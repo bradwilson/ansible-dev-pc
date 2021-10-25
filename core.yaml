@@ -3,6 +3,7 @@
   connection: local
 
   vars:
+    is_debian: "{{ ansible_distribution == 'Debian' }}"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
@@ -98,6 +99,13 @@
         path: /etc/initramfs-tools/modules
         line: dm-crypt
       when: not is_mac and ansible_facts.packages["cryptsetup-initramfs"] is defined
+
+    - name: Make ping usable by non-admins
+      become: yes
+      file:
+        path: /bin/ping
+        mode: +s
+      when: is_debian
 
     # macOS
 
