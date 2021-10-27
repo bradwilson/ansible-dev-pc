@@ -49,6 +49,41 @@
             echo -ne "\033[38;5;131;48;5;0m\033[38;5;227;48;5;131m  ${1} \033[38;5;0;48;5;131m"
           }
 
+          function echoRubyVersion() {
+            if which ruby > /dev/null; then
+              CURRENT_RUBY=$((ruby --version 2>/tmp/ruby-version || echo "xxx  $(grep -o '[[:digit:]]\(\.[[:digit:]]\)\{1,\}' /tmp/ruby-version) ") | awk '{ print $2; exit; }')
+              echo -ne "\033[38;5;52;48;5;0m\033[38;5;210;48;5;52m  \033[38;5;254m${CURRENT_RUBY} \033[38;5;0;48;5;52m"
+            fi
+          }
+
+          function echoPythonVersion() {
+            if which pyenv > /dev/null; then
+              CURRENT_PYTHON=$(pyenv version-name)
+              echo -ne "\033[38;5;221;48;5;0m\033[38;5;25;48;5;221m  \033[38;5;16m${CURRENT_PYTHON} \033[38;5;0;48;5;221m"
+            fi
+          }
+
+          function echoGoVersion() {
+            if which go > /dev/null; then
+              CURRENT_GO=$(go version | awk '{print $3; exit;}' | cut -c3-)
+              echo -ne "\033[38;5;80;48;5;0m\033[38;5;16;48;5;80m  ${CURRENT_GO} \033[38;5;0;48;5;80m"
+            fi
+          }
+
+          function echoRustVersion() {
+            if which rustc > /dev/null; then
+              CURRENT_RUST=$(rustc --version | awk '{print $2; exit;}')
+              echo -ne "\033[38;5;172;40m\033[38;5;231;48;5;172m  ${CURRENT_RUST} \033[38;5;0;48;5;172m"
+            fi
+          }
+
+          function echoDotNetVersion() {
+            if which dotnet > /dev/null; then
+              CURRENT_DOTNET=$(dotnet --version)
+              echo -ne "\033[38;5;54;48;5;0m\033[38;5;231;48;5;54m  ${CURRENT_DOTNET} \033[38;5;0;48;5;54m"
+            fi
+          }
+
           function echoKubeContext() {
             if [ -z "${PRIVATE_PROMPT}" ]; then
               if which kubectl > /dev/null; then
@@ -78,34 +113,6 @@
             fi
           }
 
-          function echoRubyVersion() {
-            if which ruby > /dev/null; then
-              CURRENT_RUBY=$((ruby --version 2>/tmp/ruby-version || echo "xxx  $(grep -o '[[:digit:]]\(\.[[:digit:]]\)\{1,\}' /tmp/ruby-version) ") | awk '{ print $2; exit; }')
-              echo -ne "\033[38;5;52;48;5;0m\033[38;5;210;48;5;52m  \033[38;5;254m${CURRENT_RUBY} \033[38;5;0;48;5;52m"
-            fi
-          }
-
-          function echoGoVersion() {
-            if which go > /dev/null; then
-              CURRENT_GO=$(go version | awk '{print $3; exit;}' | cut -c3-)
-              echo -ne "\033[38;5;80;48;5;0m\033[38;5;16;48;5;80m  ${CURRENT_GO} \033[38;5;0;48;5;80m"
-            fi
-          }
-
-          function echoDotNetVersion() {
-            if which dotnet > /dev/null; then
-              CURRENT_DOTNET=$(dotnet --version)
-              echo -ne "\033[38;5;54;48;5;0m\033[38;5;231;48;5;54m  ${CURRENT_DOTNET} \033[38;5;0;48;5;54m"
-            fi
-          }
-
-          function echoRustVersion() {
-            if which rustc > /dev/null; then
-              CURRENT_RUST=$(rustc --version | awk '{print $2; exit;}')
-              echo -ne "\033[38;5;178;40m\033[38;5;16;48;5;178m  ${CURRENT_RUST} \033[38;5;178;40m"
-            fi
-          }
-
           function echoPath() {
             echo -ne "\033[38;5;28;48;5;0m\033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[38;5;0;48;5;28m"
           }
@@ -122,7 +129,7 @@
           # Pre- and post-status prompt strings
           GIT_PROMPT_COMMAND_FAIL=" \`echoError _LAST_COMMAND_STATE_\`"
           GIT_PROMPT_COMMAND_OK=" "
-          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoGoVersion\`\`echoRustVersion\`\`echoDotNetVersion\`\`echoKubeContext\`\`echoAksAccount\`"
+          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoPythonVersion\`\`echoGoVersion\`\`echoRustVersion\`\`echoDotNetVersion\`\`echoKubeContext\`\`echoAksAccount\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
           GIT_PROMPT_END_USER="\`echoPath\`${ResetColor} \n${BoldGreen} sh$ ${ResetColor}"
           GIT_PROMPT_END_ROOT="\`echoPath\`${ResetColor} \n${BoldRed} sh# ${ResetColor}"
