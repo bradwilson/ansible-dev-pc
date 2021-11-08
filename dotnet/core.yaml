@@ -11,7 +11,8 @@
       '21.10': '21.04'
     dotnet_runtime_versions:
       - "3.1"
-    dotnet_sdk_version: "5.0"
+      - "5.0"
+    dotnet_sdk_version: "6.0"
     is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
