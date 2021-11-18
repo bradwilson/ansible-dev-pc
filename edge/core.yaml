@@ -14,7 +14,7 @@
       become: yes
       apt_repository:
         repo: deb [arch=amd64] https://packages.microsoft.com/repos/edge/ stable main
-        filename: microsoft-edge-beta
+        filename: microsoft-edge
         update_cache: no
       register: apt_repository
       when: not is_mac and not is_wsl
@@ -28,13 +28,13 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Microsoft Edge Beta (Linux)
+    - name: Install Microsoft Edge (Linux)
       become: yes
       apt:
         package: "{{ item }}"
       loop:
         - fonts-liberation
-        - microsoft-edge-beta
-      when: not is_mac
+        - microsoft-edge-stable
+      when: not is_mac and not is_wsl
 
     # macOS (TODO)
