@@ -73,7 +73,7 @@
       shell: ~/bin/dotnet-install -c {{ dotnet_sdk_version }}
       register: dotnet_sdk_installed_mac
       args:
-        creates: ~/.dotnet/sdk/{{ item }}.*/.version
+        creates: ~/.dotnet/sdk/{{ dotnet_sdk_version }}.*/.version
       when: is_mac
 
     - name: Install ASP.NET Runtime (macOS)
