@@ -73,14 +73,14 @@
           function echoRustVersion() {
             if which rustc > /dev/null; then
               CURRENT_RUST=$(rustc --version | awk '{print $2; exit;}')
-              echo -ne "\033[38;5;172;40m\033[38;5;231;48;5;172m  ${CURRENT_RUST} \033[38;5;0;48;5;172m"
+              echo -ne "\033[38;5;172;40m\033[38;5;231;48;5;172m  ${CURRENT_RUST} \033[38;5;0;48;5;172m"
             fi
           }
 
           function echoDotNetVersion() {
             if which dotnet > /dev/null; then
               CURRENT_DOTNET=$(dotnet --version)
-              echo -ne "\033[38;5;54;48;5;0m\033[38;5;231;48;5;54m  ${CURRENT_DOTNET} \033[38;5;0;48;5;54m"
+              echo -ne "\033[38;5;54;48;5;0m\033[38;5;231;48;5;54m  ${CURRENT_DOTNET} \033[38;5;0;48;5;54m"
             fi
           }
 
