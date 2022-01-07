@@ -152,3 +152,22 @@
           GIT_PROMPT_SYMBOLS_BEHIND="\`echoColor 25 110\` "
           GIT_PROMPT_SYMBOLS_NO_REMOTE_TRACKING="\`echoColor 25 227\` "
           GIT_PROMPT_SYMBOLS_PREHASH=":"
+
+    - name: Ensure ~/.config exists
+      file:
+        path: ~/.config
+        state: directory
+        mode: 0700
+
+    - name: Create ~/.config/ripgrep
+      copy:
+        dest: ~/.config/ripgrep
+        mode: 0755
+        content: |
+          --hidden
+
+    - name: Set ripgrep configuration path
+      lineinfile:
+        path: ~/.bashrc
+        line: export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep
+
