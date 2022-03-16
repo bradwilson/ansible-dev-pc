@@ -3,7 +3,7 @@
   connection: local
 
   vars:
-    ruby_version_primary: 3.0.3
+    ruby_version_primary: 3.1.1
     ruby_versions:
     - 2.7.5
     - "{{ ruby_version_primary }}"
