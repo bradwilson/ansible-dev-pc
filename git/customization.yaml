@@ -10,6 +10,11 @@
       args:
         creates: ~/.cargo/bin/diffr
 
+    - name: Install difftastic
+      command: ~/.cargo/bin/cargo install difftastic
+      args:
+        creates: ~/.cargo/bin/difft
+
     - name: Download git-completion.bash
       get_url:
         url:  https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
