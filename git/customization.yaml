@@ -50,40 +50,48 @@
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: bash-git-prompt customization"
         block: |
+          function findHereOrParent() {
+            path=$(pwd)
+            while [[ "$path" != "" && ! $(find $path -maxdepth 1 -regex "$1") ]]; do
+              path=${path%/*}
+            done
+            echo "$path"
+          }
+
           function echoError() {
             echo -ne "\033[38;5;131;48;5;0m\033[38;5;227;48;5;131m  ${1} \033[38;5;0;48;5;131m"
           }
 
           function echoRubyVersion() {
-            if which ruby > /dev/null; then
+            if [[ $(which ruby) && $(findHereOrParent '.*/Gemfile') ]]; then
               CURRENT_RUBY=$((ruby --version 2>/tmp/ruby-version || echo "xxx  $(grep -o '[[:digit:]]\(\.[[:digit:]]\)\{1,\}' /tmp/ruby-version) ") | awk '{ print $2; exit; }')
               echo -ne "\033[38;5;52;48;5;0m\033[38;5;210;48;5;52m  \033[38;5;254m${CURRENT_RUBY} \033[38;5;0;48;5;52m"
             fi
           }
 
           function echoPythonVersion() {
-            if which pyenv > /dev/null; then
+            if [[ $(which pyenv) && $(findHereOrParent '.*\.py') ]]; then
               CURRENT_PYTHON=$(pyenv version-name)
               echo -ne "\033[38;5;221;48;5;0m\033[38;5;25;48;5;221m  \033[38;5;16m${CURRENT_PYTHON} \033[38;5;0;48;5;221m"
             fi
           }
 
           function echoGoVersion() {
-            if which go > /dev/null; then
+            if [[ $(which go) && $(findHereOrParent '.*/go\.mod') ]]; then
               CURRENT_GO=$(go version | awk '{print $3; exit;}' | cut -c3-)
               echo -ne "\033[38;5;80;48;5;0m\033[38;5;16;48;5;80m  ${CURRENT_GO} \033[38;5;0;48;5;80m"
             fi
           }
 
           function echoRustVersion() {
-            if which rustc > /dev/null; then
+            if [[ $(which rustc) && $(findHereOrParent '.*/Cargo\.toml') ]]; then
               CURRENT_RUST=$(rustc --version | awk '{print $2; exit;}')
               echo -ne "\033[38;5;172;40m\033[38;5;231;48;5;172m  ${CURRENT_RUST} \033[38;5;0;48;5;172m"
             fi
           }
 
           function echoDotNetVersion() {
-            if which dotnet > /dev/null; then
+            if [[ $(which dotnet) && $(findHereOrParent '.*\.\(sln\|csproj\)') ]]; then
               CURRENT_DOTNET=$(dotnet --version)
               echo -ne "\033[38;5;54;48;5;0m\033[38;5;231;48;5;54m  ${CURRENT_DOTNET} \033[38;5;0;48;5;54m"
             fi
