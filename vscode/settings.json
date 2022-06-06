@@ -1,6 +1,6 @@
 {
   // Debugging
-  "debug.console.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "debug.console.fontFamily": "Iosevka",
   "debug.console.fontSize": 12,
   "debug.internalConsoleOptions": "openOnSessionStart",
   "debug.toolBarLocation": "docked",
@@ -9,9 +9,11 @@
   "breadcrumbs.enabled": true,
   "editor.autoClosingBrackets": "never",
   "editor.find.autoFindInSelection": "never",
-  "editor.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "editor.fontFamily": "Iosevka",
+  "editor.fontLigatures": true,
   "editor.fontSize": 14,
   "editor.formatOnPaste": true,
+  "editor.inlineSuggest.enabled": true,
   "editor.minimap.enabled": false,
   "editor.parameterHints.enabled": false,
   "editor.renderWhitespace": "boundary",
@@ -20,6 +22,7 @@
   "files.autoSave": "onWindowChange",
   "files.defaultLanguage": "markdown",
   "files.trimTrailingWhitespace": true,
+  "security.workspace.trust.untrustedFiles": "open",
 
   // Explorer
   "explorer.confirmDelete": false,
@@ -37,10 +40,9 @@
   "material-icon-theme.activeIconPack": "none",
   "material-icon-theme.folders.color": "#ff7043",
   "search.useGlobalIgnoreFiles": true,
-  "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono",
+  "terminal.integrated.fontFamily": "Iosevka",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeightBold": "500",
-  "terminal.integrated.rendererType": "canvas",
   "window.restoreFullscreen": true,
   "window.restoreWindows": "none",
   "window.titleBarStyle": "native",
@@ -87,6 +89,8 @@
     "terminal.foreground": "#696b67",
 
     "terminal.selectionBackground": "#3465a440",
+
+    // Theme-based decorations
     "[GitHub Plus]": {
       "editor.background": "#eeeeee",
       "editor.foreground": "#2e3436",
@@ -123,8 +127,19 @@
   "omnisharp.enableEditorConfigSupport": true,
   "omnisharp.enableRoslynAnalyzers": true,
 
+  // extension: Go
+  "go.toolsManagement.autoUpdate": true,
+
+  // extension: Git Lens
+  "gitlens.advanced.messages": {
+    "suppressGitMissingWarning": true
+  },
+
   // extension: PowerShell
   "powershell.integratedConsole.showOnStartup": false,
+
+  // extension: YAML
+  "redhat.telemetry.enabled": false,
 
   // extension: Code Spell Checker
   "cSpell.enabledLanguageIds": [
@@ -156,8 +171,14 @@
   ],
   "cSpell.userWords": [
     "appcenter",
+    "Codespaces",
+    "cref",
     "fluentd",
+    "goproxy",
+    "inheritdoc",
     "kubernetes",
+    "logfmt",
+    "Otel",
     "recurse",
     "telegraf",
     "testdouble",
