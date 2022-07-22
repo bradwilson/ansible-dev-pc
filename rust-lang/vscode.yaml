@@ -8,4 +8,4 @@
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
-        - rust-lang.rust
+        - rust-lang.rust-analyzer
