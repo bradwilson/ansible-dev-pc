@@ -8,5 +8,5 @@
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
-        - ms-vscode.vscode-typescript-tslint-plugin
+        - dbaeumer.vscode-eslint
         - wallabyjs.quokka-vscode
