@@ -20,6 +20,12 @@
             _images=$(docker images --all --quiet --filter 'dangling=true')
             [[ -z ${_images// } ]] || docker rmi $_images
           }
+          docker-start() {
+            [ -S /var/run/docker.sock ] || sudo service docker start
+          }
+          docker-stop() {
+            [ ! -S /var/run/docker.sock ] || sudo service docker stop
+          }
 
     # Linux
 
