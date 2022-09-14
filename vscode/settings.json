@@ -176,7 +176,6 @@
     "fluentd",
     "goproxy",
     "inheritdoc",
-    "kubernetes",
     "logfmt",
     "Otel",
     "recurse",

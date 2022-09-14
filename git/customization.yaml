@@ -97,17 +97,6 @@
             fi
           }
 
-          function echoKubeContext() {
-            if [ -z "${PRIVATE_PROMPT}" ]; then
-              if which kubectl > /dev/null; then
-                CURRENT_CONTEXT=$(kubectl config current-context 2>/dev/null)
-                if [[ ${CURRENT_CONTEXT} != "" ]]; then
-                  echo -ne "\033[38;5;242;48;5;0m\033[38;5;112;48;5;242m  \033[38;5;254m${CURRENT_CONTEXT} \033[38;5;0;48;5;242m"
-                fi
-              fi
-            fi
-          }
-
           function echoPath() {
             echo -ne "\033[38;5;28;48;5;0m\033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[38;5;0;48;5;28m"
           }
@@ -124,7 +113,7 @@
           # Pre- and post-status prompt strings
           GIT_PROMPT_COMMAND_FAIL=" \`echoError _LAST_COMMAND_STATE_\`"
           GIT_PROMPT_COMMAND_OK=" "
-          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoPythonVersion\`\`echoGoVersion\`\`echoRustVersion\`\`echoDotNetVersion\`\`echoKubeContext\`"
+          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoPythonVersion\`\`echoGoVersion\`\`echoRustVersion\`\`echoDotNetVersion\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
           GIT_PROMPT_END_USER="\`echoPath\`${ResetColor} \n${BoldGreen} sh$ ${ResetColor}"
           GIT_PROMPT_END_ROOT="\`echoPath\`${ResetColor} \n${BoldRed} sh# ${ResetColor}"
