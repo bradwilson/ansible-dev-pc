@@ -108,24 +108,6 @@
             fi
           }
 
-          function echoAksAccount() {
-            if [ -z "${PRIVATE_PROMPT}" ]; then
-              if [ -f ~/.azure/clouds.config ]; then
-                if which gsed > /dev/null; then
-                  CURRENT_SUB=$(gsed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
-                else
-                  CURRENT_SUB=$(sed -nr "/^\[AzureCloud\]/ { :l /^subscription[ ]*=/ { s/.*=[ ]*//; p; q;}; n; b l;}" ~/.azure/clouds.config)
-                fi
-                if [[ ${CURRENT_SUB} != "" ]]; then
-                  CURRENT_ACCOUNT=$(cat ~/.azure/azureProfile.json | jq -r ".subscriptions[] | select(.id==\"${CURRENT_SUB}\") | .name")
-                  if [[ ${CURRENT_ACCOUNT} != "" ]]; then
-                    echo -ne "\033[38;5;30;48;5;0m\033[38;5;227;48;5;30m  \033[38;5;254m${CURRENT_ACCOUNT} \033[38;5;0;48;5;30m"
-                  fi
-                fi
-              fi
-            fi
-          }
-
           function echoPath() {
             echo -ne "\033[38;5;28;48;5;0m\033[38;5;227;48;5;28m  \033[38;5;254m$(dirs +0) \033[38;5;0;48;5;28m"
           }
@@ -142,7 +124,7 @@
           # Pre- and post-status prompt strings
           GIT_PROMPT_COMMAND_FAIL=" \`echoError _LAST_COMMAND_STATE_\`"
           GIT_PROMPT_COMMAND_OK=" "
-          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoPythonVersion\`\`echoGoVersion\`\`echoRustVersion\`\`echoDotNetVersion\`\`echoKubeContext\`\`echoAksAccount\`"
+          GIT_PROMPT_START_USER="${ResetColor}_LAST_COMMAND_INDICATOR_\`echoRubyVersion\`\`echoPythonVersion\`\`echoGoVersion\`\`echoRustVersion\`\`echoDotNetVersion\`\`echoKubeContext\`"
           GIT_PROMPT_START_ROOT="${GIT_PROMPT_START_USER}"
           GIT_PROMPT_END_USER="\`echoPath\`${ResetColor} \n${BoldGreen} sh$ ${ResetColor}"
           GIT_PROMPT_END_ROOT="\`echoPath\`${ResetColor} \n${BoldRed} sh# ${ResetColor}"
