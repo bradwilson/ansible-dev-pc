@@ -36,7 +36,7 @@
 # golang
 - import_playbook: golang/core.yaml
 
-# Virtualization (QEMU/KVM on Linux, VirtualBox on macOS)
+# Virtualization (QEMU/KVM)
 - import_playbook: virtualization/core.yaml
 
 # Mono (.NET Framework)
@@ -82,5 +82,5 @@
 # Beyond Compare 4
 - import_playbook: bc4/core.yaml
 
-# Google Backup and Sync (macOS) / Insync (Linux)
+# Google Backup and Sync (compatible; using Insync on Linux)
 - import_playbook: google-backup/core.yaml

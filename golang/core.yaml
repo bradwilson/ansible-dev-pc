@@ -4,27 +4,22 @@
 
   vars:
     go_version: 1.19
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    # Linux
-
     - name: Create binary folder
       become: yes
       file:
         path: /opt/google/go{{ go_version }}
         state: directory
-      when: not is_mac
 
-    - name: Install Go (Linux)
+    - name: Install Go
       become: yes
       unarchive:
         src: https://dl.google.com/go/go{{ go_version }}.linux-amd64.tar.gz
         dest: /opt/google/go{{ go_version }}
         remote_src: yes
         creates: /opt/google/go{{ go_version }}/go/bin/go
-      register: go_download_linux
-      when: not is_mac
+      register: go_download
 
     - name: Create symlink to /usr/local/go
       become: yes
@@ -32,23 +27,11 @@
         path: /usr/local/go
         src: /opt/google/go{{ go_version }}/go
         state: link
-      when: not is_mac
 
     - name: Add Go to the PATH
       lineinfile:
         path: ~/.bashrc
         line: export PATH=$PATH:/usr/local/go/bin
-      when: not is_mac
-
-    # macOS
-
-    - name: Install Go (macOS)
-      homebrew:
-        name: go
-      register: go_download_mac
-      when: is_mac
-
-    # Common
 
     - name: Create package/source folder
       file:
@@ -60,7 +43,7 @@
       file:
         path: ~/dev/go/pkg
         state: absent
-      when: go_download_linux.changed or go_download_mac.changed
+      when: go_download.changed
 
     - name: Set up environment (Common)
       blockinfile:

@@ -4,40 +4,35 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    # Linux
-
-    - name: Create extension directory
+    - name: "[Non-WSL] Create extension directory"
       file:
         path: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost
         state: directory
       register: folder
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Copy extension code
+    - name: "[Non-WSL] Copy extension code"
       copy:
         src: extension.js
         dest: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost
       when: folder.changed
 
-    - name: Get GNOME shell version
+    - name: "[Non-WSL] Get GNOME shell version"
       shell: gnome-shell --version
       when: folder.changed
       register: gnome_shell_raw
 
-    - name: Extraction GNOME shell version
+    - name: "[Non-WSL] Extraction GNOME shell version"
       set_fact:
         gnome_shell_version: "{{ gnome_shell_raw.stdout | regex_search(regexp, '\\1') }}"
       vars:
         regexp: 'GNOME Shell ((\d+)\.(\d+))'
       when: folder.changed
 
-    - name: Create extension manifest
+    - name: "[Non-WSL] Create extension manifest"
       blockinfile:
         path: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost/metadata.json
         create: yes
@@ -52,6 +47,6 @@
       when: folder.changed
       register: metadata
 
-    - name: Enable extension
+    - name: "[Non-WSL] Enable extension"
       command: gnome-shell-extension-tool -e no-screen-blank@localhost
       when: folder.changed and metadata.changed

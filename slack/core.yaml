@@ -4,29 +4,26 @@
 
   vars:
     is_debian_bullseye: "{{ ansible_distribution_release == 'bullseye' }}"
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    # Linux
-
-    - name: Add Slack APT package key
+    - name: "[Non-WSL] Add Slack APT package key"
       become: yes
       apt_key:
         url: https://packagecloud.io/slacktechnologies/slack/gpgkey
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Add Slack APT package repository
+    - name: "[Non-WSL] Add Slack APT package repository"
       become: yes
       apt_repository:
         repo: deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main
         filename: slack
         update_cache: no
       register: apt_repository
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Update APT package list
+    - name: "[Non-WSL] Update APT package list"
       become: yes
       apt:
         update_cache: yes
@@ -35,7 +32,7 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install pre-requisites (Debian 11)
+    - name: "[Non-WSL Debian Bullseye] Install pre-requisites"
       become: yes
       apt:
         deb: "http://ftp.mx.debian.org/debian/pool/main/{{ item }}"
@@ -44,15 +41,8 @@
         - liba/libappindicator/libappindicator3-1_0.4.92-7_amd64.deb
       when: is_debian_bullseye and not is_wsl
 
-    - name: Install Slack Desktop (Linux)
+    - name: "[Non-WSL] Install Slack Desktop"
       become: yes
       apt:
         package: slack-desktop
-      when: not is_mac and not is_wsl
-
-    # macOS
-
-    - name: Install Slack Desktop (macOS)
-      homebrew_cask:
-        name: slack
-      when: is_mac
+      when: not is_wsl

@@ -2,40 +2,28 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    # Linux
-
-    - name: Install Postman (Linux)
+    - name: "[Non-WSL] Install Postman"
       become: yes
       unarchive:
         src: https://dl.pstmn.io/download/latest/linux64
         dest: /opt
         remote_src: yes
         creates: /opt/Postman/Postman
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Ensure local applications folder exists
+    - name: "[Non-WSL] Ensure local applications folder exists"
       become: yes
       file:
         path: /usr/local/share/applications
         state: directory
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Add Postman desktop file
+    - name: "[Non-WSL] Add Postman desktop file"
       become: yes
       copy:
         src: postman.desktop
         dest: /usr/local/share/applications/postman.desktop
-      when: not is_mac and not is_wsl
-
-    # macOS
-
-    - name: Install Postman (macOS)
-      homebrew_cask:
-        name: postman
-      when: is_mac
+      when: not is_wsl

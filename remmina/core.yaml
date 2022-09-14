@@ -3,13 +3,12 @@
   connection: local
 
   vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
 
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: Add Remmina APT package repository (Ubuntu)
+    - name: "[Non-WSL Ubuntu] Add Remmina APT package repository"
       become: yes
       apt_repository:
         repo: ppa:remmina-ppa-team/remmina-next
@@ -18,7 +17,7 @@
       register: apt_repository
       when: is_ubuntu and not is_wsl
 
-    - name: Update APT package list
+    - name: "[Non-WSL Ubuntu] Update APT package list"
       become: yes
       apt:
         update_cache: yes
@@ -27,8 +26,8 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Remmina
+    - name: "[Non-WSL] Install Remmina"
       become: yes
       apt:
         package: remmina
-      when: not is_mac and not is_wsl
+      when: not is_wsl

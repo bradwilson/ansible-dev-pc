@@ -2,30 +2,14 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    # Common
-
     - name: Ensure ~/.config folder exists
       file:
         path: ~/.config
         state: directory
         mode: 0700
 
-    # macOS
-
-    - name: Link '~/Library/Application Support/Code' to '~/.config/Code' (macOS)
-      file:
-        path: ~/.config/Code
-        src: ~/Library/Application Support/Code
-        state: link
-      when: is_mac
-
-    # Linux
-
-    - name: Install VS Live Share dependencies (Linux)
+    - name: Install VS Live Share dependencies
       become: yes
       apt:
         name: "{{ item }}"
@@ -35,9 +19,6 @@
         - libsecret-1-0
         - desktop-file-utils
         - x11-utils
-      when: not is_mac
-
-    # Common
 
     - name: Install VS Code extensions
       command: ./invoke-code --install-extension {{ item }}

@@ -4,12 +4,9 @@
 
   vars:
     is_debian: "{{ ansible_distribution == 'Debian' }}"
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
-
-    # Common
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: Create ~/bin
       file:
@@ -22,8 +19,6 @@
         path: ~/.bashrc
         line: export PATH=$PATH:~/bin
 
-    # Linux
-
     - name: Enable HTTPS APT support
       become: yes
       apt:
@@ -34,7 +29,6 @@
           - ca-certificates
           - gnupg-agent
           - software-properties-common
-      when: not is_mac
 
     - name: Update APT package list
       become: yes
@@ -43,13 +37,11 @@
       register: apt_update
       retries: 5
       until: apt_update is success
-      when: not is_mac
 
     - name: Upgrade to latest APT packages
       become: yes
       apt:
         upgrade: yes
-      when: not is_mac
 
     - name: Install core packages
       become: yes
@@ -68,64 +60,39 @@
         - unzip
         - uuid
         - xclip
-      when: not is_mac
 
-    - name: Install snapd
+    - name: "[Non-WSL] Install snapd"
       become: yes
       apt:
         package: snapd
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Install snap core
+    - name: "[Non-WSL] Install snap core"
       become: yes
       command: snap install core
       args:
         creates: /snap/core/current/bin/bash
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Add /snap/bin to PATH
+    - name: "[Non-WSL] Add /snap/bin to PATH"
       lineinfile:
         path: ~/.bashrc
         line: export PATH=$PATH:/snap/bin
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
     - name: Get installed package list
       package_facts: {}
-      when: not is_mac
 
     - name: Add dm-crypt to /etc/initramfs-tools/modules
       become: yes
       lineinfile:
         path: /etc/initramfs-tools/modules
         line: dm-crypt
-      when: not is_mac and ansible_facts.packages["cryptsetup-initramfs"] is defined
+      when: ansible_facts.packages["cryptsetup-initramfs"] is defined
 
-    - name: Make ping usable by non-admins
+    - name: "[Debian] Make ping usable by non-admins"
       become: yes
       file:
         path: /bin/ping
         mode: +s
       when: is_debian
-
-    # macOS
-
-    - name: Update Homebrew and all packages
-      homebrew:
-        update_homebrew: yes
-        upgrade_all: yes
-      when: is_mac
-
-    - name: Install core packages
-      homebrew:
-        name: "{{ item }}"
-      loop:
-        - gnu-tar
-        - htop
-        - jq
-      when: is_mac
-
-    - name: Add GNU tar to the PATH
-      lineinfile:
-        path: ~/.bashrc
-        line: export PATH=/usr/local/opt/gnu-tar/libexec/gnubin:$PATH
-      when: is_mac

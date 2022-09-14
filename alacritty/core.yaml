@@ -4,15 +4,10 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    # Linux
-
-    - name: Install pre-requisites
+    - name: "[Non-WSL] Install pre-requisites"
       become: yes
       apt:
         package: "{{ item }}"
@@ -24,51 +19,44 @@
         - libxkbcommon-dev
         - pkg-config
         - python3
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Install Alacritty (Linux)
+    - name: "[Non-WSL] Install Alacritty"
       command: ~/.cargo/bin/cargo install alacritty
       args:
         creates: ~/.cargo/bin/alacritty
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Ensure local applications folder exists
+    - name: "[Non-WSL] Ensure local applications folder exists"
       file:
         path: ~/.local/share/applications
         state: directory
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Add Alacritty desktop file
+    - name: "[Non-WSL] Add Alacritty desktop file"
       copy:
         src: alacritty.desktop
         dest: ~/.local/share/applications/alacritty.desktop
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Find Alacritty icon file
+    - name: "[Non-WSL] Find Alacritty icon file"
       find:
         paths: ~/.cargo/registry/src
         patterns: alacritty.png
         recurse: yes
       register: alacritty_icons
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Update Alacritty desktop file for binary
+    - name: "[Non-WSL] Update Alacritty desktop file for binary"
       replace:
         path: ~/.local/share/applications/alacritty.desktop
         regexp: __HOME__
         replace: "{{ lookup('env', 'HOME') }}"
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Update Alacritty desktop file for icon
+    - name: "[Non-WSL] Update Alacritty desktop file for icon"
       replace:
         path: ~/.local/share/applications/alacritty.desktop
         regexp: __ICON__
         replace: "{{ alacritty_icons.files[0].path }}"
-      when: not is_mac and not is_wsl
-
-    # macOS
-
-    - name: Install Alacritty (macOS)
-      homebrew_cask:
-        name: alacritty
-      when: is_mac
+      when: not is_wsl

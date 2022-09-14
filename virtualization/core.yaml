@@ -2,20 +2,17 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     # Linux
 
-    - name: Test for hypervisor (Linux)
+    - name: "[Non-WSL] Test for hypervisor"
       shell: dmesg | grep -i "hypervisor detected" || true
       register: hypervisor
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Install QEMU/KVM (Linux)
+    - name: "[Non-WSL] Install QEMU/KVM"
       become: yes
       apt:
         package: "{{ item }}"
@@ -26,19 +23,12 @@
         - ovmf
         - qemu-kvm
         - virt-manager
-      when: not is_mac and not is_wsl and hypervisor.stdout == ""
+      when: not is_wsl and hypervisor.stdout == ""
 
-    - name: Enable QEMU/KVM for current user (Linux)
+    - name: "[Non-WSL] Enable QEMU/KVM for current user"
       become: yes
       user:
         name={{ lookup('env', "USER") }}
         groups=libvirt
         append=yes
-      when: not is_mac and not is_wsl and hypervisor.stdout == ""
-
-    # macOS
-
-    - name: Install VirtualBox (macOS)
-      homebrew_cask:
-        name: virtualbox
-      when: is_mac
+      when: not is_wsl and hypervisor.stdout == ""

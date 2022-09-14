@@ -7,9 +7,8 @@ Distro  | Version(s)          | CPU            | SKU
 Ubuntu  | 18.04, 20.04, 21.10 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
 Pop!_OS | 18.04, 20.04        | Intel (64-bit) | [Desktop](https://system76.com/pop)
 Debian  | 10, 11              | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
-macOS   | 10.15               | Intel (64-bit) | [Desktop](https://www.apple.com/macos/)
 
-Text shell customization assumes you're using bash (macOS in particular now ships with zsh as the default shell). GUI shell customization assumes you're using Gnome on Linux. Alternate distros and/or shells are left as an exercise for the reader.
+Text shell customization assumes you're using bash. GUI shell customization assumes you're using Gnome on desktop Linux. Alternate distros and/or shells are left as an exercise for the reader.
 
 ## Please fork this and customize it
 
@@ -20,30 +19,6 @@ The purpose here is to document what I use for my personal Linux-based developme
 Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](https://github.com/microsoft/vscode/blob/afd102cbd2e17305a510701d7fd963ec2528e4ea/LICENSE.txt).
 
 # Pre-Requisites
-
-## macOS
-
-1. Install [Homebrew](https://docs.brew.sh/Installation)
-
-2. Change the default shell from zsh to bash:
-
-   ```shell
-   $ chsh -s /bin/bash
-   $ echo "export BASH_SILENCE_DEPRECATION_WARNING=1" >> ~/.bashrc
-   $ chmod 700 ~/.bashrc
-   $ ln -s ~/.bashrc ~/.bash_profile
-   ```
-
-3. Set up Python 3 as the default version of Python:
-
-   ```shell
-   $ echo "alias python='python3'" >> ~/.bashrc
-   $ echo "export PATH=$HOME/Library/Python/3.7/bin:$PATH" >> ~/.bashrc
-   ```
-
-4. Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-ansible-on-macos)
-
-## Linux
 
 1. Make sure you're up to date:
 
@@ -85,15 +60,6 @@ Special affordances are made to enable support for WSL 2. Most of the GUI custom
 ## Debian 11
 
 * Insync is not yet available on Debian Bullseye.
-
-## macOS
-
-Most software does work on macOS, with a few exceptions noted below:
-
-* Insync is replaced with the native Google Backup and Sync
-* QEMU/KVM is replaced with VirtualBox (note that installing VirtualBox might fail the first time because of required permissions)
-* Remmina is not available, and [Microsoft Remote Desktop Client](https://docs.microsoft.com/en-us/windows-server/remote/remote-desktop-services/clients/remote-desktop-mac) must be installed from the App Store
-* Gnome-specific tweaks and applications are not supported
 
 ## Having issues with Docker not starting on Linux (including WSL 2)?
 

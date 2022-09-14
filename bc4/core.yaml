@@ -2,17 +2,11 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    # Linux
-
     - name: Add Scooter Software APT package key
       become: yes
       apt_key:
         url: https://www.scootersoftware.com/RPM-GPG-KEY-scootersoftware
-      when: not is_mac
 
     - name: Add Beyond Compare APT package repository
       become: yes
@@ -21,7 +15,6 @@
         filename: scootersoftware
         update_cache: no
       register: apt_repository
-      when: not is_mac
 
     - name: Update APT package list
       become: yes
@@ -32,22 +25,13 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Beyond Compare (Linux)
+    - name: Install Beyond Compare
       become: yes
       apt:
         package: bcompare
-      when: not is_mac
 
     - name: Add bcomp alias
       file:
         path: ~/bin/bcomp
         src: /usr/bin/bcompare
         state: link
-      when: not is_mac
-
-    # macOS
-
-    - name: Install Beyond Compare (macOS)
-      homebrew_cask:
-        name: beyond-compare
-      when: is_mac

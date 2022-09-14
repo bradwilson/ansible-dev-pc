@@ -4,7 +4,6 @@
 
   vars:
     is_debian: "{{ ansible_distribution == 'Debian' }}"
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
     is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
     linux_git_packages:
@@ -14,9 +13,7 @@
       - gitk
 
   tasks:
-    # Linux
-
-    - name: Add Git APT package repository (Ubuntu)
+    - name: "[Ubuntu] Add Git APT package repository"
       become: yes
       apt_repository:
         repo: ppa:git-core/ppa
@@ -25,7 +22,7 @@
       register: apt_repository_1
       when: is_ubuntu
 
-    - name: Add Backports repository (Debian)
+    - name: "[Debian] Add Backports repository"
       become: yes
       apt_repository:
         repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
@@ -43,7 +40,7 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install APT package (Debian)
+    - name: "[Debian] Install APT package"
       become: yes
       apt:
         package: "{{ item }}"
@@ -51,42 +48,28 @@
       loop: "{{ linux_git_packages }}"
       when: is_debian
 
-    - name: Install APT package (Other Linux)
+    - name: "[Non-Debian] Install APT package"
       become: yes
       apt:
         package: "{{ item }}"
       loop: "{{ linux_git_packages }}"
-      when: not is_mac and not is_debian
+      when: not is_debian
 
-    - name: Determine latest version (Ubuntu 18.04)
+    - name: "[Ubuntu 18.04] Determine latest version"
       shell:
         cmd: "curl -s https://api.github.com/repos/BurntSushi/ripgrep/releases/latest | grep \"browser_download_url.*deb\" | grep amd64 | cut -d : -f 2,3 | tr -d \\\""
         warn: false
       register: ripgrep_version
       when: is_ubuntu_bionic
 
-    - name: Install ripgrep (Ubuntu 18.04)
+    - name: "[Ubuntu 18.04] Install ripgrep"
       become: yes
       apt:
         deb: "{{ ripgrep_version.stdout }}"
       when: is_ubuntu_bionic
 
-    - name: Install ripgrep (other Linux)
+    - name: "[Other Linux] Install ripgrep"
       become: yes
       apt:
         package: ripgrep
-      when: not is_mac and not is_ubuntu_bionic
-
-    # macOS
-
-    - name: Install Homebrew packages
-      homebrew:
-        name: "{{ item }}"
-      loop:
-        - git
-        - git-gui
-        - git-lfs
-        - gpg
-        - gnu-sed
-        - ripgrep
-      when: is_mac
+      when: not is_ubuntu_bionic

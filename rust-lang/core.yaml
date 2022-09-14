@@ -2,12 +2,7 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    # Linux
-
     - name: Install pre-requisites
       become: yes
       apt:
@@ -17,9 +12,6 @@
         - curl
         - gcc
         - make
-      when: not is_mac
-
-    # Common
 
     - name: Install Rust
       shell:

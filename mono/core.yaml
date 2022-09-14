@@ -8,19 +8,15 @@
     distribution_release_fallback:
       'bullseye': 'buster'
       'impish': 'focal'
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
 
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
-
-    # Linux
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: Add Mono APT package key
       become: yes
       apt_key:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-      when: not is_mac
 
     - name: Add Mono APT package repository
       become: yes
@@ -29,7 +25,6 @@
         filename: mono-official-stable
         update_cache: no
       register: apt_repository
-      when: not is_mac
 
     - name: Update APT package list
       become: yes
@@ -40,7 +35,7 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Mono (Linux)
+    - name: Install Mono
       become: yes
       apt:
         package: "{{ item }}"
@@ -48,24 +43,16 @@
         - mono-complete
         - mono-vbnc
       register: mono_install
-      when: not is_mac
 
-    - name: Disable .NET app auto-run with Mono now (WSL)
+    - name: "[WSL] Disable .NET app auto-run with Mono (now)"
       become: yes
       shell: update-binfmts --disable cli
       when: is_wsl
 
-    - name: Disable .NET app auto-run with Mono on startup (WSL)
+    - name: "[WSL] Disable .NET app auto-run with Mono (on startup)"
       blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Disable Mono auto-run for Windows apps (WSL)"
         block: |
           sudo update-binfmts --disable cli
       when: is_wsl
-
-    # macOS
-
-    - name: Install Mono (macOS)
-      homebrew:
-        name: mono
-      when: is_mac

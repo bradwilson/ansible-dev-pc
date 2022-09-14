@@ -2,24 +2,21 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_mac: "{{ ansible_distribution == 'MacOSX' }}"
-
   tasks:
-    - set_fact: is_wsl={{ not is_mac and lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     # Linux
 
-    - name: Add Microsoft APT package repository
+    - name: "[Non-WSL] Add Microsoft APT package repository"
       become: yes
       apt_repository:
         repo: deb [arch=amd64] https://packages.microsoft.com/repos/edge/ stable main
         filename: microsoft-edge
         update_cache: no
       register: apt_repository
-      when: not is_mac and not is_wsl
+      when: not is_wsl
 
-    - name: Update APT package list
+    - name: "[Non-WSL] Update APT package list"
       become: yes
       apt:
         update_cache: yes
@@ -28,13 +25,11 @@
       retries: 5
       until: apt_update is success
 
-    - name: Install Microsoft Edge (Linux)
+    - name: "[Non-WSL] Install Microsoft Edge"
       become: yes
       apt:
         package: "{{ item }}"
       loop:
         - fonts-liberation
         - microsoft-edge-stable
-      when: not is_mac and not is_wsl
-
-    # macOS (TODO)
+      when: not is_wsl
