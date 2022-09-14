@@ -46,7 +46,6 @@
       loop:
         - amodio.toggle-excluded-files                    # Toggle Excluded Files
         - editorconfig.editorconfig                       # EditorConfig for VS Code
-        - github.copilot                                  # GitHub Copilot
         - ms-vsliveshare.vsliveshare-pack                 # Live Share Extension Pack
         - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
         - pkief.material-icon-theme                       # Material Icon Theme
