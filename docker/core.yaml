@@ -7,7 +7,6 @@
       'Pop!_OS': 'Ubuntu'
     distribution_release_fallback:
       'impish': 'hirsute'
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     nvidia_distribution_version_fallback:
       '21.10': '20.04'
 
@@ -64,23 +63,22 @@
         groups=docker
         append=yes
 
-    - name: "[Ubuntu] Add Mesa package source"
+    - name: Add Mesa package source
       become: yes
       apt_repository:
         repo: ppa:kisak/kisak-mesa
       register: apt_repository_mesa
-      when: is_ubuntu
 
-    - name: "[Ubuntu] Update APT package list"
+    - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: is_ubuntu and apt_repository_mesa.changed
+      when: apt_repository_mesa.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: "[Ubuntu] Install Mesa libraries and utilities"
+    - name: Install Mesa libraries and utilities
       become: yes
       apt:
         package: "{{ item }}"
@@ -88,36 +86,32 @@
         - libglapi-mesa
         - libglx-mesa0
         - mesa-utils
-      when: is_ubuntu
 
-    - name: "[Ubuntu] Add NVIDIA container runtime APT package key"
+    - name: Add NVIDIA container runtime APT package key
       become: yes
       apt_key:
         url: https://nvidia.github.io/nvidia-container-runtime/gpgkey
-      when: is_ubuntu
 
-    - name: "[Ubuntu] Add NVIDIA container runtime APT package source"
+    - name: Add NVIDIA container runtime APT package source
       become: yes
       get_url:
         dest: /etc/apt/sources.list.d/nvidia-container-runtime.list
         url: https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ nvidia_distribution_version_fallback[ansible_distribution_version] | default(ansible_distribution_version) }}/nvidia-container-runtime.list
       register: apt_repository_nvidia
-      when: is_ubuntu
 
-    - name: "[Ubuntu] Update APT package list"
+    - name: Update APT package list
       become: yes
       apt:
         update_cache: yes
-      when: is_ubuntu and apt_repository_nvidia.changed
+      when: apt_repository_nvidia.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: "[Ubuntu] Install NVIDIA container runtime"
+    - name: Install NVIDIA container runtime
       become: yes
       apt:
         package: nvidia-container-runtime
-      when: is_ubuntu
 
     - name: Determine Docker Machine latest version
       shell:

@@ -8,7 +8,6 @@
     distribution_release_fallback:
       'focal': 'bionic'
       'impish': 'bionic'
-    is_debian_bullseye: "{{ ansible_distribution_release == 'bullseye' }}"
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -36,7 +35,7 @@
       apt_key:
         keyserver: hkp://keyserver.ubuntu.com:80
         id: ACCAF35C
-      when: not is_debian_bullseye and not is_wsl
+      when: not is_wsl
 
     - name: "[Non-WSL] Add Insync APT package repository"
       become: yes
@@ -45,7 +44,7 @@
         filename: insync
         update_cache: no
       register: apt_repository
-      when: not is_debian_bullseye and not is_wsl
+      when: not is_wsl
 
     - name: "[Non-WSL] Update APT package list"
       become: yes
@@ -61,4 +60,4 @@
         package: "{{ item }}"
       loop:
         - insync
-      when: not is_debian_bullseye and not is_wsl
+      when: not is_wsl

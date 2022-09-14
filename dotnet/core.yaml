@@ -22,7 +22,7 @@
     - name: Add Microsoft APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }}/{{ ansible_distribution_major_version if ansible_distribution == 'Debian' else distribution_version_fallback[ansible_distribution_version] | default(ansible_distribution_version) }}/prod {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }}/{{ distribution_version_fallback[ansible_distribution_version] | default(ansible_distribution_version) }}/prod {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository

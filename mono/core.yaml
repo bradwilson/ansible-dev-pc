@@ -6,7 +6,6 @@
     distribution_fallback:
       'Pop!_OS': 'Ubuntu'
     distribution_release_fallback:
-      'bullseye': 'buster'
       'impish': 'focal'
 
   tasks:

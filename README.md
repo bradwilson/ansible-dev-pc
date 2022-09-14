@@ -6,7 +6,6 @@ Distro  | Version(s)          | CPU            | SKU
 ------- | ------------------- | -------------- | ---
 Ubuntu  | 18.04, 20.04, 21.10 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
 Pop!_OS | 18.04, 20.04        | Intel (64-bit) | [Desktop](https://system76.com/pop)
-Debian  | 10, 11              | Intel (64-bit) | [Desktop](https://www.debian.org/distrib/netinst), [WSL 2](https://www.microsoft.com/en-us/p/debian/9msvkqc78pk6)
 
 Text shell customization assumes you're using bash. GUI shell customization assumes you're using Gnome on desktop Linux. Alternate distros and/or shells are left as an exercise for the reader.
 
@@ -57,10 +56,6 @@ In general, these scripts are optimized around the experience of users of Ubuntu
 
 Special affordances are made to enable support for WSL 2. Most of the GUI customization is not done, though some GUI applications are installed. Users will need to use Windows 11 (for WSLg) or install an X server on their machine to run those GUI applications. Instructions for enabling WSLg are available on [the WSLg GitHub project README](https://github.com/microsoft/wslg/blob/HEAD/README.md).
 
-## Debian 11
-
-* Insync is not yet available on Debian Bullseye.
-
 ## Having issues with Docker not starting on Linux (including WSL 2)?
 
 If you're noticing that Docker isn't running:
@@ -81,7 +76,7 @@ Check the Docker logs with `tail /var/log/docker.log`. If you see a line like th
 failed to start daemon: Error initializing network controller: error obtaining controller instance: unable to add return rule in DOCKER-ISOLATION-STAGE-1 chain:  (iptables failed: iptables --wait -A DOCKER-ISOLATION-STAGE-1 -j RETURN: iptables v1.8.7 (nf_tables):  RULE_APPEND failed (No such file or directory): rule in chain DOCKER-ISOLATION-STAGE-1 (exit status 4))
 ```
 
-That means you need to enable `iptables-legacy` for Docker networking to function properly (your distro is likely using something else, like `iptables-nft` as indicated in the error message above). I've noticed this the most with Debian 10+ and Ubuntu 21.10+. Run these command:
+That means you need to enable `iptables-legacy` for Docker networking to function properly (your distro is likely using something else, like `iptables-nft` as indicated in the error message above). I've noticed this the most with Ubuntu 21.10+. Run these command:
 
 ```shell
 $ sudo update-alternatives --set iptables /usr/sbin/iptables-legacy

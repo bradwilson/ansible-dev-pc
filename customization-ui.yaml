@@ -267,8 +267,6 @@
       - name: topicons-redux@pop-planet.info
         url: https://extensions.gnome.org/extension-data/topicons-redux%40pop-planet.info.v6.shell-extension.zip
 
-    is_debian: "{{ ansible_distribution == 'Debian' }}"
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
     snwh_ppa_distribution_release_fallback:
       'impish': 'focal'
@@ -328,29 +326,6 @@
       loop: "{{ fonts_apt }}"
       when: not is_wsl
 
-    - name: "[Non-WSL Debian] Add Debian contrib (main) package source"
-      become: yes
-      lineinfile:
-        path: /etc/apt/sources.list
-        line: deb http://http.us.debian.org/debian {{ ansible_distribution_release }} main contrib non-free
-      when: is_debian and not is_wsl
-
-    - name: "[Non-WSL Debian] Add Debian contrib (security) package source"
-      become: yes
-      lineinfile:
-        path: /etc/apt/sources.list
-        line: deb http://security.debian.org {{ ansible_distribution_release }}/updates main contrib non-free
-      when: is_debian and not is_wsl
-
-    - name: "[Non-WSL Debian] Update APT package list"
-      become: yes
-      apt:
-        update_cache: yes
-      register: apt_update
-      retries: 5
-      until: apt_update is success
-      when: is_debian and not is_wsl
-
     - name: "[Non-WSL] Install Microsoft TTF fonts"
       become: yes
       apt:
@@ -396,43 +371,31 @@
         package: numix-gtk-theme
       when: not is_wsl
 
-    - name: "[Non-WSL Ubuntu] Add paper Gnome icon theme APT package source"
+    - name: "[Non-WSL] Add paper Gnome icon theme APT package source"
       become: yes
       apt_repository:
         repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ snwh_ppa_distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
         filename: ppa_snwh_ppa_{{ snwh_ppa_distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}
         update_cache: no
       register: apt_repository
-      when: is_ubuntu and not is_wsl
+      when: not is_wsl
 
-    - name: "[Non-WSL Ubuntu] Update APT package list"
+    - name: "[Non-WSL] Update APT package list"
       become: yes
       apt:
         update_cache: yes
-      when: is_ubuntu and not is_wsl and apt_repository.changed
+      when: not is_wsl and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
 
-    - name: "[Non-WSL Ubuntu] Install paper Gnome icon theme"
+    - name: "[Non-WSL] Install paper Gnome icon theme"
       become: yes
       apt:
         package: "{{ item }}"
       loop:
         - paper-icon-theme
-      when: is_ubuntu and not is_wsl
-
-    - name: "[Non-WSL Debian] Download paper Gnome icon theme"
-      get_url:
-        url: https://snwh.org/paper/download.php?owner=snwh&ppa=ppa&pkg=paper-icon-theme,18.04
-        dest: /tmp/paper-icon-theme.deb
-      when: is_debian and not is_wsl
-
-    - name: "[Non-WSL Debian] Install paper Gnome icon theme"
-      become: yes
-      apt:
-        deb: /tmp/paper-icon-theme.deb
-      when: is_debian and not is_wsl
+      when: not is_wsl
 
     - name: "[Ubuntu 18.04] Install PIP 2"
       become: yes

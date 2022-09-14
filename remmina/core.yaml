@@ -2,26 +2,23 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    is_ubuntu: "{{ ansible_distribution == 'Ubuntu' or ansible_distribution == 'Pop!_OS' }}"
-
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: "[Non-WSL Ubuntu] Add Remmina APT package repository"
+    - name: "[Non-WSL] Add Remmina APT package repository"
       become: yes
       apt_repository:
         repo: ppa:remmina-ppa-team/remmina-next
         filename: remmina
         update_cache: no
       register: apt_repository
-      when: is_ubuntu and not is_wsl
+      when: not is_wsl
 
-    - name: "[Non-WSL Ubuntu] Update APT package list"
+    - name: "[Non-WSL] Update APT package list"
       become: yes
       apt:
         update_cache: yes
-      when: is_ubuntu and not is_wsl and apt_repository.changed
+      when: not is_wsl and apt_repository.changed
       register: apt_update
       retries: 5
       until: apt_update is success
