@@ -5,12 +5,10 @@
   vars:
     distribution_fallback:
       'Pop!_OS': 'Ubuntu'
-    distribution_release_fallback:
-      'impish': 'hirsute'
-    distribution_version_fallback:
-      '21.10': '21.04'
+    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
     dotnet_runtime_versions: []
     dotnet_sdk_version: "6.0"
+    is_ubu_22_04_or_newer: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) >= 22 }}"
 
   tasks:
     - name: Add Microsoft APT package key
@@ -21,10 +19,16 @@
     - name: Add Microsoft APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }}/{{ distribution_version_fallback[ansible_distribution_version] | default(ansible_distribution_version) }}/prod {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
+        repo: deb [arch=amd64] https://packages.microsoft.com/{{ distribution | lower }}/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository
+
+    - name: Prefer Microsoft APT package repository
+      become: yes
+      copy:
+        src: 10microsoft
+        dest: /etc/apt/preferences.d/
 
     - name: Update APT package list
       become: yes

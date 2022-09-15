@@ -5,10 +5,6 @@
   vars:
     distribution_fallback:
       'Pop!_OS': 'Ubuntu'
-    distribution_release_fallback:
-      'impish': 'hirsute'
-    nvidia_distribution_version_fallback:
-      '21.10': '20.04'
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -34,7 +30,7 @@
     - name: Add Docker APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ ansible_distribution_release }} stable
         filename: docker
         update_cache: no
       register: apt_repository_docker
@@ -96,7 +92,7 @@
       become: yes
       get_url:
         dest: /etc/apt/sources.list.d/nvidia-container-runtime.list
-        url: https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ nvidia_distribution_version_fallback[ansible_distribution_version] | default(ansible_distribution_version) }}/nvidia-container-runtime.list
+        url: https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ ansible_distribution_version }}/nvidia-container-runtime.list
       register: apt_repository_nvidia
 
     - name: Update APT package list

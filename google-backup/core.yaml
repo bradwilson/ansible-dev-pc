@@ -7,7 +7,7 @@
       'Pop!_OS': 'Ubuntu'
     distribution_release_fallback:
       'focal': 'bionic'
-      'impish': 'bionic'
+      'jammy': 'bionic'
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
