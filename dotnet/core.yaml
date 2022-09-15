@@ -9,8 +9,7 @@
       'impish': 'hirsute'
     distribution_version_fallback:
       '21.10': '21.04'
-    dotnet_runtime_versions:
-      - "3.1"
+    dotnet_runtime_versions: []
     dotnet_sdk_version: "6.0"
 
   tasks:
