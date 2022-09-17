@@ -5,13 +5,15 @@
   tasks:
     - name: Add Scooter Software APT package key
       become: yes
-      apt_key:
+      get_url:
         url: https://www.scootersoftware.com/RPM-GPG-KEY-scootersoftware
+        dest: /etc/apt/keyrings/scootersoftware.asc
+        mode: 0644
 
     - name: Add Beyond Compare APT package repository
       become: yes
       apt_repository:
-        repo: deb https://www.scootersoftware.com/ bcompare4 non-free
+        repo: deb [signed-by=/etc/apt/keyrings/scootersoftware.asc] https://www.scootersoftware.com/ bcompare4 non-free
         filename: scootersoftware
         update_cache: no
       register: apt_repository

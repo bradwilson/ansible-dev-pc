@@ -24,13 +24,15 @@
 
     - name: Add Docker APT package key
       become: yes
-      apt_key:
+      get_url:
         url: https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }}/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: 0644
 
     - name: Add Docker APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ ansible_distribution_release }} stable
+        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ ansible_distribution_release }} stable
         filename: docker
         update_cache: no
       register: apt_repository_docker
@@ -59,10 +61,19 @@
         groups=docker
         append=yes
 
+    - name: Add Mesa APT package key
+      become: yes
+      get_url:
+        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xeb8b81e14da65431d7504ea8f63f0f2b90935439
+        dest: /etc/apt/keyrings/ppa_kisak_kisak_mesa_{{ ansible_distribution_release }}.asc
+        mode: 0644
+
     - name: Add Mesa package source
       become: yes
       apt_repository:
-        repo: ppa:kisak/kisak-mesa
+        repo: deb [signed-by=/etc/apt/keyrings/ppa_kisak_kisak_mesa_{{ ansible_distribution_release }}.asc] http://ppa.launchpad.net/kisak/kisak-mesa/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ ansible_distribution_release }} main
+        filename: ppa_kisak_kisak_mesa_{{ ansible_distribution_release }}
+        update_cache: no
       register: apt_repository_mesa
 
     - name: Update APT package list
@@ -85,15 +96,25 @@
 
     - name: Add NVIDIA container runtime APT package key
       become: yes
-      apt_key:
+      get_url:
         url: https://nvidia.github.io/nvidia-container-runtime/gpgkey
+        dest: /etc/apt/keyrings/nvidia-container-runtime.asc
+        mode: 0644
 
     - name: Add NVIDIA container runtime APT package source
       become: yes
       get_url:
-        dest: /etc/apt/sources.list.d/nvidia-container-runtime.list
         url: https://nvidia.github.io/nvidia-container-runtime/ubuntu{{ ansible_distribution_version }}/nvidia-container-runtime.list
+        dest: /etc/apt/sources.list.d/nvidia-container-runtime.list
+        mode: 0644
       register: apt_repository_nvidia
+
+    - name: Update NVIDIA package source signature locations
+      become: yes
+      replace:
+        path: /etc/apt/sources.list.d/nvidia-container-runtime.list
+        regexp: deb http
+        replace: deb [signed-by=/etc/apt/keyrings/nvidia-container-runtime.asc] http
 
     - name: Update APT package list
       become: yes

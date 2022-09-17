@@ -13,14 +13,15 @@
 
     - name: Add Mono APT package key
       become: yes
-      apt_key:
-        keyserver: hkp://keyserver.ubuntu.com:80
-        id: 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+      get_url:
+        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x3fa7e0328081bff6a14da29aa6a19b38d3d831ef
+        dest: /etc/apt/keyrings/mono-official-stable.asc
+        mode: 0644
 
     - name: Add Mono APT package repository
       become: yes
       apt_repository:
-        repo: deb https://download.mono-project.com/repo/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} stable-{{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
+        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/mono-official-stable.asc] https://download.mono-project.com/repo/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} stable-{{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
         filename: mono-official-stable
         update_cache: no
       register: apt_repository

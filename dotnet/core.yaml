@@ -13,13 +13,15 @@
   tasks:
     - name: Add Microsoft APT package key
       become: yes
-      apt_key:
+      get_url:
         url: https://packages.microsoft.com/keys/microsoft.asc
+        dest: /etc/apt/keyrings/microsoft-prod.asc
+        mode: 0644
 
     - name: Add Microsoft APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/{{ distribution | lower }}/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main
+        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/microsoft-prod.asc] https://packages.microsoft.com/{{ distribution | lower }}/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main
         filename: microsoft-prod
         update_cache: no
       register: apt_repository

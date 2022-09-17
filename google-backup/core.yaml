@@ -32,15 +32,16 @@
 
     - name: "[Non-WSL] Add Insync APT package key"
       become: yes
-      apt_key:
-        keyserver: hkp://keyserver.ubuntu.com:80
-        id: ACCAF35C
+      get_url:
+        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xaeeb94e9c5a3b54ecfa4a66aa684470caccaf35c
+        dest: /etc/apt/keyrings/insync.asc
+        mode: 0644
       when: not is_wsl
 
     - name: "[Non-WSL] Add Insync APT package repository"
       become: yes
       apt_repository:
-        repo: deb http://apt.insynchq.com/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} non-free contrib
+        repo: deb [signed-by=/etc/apt/keyrings/insync.asc] http://apt.insynchq.com/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} non-free contrib
         filename: insync
         update_cache: no
       register: apt_repository
