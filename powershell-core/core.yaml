@@ -1,4 +1,4 @@
-- import_playbook: ../dotnet/core.yaml    # PowerShell Core depends on having .NET Core available
+- import_playbook: ../dotnet/core.yaml    # PowerShell Core depends on having .NET available
 
 - name: PowerShell Core
   hosts: 127.0.0.1

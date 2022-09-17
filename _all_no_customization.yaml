@@ -24,7 +24,7 @@
 # Docker
 - import_playbook: docker/core.yaml
 
-# .NET Core
+# .NET
 - import_playbook: dotnet/core.yaml
 
 # Flameshot

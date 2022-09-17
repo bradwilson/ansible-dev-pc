@@ -51,7 +51,7 @@
       command: dotnet new
       when: dotnet_sdk_installed_linux.changed
 
-    - name: Update environment for .NET Core
+    - name: Update environment for .NET
       blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: .NET Core enhancement"
