@@ -34,6 +34,8 @@
           alias grep='grep --color=auto'
           alias ls='ls -Fh --color'
 
+          alias gpg-stop='gpgconf --kill gpg-agent'
+
     - name: Install APT packages
       become: yes
       apt:
