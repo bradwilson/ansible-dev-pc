@@ -121,6 +121,7 @@
       become: yes
       blockinfile:
         path: /etc/wsl.conf
+        create: yes
         marker: "### {mark} Ansible managed: Enable systemd"
         block: |
           [boot]
