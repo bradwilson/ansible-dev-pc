@@ -116,3 +116,13 @@
         path: /etc/initramfs-tools/modules
         line: dm-crypt
       when: ansible_facts.packages["cryptsetup-initramfs"] is defined
+
+    - name: "[WSL] Enable systemd"
+      become: yes
+      blockinfile:
+        path: /etc/wsl.conf
+        marker: "### {mark} Ansible managed: Enable systemd"
+        block: |
+          [boot]
+          systemd=true
+      when: is_wsl
