@@ -126,3 +126,8 @@
           [boot]
           systemd=true
       when: is_wsl
+
+    - name: Ensure ~/.hushlogin exists
+      file:
+        path: ~/.hushlogin
+        state: touch
