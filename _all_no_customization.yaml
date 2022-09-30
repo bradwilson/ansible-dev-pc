@@ -79,11 +79,3 @@
 
 # VideoLan Client (primarily for codecs)
 - import_playbook: vlc/core.yaml
-
-##### Applications (commercial license required)
-
-# Beyond Compare 4
-- import_playbook: bc4/core.yaml
-
-# Google Backup and Sync (compatible; using Insync on Linux)
-- import_playbook: google-backup/core.yaml
