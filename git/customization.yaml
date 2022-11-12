@@ -52,7 +52,7 @@
         block: |
           function findHereOrParent() {
             path=$(pwd)
-            while [[ "$path" != "" && ! $(find $path -maxdepth 1 -regex "$1") ]]; do
+            while [[ "$path" != "" && ! $(find "$path" -maxdepth 1 -regex "$1") ]]; do
               path=${path%/*}
             done
             echo "$path"
