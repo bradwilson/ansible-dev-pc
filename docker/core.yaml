@@ -5,6 +5,7 @@
   vars:
     distribution_fallback:
       'Pop!_OS': 'Ubuntu'
+    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -25,14 +26,14 @@
     - name: Add Docker APT package key
       become: yes
       get_url:
-        url: https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }}/gpg
+        url: https://download.docker.com/linux/{{ distribution | lower }}/gpg
         dest: /etc/apt/keyrings/docker.asc
         mode: 0644
 
     - name: Add Docker APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ ansible_distribution_release }} stable
+        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/{{ distribution | lower }} {{ ansible_distribution_release }} stable
         filename: docker
         update_cache: no
       register: apt_repository_docker

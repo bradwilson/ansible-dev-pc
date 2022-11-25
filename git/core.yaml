@@ -3,6 +3,9 @@
   connection: local
 
   vars:
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
     is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
     linux_git_packages:
       - git
@@ -21,7 +24,7 @@
     - name: Add Git APT package repository
       become: yes
       apt_repository:
-        repo: deb [signed-by=/etc/apt/keyrings/git.asc] http://ppa.launchpad.net/git-core/ppa/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ ansible_distribution_release }} main
+        repo: deb [signed-by=/etc/apt/keyrings/git.asc] http://ppa.launchpad.net/git-core/ppa/{{ distribution | lower }} {{ ansible_distribution_release }} main
         filename: git
         update_cache: no
       register: apt_repository

@@ -2,6 +2,11 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
+
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
@@ -16,7 +21,7 @@
     - name: "[Non-WSL] Add Remmina APT package repository"
       become: yes
       apt_repository:
-        repo: deb [signed-by=/etc/apt/keyrings/remmina.asc] http://ppa.launchpad.net/remmina-ppa-team/remmina-next/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} {{ ansible_distribution_release }} main
+        repo: deb [signed-by=/etc/apt/keyrings/remmina.asc] http://ppa.launchpad.net/remmina-ppa-team/remmina-next/{{ distribution | lower }} {{ ansible_distribution_release }} main
         filename: remmina
         update_cache: no
       register: apt_repository

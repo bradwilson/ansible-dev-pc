@@ -5,8 +5,10 @@
   vars:
     distribution_fallback:
       'Pop!_OS': 'Ubuntu'
+    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
     distribution_release_fallback:
       'jammy': 'focal'
+    distribution_release: "{{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}"
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -21,7 +23,7 @@
     - name: Add Mono APT package repository
       become: yes
       apt_repository:
-        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/mono-official-stable.asc] https://download.mono-project.com/repo/{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) | lower }} stable-{{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }} main
+        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/mono-official-stable.asc] https://download.mono-project.com/repo/{{ distribution | lower }} stable-{{ distribution_release }} main
         filename: mono-official-stable
         update_cache: no
       register: apt_repository
