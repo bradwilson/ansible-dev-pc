@@ -65,6 +65,9 @@
 # Alacritty (high performance terminal application)
 - import_playbook: alacritty/core.yaml
 
+# Microsoft Edge
+- import_playbook: edge/core.yaml
+
 # Prettier version of ping w/ graphs
 - import_playbook: prettyping/core.yaml
 
