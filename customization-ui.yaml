@@ -263,15 +263,13 @@
     gnome_extensions:
       # Dash to Panel (Windows-style bottom task bar)
       - name: dash-to-panel@jderose9.github.com
-        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v19.shell-extension.zip
+        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v52.shell-extension.zip
       # Emoji Selector
       - name: emoji-selector@maestroschan.fr
-        url: https://extensions.gnome.org/extension-data/emoji-selectormaestroschan.fr.v15.shell-extension.zip
-      # TopIcons Redux (shows legacy app icons in Gnome 3)
-      - name: topicons-redux@pop-planet.info
-        url: https://extensions.gnome.org/extension-data/topicons-redux%40pop-planet.info.v6.shell-extension.zip
-
-    is_ubuntu_bionic: "{{ ansible_distribution_release == 'bionic' }}"
+        url: https://extensions.gnome.org/extension-data/emoji-selectormaestroschan.fr.v23.shell-extension.zip
+      # TopIconsFix (shows legacy app icons in Gnome 3)
+      - name: topiconsfix@aleskva@devnullmail.com
+        url: https://extensions.gnome.org/extension-data/topiconsfixaleskvadevnullmail.com.v15.shell-extension.zip
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -399,12 +397,6 @@
       loop:
         - paper-icon-theme
       when: not is_wsl
-
-    - name: "[Ubuntu 18.04] Install PIP 2"
-      become: yes
-      apt:
-        package: python-pip
-      when: is_ubuntu_bionic
 
     - name: "[Non-WSL] Install PIP 3"
       become: yes

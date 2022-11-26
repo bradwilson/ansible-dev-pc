@@ -7,7 +7,6 @@
       'Pop!_OS': 'Ubuntu'
     distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
     distribution_release_fallback:
-      'focal': 'bionic'
       'jammy': 'bionic'
     distribution_release: "{{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}"
 
