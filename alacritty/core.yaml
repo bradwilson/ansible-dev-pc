@@ -42,7 +42,7 @@
     - name: "[Non-WSL] Find Alacritty icon file"
       find:
         paths: ~/.cargo/registry/src
-        patterns: alacritty.png
+        patterns: alacritty-term.png
         recurse: yes
       register: alacritty_icons
       when: not is_wsl
