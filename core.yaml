@@ -11,6 +11,15 @@
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
+    - name: Disable auto-upgrade timer
+      become: yes
+      command:
+        cmd: systemctl disable {{ item }}.timer
+        removes: /etc/systemd/system/timers.target.wants/{{ item }}.timer
+      loop:
+        - apt-daily
+        - apt-daily-upgrade
+
     - name: Create /etc/apt/keyrings
       become: yes
       file:
