@@ -11,21 +11,21 @@
 
 ##### Operating system packages and configuration
 
-- import_playbook: core.yaml
+#- import_playbook: core.yaml
 
 ##### Developer tools
 
 # Visual Studio Code
-- import_playbook: vscode/core.yaml
+#- import_playbook: vscode/core.yaml
 
 # bat
 - import_playbook: bat/core.yaml
 
 # Broot
-- import_playbook: broot/core.yaml
+#- import_playbook: broot/core.yaml
 
 # Docker
-- import_playbook: docker/core.yaml
+#- import_playbook: docker/core.yaml
 
 # .NET
 - import_playbook: dotnet/core.yaml
