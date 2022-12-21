@@ -1,4 +1,4 @@
-﻿"$schema" = 'https://starship.rs/config-schema.json'
+"$schema" = 'https://starship.rs/config-schema.json'
 
 # This file contains two alternatives for the display.
 #
@@ -85,3 +85,4 @@ format = "[\\$]($style) "
 show_always = true
 style_root = "bold red"
 style_user = "bold green"
+command_timeout = 1000

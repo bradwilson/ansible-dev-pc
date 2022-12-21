@@ -24,3 +24,8 @@
         marker: "### {mark} Ansible managed: initialize starship"
         block: |
           eval "$(/home/linuxbrew/.linuxbrew/bin/starship init bash)"
+
+    - name: "Add custom config file"
+      copy:
+        src: starship.toml
+        dest: ~/.config/starship.toml
