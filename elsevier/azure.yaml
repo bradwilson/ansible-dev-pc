@@ -1,0 +1,47 @@
+- name: azure_cli
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    prereqs:
+    - ca-certificates 
+    - curl 
+    - apt-transport-https 
+    - lsb-release
+    - gnupg
+
+  tasks:
+    - name: Install Azure CLI prereqs
+      become: yes
+      apt:
+        package: "{{ item }}"
+      loop: "{{ prereqs }}"
+
+    - name: Add Microsoft signing key
+      become: yes
+      get_url:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        dest: /etc/apt/keyrings/microsoft.asc
+        mode: 0644
+
+    - name: Add Microsoft Azure CLI APT package repository
+      become: yes
+      apt_repository:
+        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/microsoft.asc] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main
+        filename: azure-cli
+        update_cache: no
+      register: apt_repository
+
+    - name: Update APT package list
+      become: yes
+      apt:
+        update_cache: yes
+      when: apt_repository.changed
+      register: apt_update
+      retries: 5
+      until: apt_update is success
+
+    - name: Install Azure CLI
+      become: yes
+      apt:
+        package: azure-cli

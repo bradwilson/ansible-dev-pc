@@ -1,0 +1,39 @@
+- name: Configure machine for development work at elsevier
+  hosts: 127.0.0.1
+  connection: local
+
+##### Operating system packages and configuration
+- import_playbook: core.yaml
+
+# Trust the zscaler root cert in order for TLS requests to succeed
+- import_playbook: zscalar/core.yaml
+
+# Install awscli
+- import_playbook: elsevier/aws.yaml
+
+# Install azure cli
+- import_playbook: elsevier/azure.yaml
+
+
+- import playbook: starship/core.yaml
+
+# Install Homebrew for linux
+- import_playbook: homebrew/core.yaml
+
+
+##### Developer tools
+
+# Visual Studio Code
+# - import_playbook: vscode/core.yaml
+
+# git
+#- import_playbook: git/core.yaml
+
+# PowerShell Core
+#- import_playbook: powershell-core/core.yaml
+
+# Python
+#- import_playbook: python/core.yaml
+
+# VideoLan Client (primarily for codecs)
+#- import_playbook: vlc/core.yaml

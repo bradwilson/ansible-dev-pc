@@ -1,0 +1,24 @@
+- name: aws_cli
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Download the AWS CLI
+      unarchive:
+        src: https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip
+        dest: /tmp
+        remote_src: yes
+
+    - name: Install the AWS CLI
+      become: yes
+      shell:
+        chdir: /tmp
+        cmd: "./aws/install --update"
+
+    - name: Set up autocomplete for awscli
+      blockinfile:
+        path: ~/.bashrc
+        create: yes
+        marker: "### {mark} Ansible managed: awscli support"
+        block: |
+          complete -C '/usr/local/bin/aws_completer' aws
