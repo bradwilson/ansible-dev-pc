@@ -1,0 +1,34 @@
+- name: Homebrew
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install Homebrew
+      become: no
+      get_url:
+        url: https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh
+        dest: /tmp/brew-install.sh
+        mode: 0755
+      register: homebrew_download
+
+    - name: Create the linuxbrew directory if it does not exist
+      become: yes
+      file:
+        path: /home/linuxbrew/.linuxbrew
+        state: directory
+        mode: 0777
+
+    - name: Run post-download install
+      shell: /tmp/brew-install.sh
+
+    - name: Set up environment for homebrew
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Homebrew support"
+        block: |
+          export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew"
+          export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar"
+          export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew"
+          export PATH="${PATH+:$PATH}:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin"
+          export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:"
+          export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}"
