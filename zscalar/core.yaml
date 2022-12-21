@@ -1,0 +1,42 @@
+- name: Zscaler Intermediate Root CA
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: "Trust the Zscaler Root CA"
+      become: yes
+      copy:
+        src: ZscalerRootCA.pem
+        dest: /etc/ssl/certs/ZscalerRootCA.pem
+        mode: 0644
+
+    - name: "Trust the Zscaler Intermediate Certificate"
+      become: yes
+      copy:
+        src: zscaler-intermediate-root.pem
+        dest: /etc/ssl/certs/zscaler-intermediate-root.pem
+        mode: 0644
+
+    - name: "Update CA certs"
+      become: yes
+      command: 
+        cmd: update-ca-certificates -f
+
+    - name: Set up environment for the Zscaler certificate
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Zscaler certificate"
+        block: |
+          export CERT_PATH=/etc/ssl/certs/ca-certificates.crt
+          export CERT_DIR=/etc/ssl/certs/
+          export SSL_CERT_FILE=${CERT_PATH}
+          export SSL_CERT_DIR=${CERT_DIR}
+          export REQUESTS_CA_BUNDLE=${CERT_PATH}
+          export LC_ALL=C
+
+# NOW WE NEED TO APPEND THE ZSCALER CERT ONTO THE END OF THE 
+# /etc/ssl/certs/ca-certificates.crt file
+# DO THIS MANUALLY. DO NOT UPDATE CA CERTS AFTERWARDS.
+# sudo su
+#  cat /etc/ssl/certs/ZscalerRootCA.pem >> /etc/ssl/certs/ca-certificates.crt 
+#  cat /etc/ssl/certs/zscaler-intermediate-root.pem >> /etc/ssl/certs/ca-certificates.crt 
