@@ -7,20 +7,15 @@
       become: yes
       copy:
         src: ZscalerRootCA.pem
-        dest: /etc/ssl/certs/ZscalerRootCA.pem
+        dest: /usr/local/share/ca-certificates/zscaler.crt
         mode: 0644
-
-    - name: "Trust the Zscaler Intermediate Certificate"
-      become: yes
-      copy:
-        src: zscaler-intermediate-root.pem
-        dest: /etc/ssl/certs/zscaler-intermediate-root.pem
-        mode: 0644
+      register: zscaler_cert
 
     - name: "Update CA certs"
       become: yes
       command: 
         cmd: update-ca-certificates -f
+      when: zscaler_cert.changed
 
     - name: Set up environment for the Zscaler certificate
       blockinfile:
@@ -33,10 +28,3 @@
           export SSL_CERT_DIR=${CERT_DIR}
           export REQUESTS_CA_BUNDLE=${CERT_PATH}
           export LC_ALL=C
-
-# NOW WE NEED TO APPEND THE ZSCALER CERT ONTO THE END OF THE 
-# /etc/ssl/certs/ca-certificates.crt file
-# DO THIS MANUALLY. DO NOT UPDATE CA CERTS AFTERWARDS.
-# sudo su
-#  cat /etc/ssl/certs/ZscalerRootCA.pem >> /etc/ssl/certs/ca-certificates.crt 
-#  cat /etc/ssl/certs/zscaler-intermediate-root.pem >> /etc/ssl/certs/ca-certificates.crt 
