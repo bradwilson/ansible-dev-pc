@@ -13,4 +13,3 @@
         - dotnet-format
         - dotnet-outdated-tool
         - dotnet-reportgenerator-globaltool
-        - dotnet-retire
