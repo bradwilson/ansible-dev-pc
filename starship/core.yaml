@@ -45,9 +45,29 @@
         src: starship.toml
         dest: ~/.config/starship.toml
 
-    - name: Add Starship to shell startup
+    - name: Enable Starship in bash
       blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Starship"
         block: |
           eval "$(starship init bash)"
+
+    - name: Ensure PowerShell config folder exists
+      file:
+        path: ~/.config/powershell
+        state: directory
+        mode: 0700
+
+    - name: Ensure PowerShell profile exists
+      copy:
+        content: ""
+        dest: ~/.config/powershell/Microsoft.PowerShell_profile.ps1
+        force: false
+        mode: 0600
+
+    - name: Enable Starship in PowerShell
+      blockinfile:
+        path: ~/.config/powershell/Microsoft.PowerShell_profile.ps1
+        marker: "### {mark} Ansible managed: Starship"
+        block: |
+          Invoke-Expression (&starship init powershell)

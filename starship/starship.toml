@@ -1,7 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = true
-format = " $status$ruby$python$golang$rust$dotnet(\u001b\\[38;5;25;48;5;0m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[38;5;0;48;5;25m)$directory\u001b\\[0m\n $username"
+format = " $status$ruby$python$golang$rust$dotnet(\u001b\\[38;5;25;48;5;0m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[38;5;0;48;5;25m)$directory\u001b\\[0m\n $shell$username"
 
 [directory]
 format = "\u001b\\[38;5;28;48;5;0m\u001b\\[38;5;227;48;5;28m  \u001b\\[38;5;231m$path \u001b\\[38;5;0;48;5;28m"
@@ -51,12 +51,18 @@ version_format = "${raw}"
 [rust]
 format = "\u001b\\[38;5;172;40m\u001b\\[38;5;231;48;5;172m  $numver \u001b\\[38;5;0;48;5;172m"
 
+[shell]
+bash_indicator = "sh"
+disabled = false
+format = '$indicator'
+powershell_indicator = "pwsh"
+
 [status]
 disabled = false
 format = "\u001b\\[38;5;131;48;5;0m\u001b\\[38;5;227;48;5;131m  $status \u001b\\[38;5;0;48;5;131m"
 
 [username]
-format = "[sh\\$]($style) "
+format = "[\\$]($style) "
 show_always = true
 style_root = "bold red"
 style_user = "bold green"
