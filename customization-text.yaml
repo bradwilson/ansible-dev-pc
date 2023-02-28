@@ -140,7 +140,6 @@
             if [ "$(__get_terminal_column)" != 0 ]; then
               echo -e '\033[7m%\033[0m'
             fi
-            echo ""
           }
 
           __get_terminal_column() {

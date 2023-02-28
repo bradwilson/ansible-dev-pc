@@ -1,0 +1,53 @@
+- name: Starship
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    starship_version: v1.13.1
+
+  tasks:
+    - name: Create binary folder
+      become: yes
+      file:
+        path: /opt/starship/{{ starship_version }}
+        state: directory
+
+    - name: Install Starship
+      become: yes
+      unarchive:
+        src: https://github.com/starship/starship/releases/download/{{ starship_version }}/starship-x86_64-unknown-linux-musl.tar.gz
+        dest: /opt/starship/{{ starship_version }}
+        remote_src: yes
+        creates: /opt/starship/{{ starship_version }}/starship
+
+    - name: Set Starship binary ownership to root
+      become: yes
+      file:
+        path: /opt/starship/{{ starship_version }}/starship
+        owner: root
+        group: root
+
+    - name: Create symlink to /usr/local/bin/starship
+      become: yes
+      file:
+        path: /usr/local/bin/starship
+        src: /opt/starship/{{ starship_version }}/starship
+        state: link
+
+    - name: Ensure ~/.config folder exists
+      file:
+        path: ~/.config
+        state: directory
+        mode: 0700
+
+    - name: Copy starship.toml to ~/.config
+      copy:
+        src: starship.toml
+        dest: ~/.config/starship.toml
+
+    - name: Add Starship to shell startup
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Starship"
+        block: |
+          eval "$(starship init bash)"

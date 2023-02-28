@@ -1,0 +1,62 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+add_newline = true
+format = " $status$ruby$python$golang$rust$dotnet(\u001b\\[38;5;25;48;5;0m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[38;5;0;48;5;25m)$directory\u001b\\[0m\n $username"
+
+[directory]
+format = "\u001b\\[38;5;28;48;5;0m\u001b\\[38;5;227;48;5;28m  \u001b\\[38;5;231m$path \u001b\\[38;5;0;48;5;28m"
+truncate_to_repo = false
+truncation_length = 99
+
+[dotnet]
+format = "\u001b\\[38;5;54;48;5;0m\u001b\\[38;5;231;48;5;54m  ($version )(🎯 $tfm )\u001b\\[38;5;0;48;5;54m"
+version_format = '${raw}'
+
+[git_branch]
+format = "\u001b\\[38;5;231;48;5;25m$branch "
+
+[git_commit]
+format = "\u001b\\[38;5;231;48;5;25m(\\($hash$tag\\))  "
+tag_disabled = false
+tag_symbol = " ∷ "
+
+[git_state]
+format = "\u001b\\[38;5;231;48;5;25m| $state( $progress_current/$progress_total) "
+
+[git_status]
+format = "$ahead_behind$conflicted$stashed$staged$renamed$deleted$modified$untracked"
+ahead = "(\u001b\\[38;5;110;48;5;25m$count )"
+behind = "(\u001b\\[38;5;110;48;5;25m$count )"
+conflicted = "(\u001b\\[38;5;210;48;5;25m $count )"
+deleted = "(\u001b\\[38;5;45;48;5;25m-$count )"
+diverged = "(\u001b\\[38;5;110;48;5;25m$behind_count $ahead_count )"
+modified = "(\u001b\\[38;5;227;48;5;25m~$count )"
+renamed = "(\u001b\\[38;5;45;48;5;25m~$count )"
+staged = "(\u001b\\[38;5;45;48;5;25m+$count )"
+stashed = "(\u001b\\[38;5;110;48;5;25m $count )"
+untracked = "(\u001b\\[38;5;227;48;5;25m+$count )"
+
+[golang]
+format = "\u001b\\[38;5;80;48;5;0m\u001b\\[38;5;16;48;5;80m  $version \u001b\\[38;5;0;48;5;80m"
+version_format = "${raw}"
+
+[python]
+format = "\u001b\\[38;5;221;48;5;0m\u001b\\[38;5;25;48;5;221m  \u001b\\[38;5;16m$version \u001b\\[38;5;0;48;5;221m"
+version_format = "${raw}"
+
+[ruby]
+format = "\u001b\\[38;5;52;48;5;0m\u001b\\[38;5;210;48;5;52m  \u001b\\[38;5;254m$version \u001b\\[38;5;0;48;5;52m"
+version_format = "${raw}"
+
+[rust]
+format = "\u001b\\[38;5;172;40m\u001b\\[38;5;231;48;5;172m  $numver \u001b\\[38;5;0;48;5;172m"
+
+[status]
+disabled = false
+format = "\u001b\\[38;5;131;48;5;0m\u001b\\[38;5;227;48;5;131m  $status \u001b\\[38;5;0;48;5;131m"
+
+[username]
+format = "[sh\\$]($style) "
+show_always = true
+style_root = "bold red"
+style_user = "bold green"
