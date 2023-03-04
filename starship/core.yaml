@@ -70,4 +70,7 @@
         path: ~/.config/powershell/Microsoft.PowerShell_profile.ps1
         marker: "### {mark} Ansible managed: Starship"
         block: |
+          function Invoke-Starship-PreCommand {
+            $host.ui.Write("`e]0;$($PWD.Path.Replace($env:USERPROFILE ?? $env:HOME, '~'))`a")
+          }
           Invoke-Expression (&starship init powershell)
