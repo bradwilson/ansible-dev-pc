@@ -1,0 +1,22 @@
+- name: git-config
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Add alias for git br
+      git_config:
+        name: alias.br
+        scope: global
+        value: branch
+
+    - name: Choose vi as the git editor 
+      git_config:
+        name: core.editor
+        scope: global
+        value: vi
+
+    - name: Do not show whitespace carriage return at EOL in the diffs
+      git_config:
+        name: core.whitespace
+        scope: global
+        value: cr-at-eol
