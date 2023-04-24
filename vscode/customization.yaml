@@ -27,7 +27,7 @@
       loop:
         - amodio.toggle-excluded-files                    # Toggle Excluded Files
         - editorconfig.editorconfig                       # EditorConfig for VS Code
-        - ms-vsliveshare.vsliveshare-pack                 # Live Share Extension Pack
+        - MS-vsliveshare.vsliveshare                      # Live Share Extension Pack
         - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
         - pkief.material-icon-theme                       # Material Icon Theme
         - pflannery.vscode-versionlens                    # Version Lens
