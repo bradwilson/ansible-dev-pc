@@ -329,7 +329,7 @@
     - name: "[Non-WSL] Install Microsoft TTF fonts"
       become: yes
       apt:
-        deb: http://ftp.us.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8_all.deb
+        deb: http://ftp.us.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8.1_all.deb
       when: not is_wsl
 
     - name: "[Non-WSL] Install Fonts (downloaded)"
