@@ -1,0 +1,93 @@
+- name: go-aws-sso
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    temporary_download_path: /tmp
+    go_aws_sso:
+      version: 1.3.0
+      hash: sha256:a5c34f95983a6e53354cc0767efc25967d119456b32c6aecdaa6ae0f1e9f7f9f
+    accounts:
+      - name: em-ad-prod-admin
+        id: "692824280932"
+        role: EnterpriseAdmin
+        region: us-east-2
+      - name: em-backup-admin
+        id: "723791386045"
+        role: EnterpriseAdmin
+        region: us-east-2
+      - name: em-network-prod-admin
+        id: "469845136634"
+        role: EnterpriseAdmin
+        region: us-east-2
+      - name: em-nonprod-admin
+        id: "544785467518"
+        role: EnterpriseAdmin
+        region: us-east-2
+      - name: em-playground-nonprod-admin
+        id: 027582772594
+        role: EnterpriseAdmin
+        region: us-east-2
+      - name: em-prod-admin
+        id: "453836842642"
+        role: EnterpriseAdmin
+        region: us-east-2
+      - name: em-tools-prod-admin
+        id: "806064321552"
+        role: EnterpriseAdmin
+        region: us-east-2
+      - name: em-sandbox-prod-admin
+        id: "534259481618"
+        role: EnterpriseAdmin
+        region: us-east-2
+
+  tasks:
+  - name: Download go-aws-sso
+    get_url:
+      url: https://github.com/theurichde/go-aws-sso/releases/download/v{{ go_aws_sso.version }}/go-aws-sso_{{ go_aws_sso.version }}_linux_amd64.tar.gz
+      dest: "{{ temporary_download_path }}/go-aws-sso.tar.gz"
+      checksum: "{{ go_aws_sso.hash }}"
+      mode: 0644
+    register: go_aws_sso_download
+
+  - name: Extract go-aws-sso # noqa no-handler
+    become: true
+    unarchive:
+      src: "{{ go_aws_sso_download.dest }}"
+      dest: /usr/local/bin
+      extra_opts:
+        - go-aws-sso
+      remote_src: true
+    when: go_aws_sso_download.changed
+
+  - name: Create config folder directory if it does not exist
+    ansible.builtin.file:
+      path: ~/.config/go-aws-sso/
+      state: directory
+      mode: '0755'
+
+  - name: Configure go-aws-sso
+    become: false
+    copy:
+      dest: ~/.config/go-aws-sso/config.yml
+      content: "{{ config | to_nice_yaml }}"
+      mode: 0600
+    vars:
+      config:
+        start-url: https://elsevier-sso.awsapps.com/start#/
+        region: eu-west-1
+
+  - name: Configure AWS CLI with go-aws-sso
+    become: false
+    blockinfile:
+      path: ~/.aws/config
+      block: |
+        {% for account in accounts %}
+        [profile {{ account.name }}]
+        credential_process = /usr/local/bin/go-aws-sso assume -a {{ account.id }} -n {{ account.role }}
+        region             = {{ account.region }}
+
+        {% endfor %}
+      create: true
+      mode: 0600
+      marker: "# {mark} ANSIBLE MANAGED BLOCK for go-aws-sso"
