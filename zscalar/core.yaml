@@ -6,7 +6,7 @@
     - name: "Trust the Zscaler Root CA"
       become: yes
       copy:
-        src: ZscalerRootCA.pem
+        src: ZscalerRootCerts/ZscalerRootCertificate-2048-SHA256.crt
         dest: /usr/local/share/ca-certificates/zscaler.crt
         mode: 0644
       register: zscaler_cert
