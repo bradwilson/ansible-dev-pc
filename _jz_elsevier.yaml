@@ -8,12 +8,11 @@
 # Trust the zscaler root cert in order for TLS requests to succeed
 - import_playbook: zscalar/core.yaml
 
-# Install awscli
 - import_playbook: elsevier/aws.yaml
-
-# Install azure cli
 - import_playbook: elsevier/azure.yaml
-
+- import_playbook: elsevier/fulcrum.yaml
+- import_playbook: elsevier/go-aws-sso.yaml
+- import_playbook: elsevier/terragrunt.yaml
 
 - import playbook: starship/core.yaml
 
