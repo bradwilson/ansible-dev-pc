@@ -6,13 +6,15 @@
   "debug.toolBarLocation": "docked",
 
   // Text editor
+  "audioCues.volume": 0,
   "breadcrumbs.enabled": true,
+  "editor.accessibilitySupport": "off",
   "editor.autoClosingBrackets": "never",
   "editor.find.autoFindInSelection": "never",
   "editor.fontFamily": "Iosevka",
   "editor.fontLigatures": true,
   "editor.fontSize": 14,
-  "editor.formatOnPaste": true,
+  "editor.formatOnPaste": false,
   "editor.inlineSuggest.enabled": true,
   "editor.minimap.enabled": false,
   "editor.parameterHints.enabled": false,
@@ -30,7 +32,9 @@
   "explorer.openEditors.visible": 0,
 
   // Git
+  "diffEditor.ignoreTrimWhitespace": false,
   "git.inputValidation": "off",
+  "git.openRepositoryInParentFolders": "never",
 
   // TypeScript
   "typescript.updateImportsOnFileMove.enabled": "always",
@@ -110,9 +114,6 @@
   "workbench.startupEditor": "none",
   "workbench.tips.enabled": false,
 
-  // extension: Live Share
-  "liveshare.featureSet": "insiders",
-
   // extension: Toggle Excluded Files
   "toggleexcludedfiles.statusBar.enabled": true,
 
@@ -121,14 +122,14 @@
 
   // extension: C#
   "csharp.suppressDotnetRestoreNotification": true,
-  "csharp.unitTestDebuggingOptions": {
+  "dotnet.unitTestDebuggingOptions": {
     "justMyCode": false
   },
+  "dotnet.server.useOmnisharp": true,
+  "omnisharp.enableDecompilationSupport": true,
   "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableRoslynAnalyzers": true,
-
-  // extension: Go
-  "go.toolsManagement.autoUpdate": true,
+  "omnisharp.enableLspDriver": true,
+  "omnisharp.organizeImportsOnFormat": true,
 
   // extension: Git Lens
   "gitlens.advanced.messages": {
