@@ -25,6 +25,7 @@
   "files.defaultLanguage": "markdown",
   "files.trimTrailingWhitespace": true,
   "security.workspace.trust.untrustedFiles": "open",
+  "task.autoDetect": "off",
 
   // Explorer
   "explorer.confirmDelete": false,
@@ -121,15 +122,10 @@
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 
   // extension: C#
-  "csharp.suppressDotnetRestoreNotification": true,
-  "dotnet.unitTestDebuggingOptions": {
-    "justMyCode": false
-  },
-  "dotnet.server.useOmnisharp": true,
-  "omnisharp.enableDecompilationSupport": true,
+  "csharp.debug.justMyCode": false,
+  "dotnet.autoDetect": "off",
+  "dotnet.automaticallyCreateSolutionInWorkspace": false,
   "omnisharp.enableEditorConfigSupport": true,
-  "omnisharp.enableLspDriver": true,
-  "omnisharp.organizeImportsOnFormat": true,
 
   // extension: Git Lens
   "gitlens.advanced.messages": {
