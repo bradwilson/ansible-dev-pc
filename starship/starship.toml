@@ -1,19 +1,19 @@
 ﻿"$schema" = 'https://starship.rs/config-schema.json'
 
 add_newline = true
-format = " $status$env_var$ruby$python$golang$rust$dotnet(\u001b\\[38;5;25;48;5;0m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[38;5;0;48;5;25m)$directory\u001b\\[0m\n $shell$username"
+format = " $status$env_var$ruby$python$golang$rust$dotnet(\u001b\\[0;38;5;25m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[0;38;5;25m)$directory\u001b\\[0m\n $shell$username"
 
 [directory]
-format = "\u001b\\[38;5;28;48;5;0m\u001b\\[38;5;227;48;5;28m  \u001b\\[38;5;231m$path \u001b\\[38;5;0;48;5;28m"
+format = "\u001b\\[0;38;5;28m\u001b\\[38;5;227;48;5;28m  \u001b\\[38;5;231m$path \u001b\\[0;38;5;28m"
 truncate_to_repo = false
 truncation_length = 99
 
 [dotnet]
-format = "\u001b\\[38;5;54;48;5;0m\u001b\\[38;5;231;48;5;54m  $version (∷ $tfm )\u001b\\[38;5;0;48;5;54m"
+format = "\u001b\\[0;38;5;54m\u001b\\[38;5;231;48;5;54m  $version (» $tfm )\u001b\\[0;38;5;54m"
 version_format = '${raw}'
 
 [env_var.PromptEnvironment]
-format = "\u001b\\[38;5;183;40m\u001b\\[38;5;54;48;5;183m$env_value\u001b\\[38;5;183;40m"
+format = "\u001b\\[0;38;5;183m\u001b\\[38;5;54;48;5;183m$env_value\u001b\\[0;38;5;183m"
 
 [git_branch]
 format = "\u001b\\[38;5;231;48;5;25m$branch "
@@ -40,19 +40,19 @@ stashed = "(\u001b\\[38;5;110;48;5;25m $count )"
 untracked = "(\u001b\\[38;5;227;48;5;25m+$count )"
 
 [golang]
-format = "\u001b\\[38;5;80;48;5;0m\u001b\\[38;5;16;48;5;80m  $version \u001b\\[38;5;0;48;5;80m"
+format = "\u001b\\[0;38;5;80m\u001b\\[38;5;16;48;5;80m  $version \u001b\\[0;38;5;80m"
 version_format = "${raw}"
 
 [python]
-format = "\u001b\\[38;5;221;48;5;0m\u001b\\[38;5;25;48;5;221m  \u001b\\[38;5;16m$version \u001b\\[38;5;0;48;5;221m"
+format = "\u001b\\[0;38;5;221m\u001b\\[38;5;25;48;5;221m  \u001b\\[38;5;16m$version \u001b\\[0;38;5;221m"
 version_format = "${raw}"
 
 [ruby]
-format = "\u001b\\[38;5;52;48;5;0m\u001b\\[38;5;210;48;5;52m  \u001b\\[38;5;254m$version \u001b\\[38;5;0;48;5;52m"
+format = "\u001b\\[0;38;5;52m\u001b\\[38;5;210;48;5;52m  \u001b\\[38;5;254m$version \u001b\\[0;38;5;52m"
 version_format = "${raw}"
 
 [rust]
-format = "\u001b\\[38;5;172;40m\u001b\\[38;5;231;48;5;172m  $numver \u001b\\[38;5;0;48;5;172m"
+format = "\u001b\\[0;38;5;172m\u001b\\[38;5;231;48;5;172m  $numver \u001b\\[0;38;5;172m"
 
 [shell]
 bash_indicator = "sh"
@@ -62,7 +62,7 @@ powershell_indicator = "pwsh"
 
 [status]
 disabled = false
-format = "\u001b\\[38;5;131;48;5;0m\u001b\\[38;5;227;48;5;131m  $status \u001b\\[38;5;0;48;5;131m"
+format = "\u001b\\[0;38;5;131m\u001b\\[38;5;227;48;5;131m  $status \u001b\\[0;38;5;131m"
 
 [username]
 format = "[\\$]($style) "
