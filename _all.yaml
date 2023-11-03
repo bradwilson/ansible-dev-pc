@@ -49,6 +49,8 @@
 
 - import_playbook: rust-lang/vscode.yaml
 
+- import_playbook: toml/vscode.yaml
+
 ##### Applications (free)
 
 - import_playbook: alacritty/customization.yaml
