@@ -9,6 +9,7 @@ truncate_to_repo = false
 truncation_length = 99
 
 [dotnet]
+detect_extensions = ["sln"]
 format = "\u001b\\[0;38;5;54m\u001b\\[38;5;231;48;5;54m  $version (» $tfm )\u001b\\[0;38;5;54m"
 version_format = '${raw}'
 
