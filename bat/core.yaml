@@ -1,0 +1,15 @@
+- name: bat
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install bat
+      become: yes
+      apt:
+        package: bat
+
+    - name: Add bat alias
+      file:
+        path: ~/bin/bat
+        src: /usr/bin/batcat
+        state: link

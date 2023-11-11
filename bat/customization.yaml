@@ -1,0 +1,25 @@
+- name: bat (customization)
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Ensure configuration folder exists
+      become: yes
+      file:
+        path: ~/.config/bat
+        state: directory
+
+    - name: Add configuration file
+      blockinfile:
+        path: ~/.config/bat/config
+        create: true
+        marker: "### {mark} Ansible managed: bat customization"
+        block: |
+          --theme="TwoDark"
+          --italic-text=always
+          --map-syntax "*.csproj:XML"
+
+    - name: Alias bat to cat
+      lineinfile:
+        path: ~/.bashrc
+        line: alias cat='bat -p'

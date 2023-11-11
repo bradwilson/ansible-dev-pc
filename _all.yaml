@@ -22,6 +22,8 @@
 
 ##### Developer tools
 
+- import_playbook: bat/customization.yaml
+
 - import_playbook: docker/customization.yaml
 - import_playbook: docker/vscode.yaml
 

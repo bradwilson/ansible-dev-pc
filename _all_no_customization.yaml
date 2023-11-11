@@ -18,6 +18,9 @@
 # Visual Studio Code
 - import_playbook: vscode/core.yaml
 
+# bat
+- import_playbook: bat/core.yaml
+
 # Broot
 - import_playbook: broot/core.yaml
 
