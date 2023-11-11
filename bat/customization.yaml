@@ -22,4 +22,4 @@
     - name: Alias bat to cat
       lineinfile:
         path: ~/.bashrc
-        line: alias cat='bat -p'
+        line: alias cat='bat -pp'
