@@ -15,11 +15,15 @@
         create: true
         marker: "### {mark} Ansible managed: bat customization"
         block: |
-          --theme="TwoDark"
+          --theme="Visual Studio Dark+"
           --italic-text=always
           --map-syntax "*.csproj:XML"
+          --map-syntax "*.props:XML"
+          --map-syntax "*.targets:XML"
 
     - name: Alias bat to cat
-      lineinfile:
+      blockinfile:
         path: ~/.bashrc
-        line: alias cat='bat -pp'
+        marker: "### {mark} Ansible managed: bat customization"
+        block: |
+          alias cat='bat -pp'
