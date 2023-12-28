@@ -28,6 +28,8 @@
       - tfenv
       - tflint
       - tfsec
-      - tgenv
-      # This one requires gcc. Skipping for now.
+      - warrensbox/tap/tgswitch
+
+      # This one requires gcc. Skipping for now,
+      # we don't use eks anyhow
       # - weaveworks/tap/eksctl
