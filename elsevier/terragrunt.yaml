@@ -14,5 +14,5 @@
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: terragrunt config"
         block: |
-          export TERRAGRUNT_DOWNLOAD="/tmp/terragrunt-cache"
-          export TERRAGRUNT_INCLUDE_EXTERNAL_DEPENDENCIES="true"
+          # export TERRAGRUNT_DOWNLOAD="/tmp/terragrunt-cache"
+          # export TERRAGRUNT_INCLUDE_EXTERNAL_DEPENDENCIES="true"
