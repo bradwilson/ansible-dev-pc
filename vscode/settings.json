@@ -121,6 +121,9 @@
   // extension: VS Intellicode
   "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
 
+  // extension: Version Lens
+  "versionlens.suggestions.showOnStartup": true,
+
   // extension: C#
   "csharp.debug.justMyCode": false,
   "dotnet.autoDetect": "off",
@@ -134,6 +137,7 @@
 
   // extension: PowerShell
   "powershell.integratedConsole.showOnStartup": false,
+  "powershell.promptToUpdatePowerShell": false,
 
   // extension: YAML
   "redhat.telemetry.enabled": false,
@@ -168,6 +172,7 @@
   ],
   "cSpell.userWords": [
     "appcenter",
+    "bitness",
     "Codespaces",
     "cref",
     "fluentd",
@@ -175,6 +180,7 @@
     "inheritdoc",
     "logfmt",
     "Otel",
+    "parallelizable",
     "recurse",
     "telegraf",
     "testdouble",
