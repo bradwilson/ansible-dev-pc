@@ -4,7 +4,32 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    lazygit_version: 0.40.2
+
   tasks:
+    - name: Create lazygit binary folder
+      become: yes
+      file:
+        path: /opt/lazygit/{{ lazygit_version }}
+        state: directory
+
+    - name: Install lazygit
+      become: yes
+      unarchive:
+        src: https://github.com/jesseduffield/lazygit/releases/download/v{{ lazygit_version }}/lazygit_{{ lazygit_version }}_Linux_x86_64.tar.gz
+        dest: /opt/lazygit/{{ lazygit_version }}
+        remote_src: yes
+        creates: /opt/lazygit/{{ lazygit_version }}/lazygit
+      register: lazygit_download
+
+    - name: Create symlink to /usr/local/bin/lazygit
+      become: yes
+      file:
+        path: /usr/local/bin/lazygit
+        src: /opt/lazygit/{{ lazygit_version }}/lazygit
+        state: link
+
     - name: Install diffr
       command: ~/.cargo/bin/cargo install diffr
       args:
