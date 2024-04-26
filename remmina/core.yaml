@@ -14,14 +14,14 @@
       become: yes
       get_url:
         url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x04e38ce134b239b9f38f82ee8a993c2521c5f0ba
-        dest: /etc/apt/keyrings/remmina.asc
+        dest: /etc/apt/trusted.gpg.d/remmina.asc
         mode: 0644
       when: not is_wsl
 
     - name: "[Non-WSL] Add Remmina APT package repository"
       become: yes
       apt_repository:
-        repo: deb [signed-by=/etc/apt/keyrings/remmina.asc] http://ppa.launchpad.net/remmina-ppa-team/remmina-next/{{ distribution | lower }} {{ ansible_distribution_release }} main
+        repo: deb http://ppa.launchpad.net/remmina-ppa-team/remmina-next/{{ distribution | lower }} {{ ansible_distribution_release }} main
         filename: remmina
         update_cache: no
       register: apt_repository

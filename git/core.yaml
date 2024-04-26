@@ -17,13 +17,13 @@
       become: yes
       get_url:
         url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df1f24
-        dest: /etc/apt/keyrings/git.asc
+        dest: /etc/apt/trusted.gpg.d/git.asc
         mode: 0644
 
     - name: Add Git APT package repository
       become: yes
       apt_repository:
-        repo: deb [signed-by=/etc/apt/keyrings/git.asc] http://ppa.launchpad.net/git-core/ppa/{{ distribution | lower }} {{ ansible_distribution_release }} main
+        repo: deb http://ppa.launchpad.net/git-core/ppa/{{ distribution | lower }} {{ ansible_distribution_release }} main
         filename: git
         update_cache: no
       register: apt_repository

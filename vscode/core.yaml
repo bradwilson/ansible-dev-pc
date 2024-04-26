@@ -9,14 +9,14 @@
       become: yes
       get_url:
         url: https://packages.microsoft.com/keys/microsoft.asc
-        dest: /etc/apt/keyrings/vscode.asc
+        dest: /etc/apt/trusted.gpg.d/vscode.asc
         mode: 0644
       when: not is_wsl
 
     - name: "[Non-WSL] Add VS Code APT package repository"
       become: yes
       apt_repository:
-        repo: deb [arch=amd64, signed-by=/etc/apt/keyrings/vscode.asc] https://packages.microsoft.com/repos/vscode stable main
+        repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
         filename: vscode
         update_cache: no
       register: apt_repository

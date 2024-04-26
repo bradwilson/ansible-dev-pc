@@ -350,7 +350,7 @@
       become: yes
       get_url:
         url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xd320d0c30b02e64c5b2bb2743766223989993a70
-        dest: /etc/apt/keyrings/ppa_snwh_ppa_{{ distribution_release_snwh }}.asc
+        dest: /etc/apt/trusted.gpg.d/ppa_snwh_ppa_{{ distribution_release_snwh }}.asc
         mode: 0644
       when: not is_wsl
 
@@ -375,7 +375,7 @@
     - name: "[Non-WSL] Add paper Gnome icon theme APT package source"
       become: yes
       apt_repository:
-        repo: deb [signed-by=/etc/apt/keyrings/ppa_snwh_ppa_{{ distribution_release_snwh }}.asc] http://ppa.launchpad.net/snwh/ppa/ubuntu {{ distribution_release_snwh }} main
+        repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ distribution_release_snwh }} main
         filename: ppa_snwh_ppa_{{ distribution_release_snwh }}
         update_cache: no
       register: apt_repository

@@ -20,13 +20,6 @@
         - apt-daily
         - apt-daily-upgrade
 
-    - name: Create /etc/apt/keyrings
-      become: yes
-      file:
-        path: /etc/apt/keyrings
-        state: directory
-        mode: 0755
-
     - name: Create ~/bin
       file:
         path: ~/bin
