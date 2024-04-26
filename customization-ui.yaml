@@ -263,7 +263,7 @@
     gnome_extensions:
       # Dash to Panel (Windows-style bottom task bar)
       - name: dash-to-panel@jderose9.github.com
-        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v52.shell-extension.zip
+        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v56.shell-extension.zip
       # Emoji Selector
       - name: emoji-selector@maestroschan.fr
         url: https://extensions.gnome.org/extension-data/emoji-selectormaestroschan.fr.v23.shell-extension.zip
