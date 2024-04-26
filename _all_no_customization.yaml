@@ -48,9 +48,6 @@
 # NodeJS
 - import_playbook: nodejs/core.yaml
 
-# Postman
-- import_playbook: postman/core.yaml
-
 # PowerShell Core
 - import_playbook: powershell-core/core.yaml
 

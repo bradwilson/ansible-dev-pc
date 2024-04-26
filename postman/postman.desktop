@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.1
-Name=Postman
-Exec=/opt/Postman/Postman
-Icon=/opt/Postman/app/resources/app/assets/icon.png
-Type=Application
-Terminal=false
-Categories=Network;System;Utility;
-StartupWMClass=postman
