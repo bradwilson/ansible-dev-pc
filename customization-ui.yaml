@@ -36,7 +36,7 @@
       - key: /org/gnome/settings-daemon/plugins/xsettings/antialiasing
         value: "'grayscale'"
       - key: /org/gnome/shell/favorite-apps
-        value: "['alacritty.desktop', 'microsoft-edge.desktop', 'slack.desktop', 'virt-manager.desktop', 'code.desktop', 'org.remmina.Remmina.desktop']"
+        value: "['alacritty.desktop', 'firefox_firefox.desktop', 'microsoft-edge.desktop', 'slack.desktop', 'virt-manager.desktop', 'code.desktop', 'org.remmina.Remmina.desktop']"
       - key: /org/gnome/shell/extensions/desktop-icons/show-home
         value: "false"
       - key: /org/gnome/shell/extensions/desktop-icons/show-trash
