@@ -53,7 +53,7 @@
     - name: Upgrade to latest APT packages
       become: yes
       apt:
-        upgrade: yes
+        upgrade: "yes"
 
     - name: Install core packages
       become: yes
