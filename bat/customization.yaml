@@ -14,8 +14,10 @@
         path: ~/.config/bat/config
         create: true
         marker: "### {mark} Ansible managed: bat customization"
+        # Note: You may want --theme="Visual Studio Dark+" if you plan to run a dark mode terminal
+        # You can run 'bat --list-themes' and choose the one that works best for you
         block: |
-          --theme="Visual Studio Dark+"
+          --theme="GitHub"
           --italic-text=always
           --map-syntax "*.csproj:XML"
           --map-syntax "*.nuspec:XML"
