@@ -3,7 +3,7 @@
   connection: local
 
   vars:
-    starship_version: v1.13.1
+    starship_version: v1.18.2
 
   tasks:
     - name: Create binary folder

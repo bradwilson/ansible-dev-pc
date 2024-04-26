@@ -3,7 +3,7 @@
   connection: local
 
   vars:
-    go_version: 1.19.4
+    go_version: 1.22.2
 
   tasks:
     - name: Create binary folder
