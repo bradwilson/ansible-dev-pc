@@ -11,78 +11,88 @@
         state: directory
       when: not is_wsl
 
-    - name: "[Non-WSL] Update ~/.config/alacritty/alacritty.yml"
+    - name: "[Non-WSL] Update ~/.config/alacritty/alacritty.toml"
       copy:
-        dest: ~/.config/alacritty/alacritty.yml
+        dest: ~/.config/alacritty/alacritty.toml
         content: |
-          window:
-            dimensions:
-              columns: 160
-              lines: 50
-            padding:
-              x: 8
-              y: 8
-            dynamic_padding: true
-            decorations: full
-            startup_mode: Maximized
+          [colors]
+          draw_bold_text_with_bright_colors = true
 
-          font:
-            normal:
-              family: JetBrainsMono Nerd Font Mono
-            size: 10.0
+          [font]
+          size = 10.0
 
-          draw_bold_text_with_bright_colors: true
+          [font.normal]
+          family = "JetBrainsMono Nerd Font Mono"
+
+          [[keyboard.bindings]]
+          action = "SpawnNewInstance"
+          key = "T"
+          mods = "Control|Shift"
+
+          [window]
+          decorations = "full"
+          dynamic_padding = true
+          startup_mode = "Maximized"
+
+          [window.dimensions]
+          columns = 160
+          lines = 50
+
+          [window.padding]
+          x = 8
+          y = 8
 
           #### Brad's Ubuntu (dark variant)
+          #### Note: Your bat theme may need to be changed for dark mode
 
-          # colors:
-          #   primary:
-          #     background: '0x2e3436'
-          #     foreground: '0xb5bbae'
-          #   normal:
-          #     black:   '0x2e3436'
-          #     blue:    '0x3465a4'
-          #     cyan:    '0x06989a'
-          #     green:   '0x4e9a06'
-          #     magenta: '0x75507b'
-          #     red:     '0xae5e5e'
-          #     white:   '0xb5bbae'
-          #     yellow:  '0x9b7f00'
-          #   bright:
-          #     black:   '0x696b67'
-          #     blue:    '0x729fcf'
-          #     cyan:    '0x2ec3c3'
-          #     green:   '0x79c32e'
-          #     magenta: '0xad7fa8'
-          #     red:     '0xf49797'
-          #     white:   '0xfbfbfb'
-          #     yellow:  '0xc4a000'
+          # [colors.normal]
+          # black = "0x2e3436"
+          # blue = "0x3465a4"
+          # cyan = "0x06989a"
+          # green = "0x4e9a06"
+          # magenta = "0x75507b"
+          # red = "0xae5e5e"
+          # white = "0xb5bbae"
+          # yellow = "0x9b7f00"
+
+          # [colors.bright]
+          # black = "0x696b67"
+          # blue = "0x729fcf"
+          # cyan = "0x2ec3c3"
+          # green = "0x79c32e"
+          # magenta = "0xad7fa8"
+          # red = "0xf49797"
+          # white = "0xeeeeee"
+          # yellow = "0xc4a000"
+
+          # [colors.primary]
+          # background = "0x2e3436"
+          # foreground = "0xb5bbae"
 
           #### Brad's Ubuntu (light variant)
 
-          colors:
-            primary:
-              background: '0xeeeeee'
-              foreground: '0x696b67'
-            normal:
-              black:   '0xeeeeee'
-              blue:    '0x729fcf'
-              cyan:    '0x2ec3c3'
-              green:   '0x79c32e'
-              magenta: '0xad7fa8'
-              red:     '0xf49797'
-              white:   '0x696b67'
-              yellow:  '0xc4a000'
-            bright:
-              black:   '0xb5bbae'
-              blue:    '0x3465a4'
-              cyan:    '0x06989a'
-              green:   '0x4e9a06'
-              magenta: '0x75507b'
-              red:     '0xae5e5e'
-              white:   '0x2e3436'
-              yellow:  '0x9b7f00'
+          [colors.normal]
+          black = "0xeeeeee"
+          blue = "0x729fcf"
+          cyan = "0x2ec3c3"
+          green = "0x79c32e"
+          magenta = "0xad7fa8"
+          red = "0xf49797"
+          white = "0x696b67"
+          yellow = "0xc4a000"
 
-          key_bindings:
-            - { key: T, mods: Control|Shift, action: SpawnNewInstance }
+          [colors.bright]
+          black = "0xb5bbae"
+          blue = "0x3465a4"
+          cyan = "0x06989a"
+          green = "0x4e9a06"
+          magenta = "0x75507b"
+          red = "0xae5e5e"
+          white = "0x2e3436"
+          yellow = "0x9b7f00"
+
+          [colors.primary]
+          background = "0xeeeeee"
+          foreground = "0x696b67"
+
       when: not is_wsl
