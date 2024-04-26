@@ -2,10 +2,10 @@
 
 This repository contains useful scripts to set up a Unix-y development machine. They have been tested with the following OSes:
 
-Distro  | Version(s) | CPU            | SKU
-------- | ---------- | -------------- | ---
-Ubuntu  | 22.04      | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
-Pop!_OS | 22.04      | Intel (64-bit) | [Desktop](https://system76.com/pop)
+Distro  | Version(s)   | CPU            | SKU
+------- | ------------ | -------------- | ---
+Ubuntu  | 22.04, 24.04 | Intel (64-bit) | [Desktop](https://www.ubuntu.com/download/desktop), [WSL 2](https://www.microsoft.com/en-us/p/ubuntu/9nblggh4msv6)
+Pop!_OS | 22.04        | Intel (64-bit) | [Desktop](https://system76.com/pop)
 
 Text shell customization assumes you're using bash. GUI shell customization assumes you're using Gnome on desktop Linux. Alternate distros and/or shells are left as an exercise for the reader.
 
