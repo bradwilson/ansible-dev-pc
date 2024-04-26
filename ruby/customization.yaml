@@ -3,12 +3,20 @@
   connection: local
 
   vars:
-    ruby_version_primary: 3.3.1
+    # We have been unable to install 3.2.x or 3.3.x versions due to the psych gem missing a
+    # seemingly required yaml.h header file, so we'll stick with latest from 3.1.x.
+    ruby_version_primary: 3.1.5
     ruby_versions:
     - 2.7.4
     - "{{ ruby_version_primary }}"
 
   tasks:
+    # Dependencies
+    - name: Install libffi-dev
+      become: yes
+      apt:
+        package: libffi-dev
+
     # Need to update versions in case this is being re-run to get a newer Ruby
     - name: Update available Ruby versions
       shell: git -C ~/.rbenv/plugins/ruby-build pull
