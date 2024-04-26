@@ -119,17 +119,6 @@
         line: dm-crypt
       when: ansible_facts.packages["cryptsetup-initramfs"] is defined
 
-    - name: "[WSL] Enable systemd"
-      become: yes
-      blockinfile:
-        path: /etc/wsl.conf
-        create: yes
-        marker: "### {mark} Ansible managed: Enable systemd"
-        block: |
-          [boot]
-          systemd=true
-      when: is_wsl
-
     - name: Ensure ~/.hushlogin exists
       file:
         path: ~/.hushlogin

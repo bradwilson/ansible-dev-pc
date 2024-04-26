@@ -34,8 +34,6 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
 
-4. WSL 2 users who want systemd support should follow [these instructions](https://devblogs.microsoft.com/commandline/systemd-support-is-now-available-in-wsl/) to ensure that they have a compatible version of WSL installed.
-
 # Running
 
 Before running the scripts, please review `_all.yaml` and `_all_no_customization.yaml`, and comment out software you don't want installed. In particular, most folders contain `customization.yaml` files which tend to contain my personal opinions on customizations; feel free to comment out sections of those files, or ignore them entirely.
