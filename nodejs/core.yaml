@@ -6,6 +6,5 @@
     - name: Install Node Version Manager
       shell:
         cmd: "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.7/install.sh | bash"
-        warn: false
       args:
         creates: ~/.nvm/install.sh

@@ -16,5 +16,4 @@
     - name: Install Rust
       shell:
         cmd: curl https://sh.rustup.rs -sSf | sh -s -- -y
-        warn: false
         creates: ~/.cargo/bin/cargo
