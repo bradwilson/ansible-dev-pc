@@ -6,7 +6,9 @@
     distribution_fallback:
       'Pop!_OS': 'Ubuntu'
     distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
+    # Since Mono is basically frozen, perhaps this fallback mapping isn't necessary, because it likely will never be "newer" than "focal"
     distribution_release_fallback:
+      'noble': 'focal'
       'jammy': 'focal'
     distribution_release: "{{ distribution_release_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}"
 
