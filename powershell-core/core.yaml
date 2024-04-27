@@ -6,6 +6,6 @@
 
   tasks:
     - name: Install PowerShell Core
-      command: dotnet tool install -g powershell
+      command: ~/.dotnet/dotnet tool install -g powershell
       args:
         creates: ~/.dotnet/tools/pwsh

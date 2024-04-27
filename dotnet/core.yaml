@@ -3,62 +3,36 @@
   connection: local
 
   vars:
-    distribution_fallback:
-      'Pop!_OS': 'Ubuntu'
-    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
-    dotnet_runtime_versions: []
+    dotnet_runtime_versions: ["6.0"]
     dotnet_sdk_version: "8.0"
 
   tasks:
-    - name: "[Ubuntu <= 22.04] Add .NET 6 Runtime"
-      set_fact:
-        dotnet_runtime_versions: ["6.0"]
-      when: (ansible_distribution_major_version | int) <= 22
+    - name: Create ~/.dotnet
+      file:
+        path: ~/.dotnet
+        state: directory
+        mode: 0755
 
-    - name: Add Microsoft APT package key
-      become: yes
+    - name: Download dotnet-install
       get_url:
-        url: https://packages.microsoft.com/keys/microsoft.asc
-        dest: /etc/apt/trusted.gpg.d/microsoft.asc
-        mode: 0644
-
-    - name: Add Microsoft APT package repository
-      become: yes
-      apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/{{ distribution | lower }}/{{ ansible_distribution_version }}/prod {{ ansible_distribution_release }} main
-        filename: microsoft-prod
-        update_cache: no
-      register: apt_repository
-
-    - name: Prefer Microsoft APT package repository
-      become: yes
-      copy:
-        src: 10microsoft
-        dest: /etc/apt/preferences.d/
-
-    - name: Update APT package list
-      become: yes
-      apt:
-        update_cache: yes
-      when: apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
+        url: https://dot.net/v1/dotnet-install.sh
+        dest: ~/bin/dotnet-install
+        mode: 0755
 
     - name: Install .NET SDK {{ dotnet_sdk_version }}
-      become: yes
-      apt:
-        package: dotnet-sdk-{{ dotnet_sdk_version }}
+      command: ~/bin/dotnet-install --channel {{ dotnet_sdk_version }}
+      args:
+        creates: ~/.dotnet/sdk/{{ dotnet_sdk_version }}.*/
       register: dotnet_sdk_installed_linux
 
     - name: Install ASP.NET Runtime
-      become: yes
-      apt:
-        package: aspnetcore-runtime-{{ item }}
+      command: ~/bin/dotnet-install --channel {{ item }} --runtime aspnetcore
+      args:
+        creates: ~/.dotnet/shared/Microsoft.AspNetCore.App/{{ item }}.*/
       loop: "{{ dotnet_runtime_versions }}"
 
     - name: Perform first-run experience
-      command: dotnet new
+      command: ~/.dotnet/dotnet new
       when: dotnet_sdk_installed_linux.changed
 
     - name: Update environment for .NET
@@ -66,4 +40,4 @@
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: .NET Core enhancement"
         block: |
-          export PATH=$PATH:$HOME/.dotnet/tools
+          export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
