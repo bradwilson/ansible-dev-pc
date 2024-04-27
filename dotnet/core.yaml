@@ -6,10 +6,15 @@
     distribution_fallback:
       'Pop!_OS': 'Ubuntu'
     distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
-    dotnet_runtime_versions: ["6.0"]
+    dotnet_runtime_versions: []
     dotnet_sdk_version: "8.0"
 
   tasks:
+    - name: "[Ubuntu <= 22.04] Add .NET 6 Runtime"
+      set_fact:
+        dotnet_runtime_versions: ["6.0"]
+      when: (ansible_distribution_major_version | int) <= 22
+
     - name: Add Microsoft APT package key
       become: yes
       get_url:
