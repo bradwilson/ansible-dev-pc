@@ -327,11 +327,15 @@
       loop: "{{ fonts_apt }}"
       when: not is_wsl
 
+    - name: "[Non-WSL] Gather package facts"
+      package_facts:
+        manager: auto
+
     - name: "[Non-WSL] Install Microsoft TTF fonts"
       become: yes
       apt:
         deb: http://ftp.us.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8.1_all.deb
-      when: not is_wsl
+      when: not is_wsl and "ttf-mscorefonts-installer" not in ansible_facts.packages
 
     - name: "[Non-WSL] Install Fonts (downloaded)"
       become: yes
