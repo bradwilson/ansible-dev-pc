@@ -4,6 +4,13 @@
   hosts: 127.0.0.1
   connection: local
 
+  vars:
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
+    is_ubu_22_04: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) == 22 }}"
+    is_ubu_24_04: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) == 24 }}"
+
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
@@ -14,11 +21,17 @@
       register: folder
       when: not is_wsl
 
-    - name: "[Non-WSL] Copy extension code"
+    - name: "[Non-WSL, Gnome 42] Copy extension code"
       copy:
-        src: extension.js
-        dest: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost
-      when: folder.changed
+        src: extension_v42.js
+        dest: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost/extension.js
+      when: folder.changed and is_ubu_22_04
+
+    - name: "[Non-WSL, Gnome 46] Copy extension code"
+      copy:
+        src: extension_v46.js
+        dest: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost/extension.js
+      when: folder.changed and is_ubu_24_04
 
     - name: "[Non-WSL] Get GNOME shell version"
       shell: gnome-shell --version
@@ -48,5 +61,6 @@
       register: metadata
 
     - name: "[Non-WSL] Enable extension"
-      command: gnome-shell-extension-tool -e no-screen-blank@localhost
+      shell: gnome-extensions enable no-screen-blank@localhost
+      ignore_errors: yes
       when: folder.changed and metadata.changed

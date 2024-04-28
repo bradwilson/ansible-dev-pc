@@ -342,7 +342,8 @@
       when: not is_wsl and item.changed
 
     - name: "[Non-WSL] Enable GNOME extension"
-      command: gnome-shell-extension-tool -e "{{ item.item.name }}"
+      shell: gnome-extensions enable "{{ item.item.name }}"
+      ignore_errors: yes
       loop: "{{ new_extensions.results }}"
       when: not is_wsl and item.changed
 

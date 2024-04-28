@@ -10,12 +10,12 @@ let orig_activateFade = ScreenShield.ScreenShield.prototype._activateFade;
 let orig_completeLockScreenShown = ScreenShield.ScreenShield.prototype._completeLockScreenShown;
 
 // don't fade in a full screen black box which would obscure the view
-function noFade_activateFade (lightbox, time) {};
+function noFade_activateFade(lightbox, time) { };
 
 // basically a copy of the original method without the emission of the
 // "active-changed" signal which would cause gnome-settings-daemon to
 // blank the screen
-function noFade_completeLockScreenShown () {
+function noFade_completeLockScreenShown() {
     this._isActive = true;
 
     if (this._aboutToSuspend)
