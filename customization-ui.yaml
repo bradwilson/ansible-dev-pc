@@ -3,10 +3,14 @@
   connection: local
 
   vars:
+    distribution_fallback:
+      'Pop!_OS': 'Ubuntu'
+    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
     distribution_release_snwh_fallback:
       'noble': 'focal'
       'jammy': 'focal'
     distribution_release_snwh: "{{ distribution_release_snwh_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}"
+    is_ubu_22_04: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) == 22 }}"
 
     dconf_config:
       # Themes
@@ -409,11 +413,17 @@
         package: python3-pip
       when: not is_wsl
 
-    - name: "[Non-WSL] Install psutil Python package"
+    - name: "[Non-WSL, Ubuntu 22.04] Install psutil Python package"
       become: yes
       pip:
         name: psutil
-      when: not is_wsl
+      when: not is_wsl and is_ubu_22_04
+
+    - name: "[Non-WSL, Ubuntu 24.04+] Install psutil Python package"
+      become: yes
+      apt:
+        package: python3-psutil
+      when: not is_wsl and not is_ubu_22_04
 
     - name: "[Non-WSL] Update customization with dconf"
       dconf:
