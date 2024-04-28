@@ -270,25 +270,27 @@
     gnome_extensions_v42:
       # Dash to Panel (Windows-style bottom task bar)
       - name: dash-to-panel@jderose9.github.com
-        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v56.shell-extension.zip
+        file: dash-to-paneljderose9.github.com.v56.shell-extension.zip
       # Emoji Copy
       - name: emoji-copy@felipeftn
-        url: https://extensions.gnome.org/extension-data/emoji-copyfelipeftn.v9.shell-extension.zip
+        file: emoji-copyfelipeftn.v9.shell-extension.zip
       # TopIconsFix (shows legacy app icons in Gnome 3)
       - name: topiconsfix@aleskva@devnullmail.com
-        url: https://extensions.gnome.org/extension-data/topiconsfixaleskvadevnullmail.com.v15.shell-extension.zip
+        file: topiconsfixaleskvadevnullmail.com.v15.shell-extension.zip
 
     # Extensions for Gnome 46 in Ubuntu 24.04
     gnome_extensions_v46:
       # Dash to Panel (Windows-style bottom task bar)
       - name: dash-to-panel@jderose9.github.com
-        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v62.shell-extension.zip
+        file: dash-to-paneljderose9.github.com.v62.shell-extension.zip
       # Emoji Copy
       - name: emoji-copy@felipeftn
-        url: https://extensions.gnome.org/extension-data/emoji-copyfelipeftn.v21.shell-extension.zip
+        file: emoji-copyfelipeftn.v21.shell-extension.zip
       # TopIconsFix (shows legacy app icons in Gnome 3)
       - name: topiconsfix@aleskva@devnullmail.com
-        url: https://extensions.gnome.org/extension-data/topiconsfixaleskvadevnullmail.com.v22.shell-extension.zip
+        file: topiconsfixaleskvadevnullmail.com.v22.shell-extension.zip
+
+    missing_extensions: []
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -316,36 +318,51 @@
           </fontconfig>
       when: is_wsl
 
-    - name: "[Non-WSL, Gnome v42] Create GNOME extension directory"
+    - name: "[Non-WSL] Make temporary folder for Gnome extensions"
       file:
-        path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
+        path: /tmp/gnome-extensions
         state: directory
-      register: new_extensions
+        mode: 0755
+      when: not is_wsl
+
+    - name: "[Non-WSL, Gnome v42] Check if extension is installed"
+      stat:
+        path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
+      register: gnome_extensions_v42_installed
       loop: "{{ gnome_extensions_v42 }}"
       when: not is_wsl and is_ubu_22_04
 
-    - name: "[Non-WSL, Gnome v46] Create GNOME extension directory"
-      file:
+    - name: "[Non-WSL, Gnome v42] Create missing Gnome extension list"
+      set_fact:
+        missing_extensions: "{{ missing_extensions + [item.item] }}"
+      when: not is_wsl and is_ubu_22_04 and not item.stat.exists
+      with_items: "{{ gnome_extensions_v42_installed.results }}"
+
+    - name: "[Non-WSL, Gnome v46] Check if extension is installed"
+      stat:
         path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
-        state: directory
-      register: new_extensions
+      register: gnome_extensions_v46_installed
       loop: "{{ gnome_extensions_v46 }}"
       when: not is_wsl and is_ubu_24_04
 
-    - name: "[Non-WSL] Extract GNOME extension"
-      unarchive:
-        src: "{{ item.item.url }}"
-        dest: "~/.local/share/gnome-shell/extensions/{{ item.item.name }}"
-        creates: "~/.local/share/gnome-shell/extensions/{{ item.item.name }}/metadata.json"
-        remote_src: yes
-      loop: "{{ new_extensions.results }}"
-      when: not is_wsl and item.changed
+    - name: "[Non-WSL, Gnome v46] Create missing Gnome extension list"
+      set_fact:
+        missing_extensions: "{{ missing_extensions + [item.item] }}"
+      when: not is_wsl and is_ubu_24_04 and not item.stat.exists
+      with_items: "{{ gnome_extensions_v46_installed.results }}"
 
-    - name: "[Non-WSL] Enable GNOME extension"
-      shell: gnome-extensions enable "{{ item.item.name }}"
-      ignore_errors: yes
-      loop: "{{ new_extensions.results }}"
-      when: not is_wsl and item.changed
+    - name: "[Non-WSL] Download Gnome extensions"
+      get_url:
+        url: https://extensions.gnome.org/extension-data/{{ item.file }}
+        dest: /tmp/gnome-extensions
+        mode: 0644
+      loop: "{{ missing_extensions }}"
+      when: not is_wsl
+
+    - name: "[Non-WSL] Install Gnome extension"
+      command: gnome-extensions install /tmp/gnome-extensions/{{ item.file }}
+      loop: "{{ missing_extensions }}"
+      when: not is_wsl
 
     - name: "[Non-WSL] Install Fonts (via APT)"
       become: yes
