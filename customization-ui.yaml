@@ -11,6 +11,7 @@
       'jammy': 'focal'
     distribution_release_snwh: "{{ distribution_release_snwh_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}"
     is_ubu_22_04: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) == 22 }}"
+    is_ubu_24_04: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) == 24 }}"
 
     dconf_config:
       # Themes
@@ -265,16 +266,29 @@
       - fonts-crosextra-carlito
       - fonts-crosextra-caladea
 
-    gnome_extensions:
+    # Extensions for Gnome 42 in Ubuntu 22.04
+    gnome_extensions_v42:
       # Dash to Panel (Windows-style bottom task bar)
       - name: dash-to-panel@jderose9.github.com
         url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v56.shell-extension.zip
-      # Emoji Selector
-      - name: emoji-selector@maestroschan.fr
-        url: https://extensions.gnome.org/extension-data/emoji-selectormaestroschan.fr.v23.shell-extension.zip
+      # Emoji Copy
+      - name: emoji-copy@felipeftn
+        url: https://extensions.gnome.org/extension-data/emoji-copyfelipeftn.v9.shell-extension.zip
       # TopIconsFix (shows legacy app icons in Gnome 3)
       - name: topiconsfix@aleskva@devnullmail.com
         url: https://extensions.gnome.org/extension-data/topiconsfixaleskvadevnullmail.com.v15.shell-extension.zip
+
+    # Extensions for Gnome 46 in Ubuntu 24.04
+    gnome_extensions_v46:
+      # Dash to Panel (Windows-style bottom task bar)
+      - name: dash-to-panel@jderose9.github.com
+        url: https://extensions.gnome.org/extension-data/dash-to-paneljderose9.github.com.v62.shell-extension.zip
+      # Emoji Copy
+      - name: emoji-copy@felipeftn
+        url: https://extensions.gnome.org/extension-data/emoji-copyfelipeftn.v21.shell-extension.zip
+      # TopIconsFix (shows legacy app icons in Gnome 3)
+      - name: topiconsfix@aleskva@devnullmail.com
+        url: https://extensions.gnome.org/extension-data/topiconsfixaleskvadevnullmail.com.v22.shell-extension.zip
 
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
@@ -302,13 +316,21 @@
           </fontconfig>
       when: is_wsl
 
-    - name: "[Non-WSL] Create GNOME extension directory"
+    - name: "[Non-WSL, Gnome v42] Create GNOME extension directory"
       file:
         path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
         state: directory
       register: new_extensions
-      loop: "{{ gnome_extensions }}"
-      when: not is_wsl
+      loop: "{{ gnome_extensions_v42 }}"
+      when: not is_wsl and is_ubu_22_04
+
+    - name: "[Non-WSL, Gnome v46] Create GNOME extension directory"
+      file:
+        path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
+        state: directory
+      register: new_extensions
+      loop: "{{ gnome_extensions_v46 }}"
+      when: not is_wsl and is_ubu_24_04
 
     - name: "[Non-WSL] Extract GNOME extension"
       unarchive:
