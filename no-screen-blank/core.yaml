@@ -25,14 +25,14 @@
         src: extension_v42.js
         dest: /tmp/gnome-extensions/no-screen-blank/extension.js
       when: not is_wsl and is_ubu_22_04
-      register: extension_src
+      register: extension_src_v42
 
     - name: "[Non-WSL, Gnome 46] Copy extension code"
       copy:
         src: extension_v46.js
         dest: /tmp/gnome-extensions/no-screen-blank/extension.js
       when: not is_wsl and is_ubu_24_04
-      register: extension_src
+      register: extension_src_v46
 
     - name: "[Non-WSL] Get GNOME shell version"
       shell: gnome-shell --version
@@ -65,13 +65,13 @@
       file:
         path: /tmp/gnome-extensions/no-screen-blank@localhost.zip
         state: absent
-      when: not is_wsl and (extension_src.changed or metadata_src.changed)
+      when: not is_wsl and (extension_src_v42.changed or extension_src_v46.changed or metadata_src.changed)
 
     - name: "[Non-WSL] Create extension ZIP"
       command: zip -j ../no-screen-blank@localhost.zip extension.js metadata.json
       args:
         chdir: /tmp/gnome-extensions/no-screen-blank
-      when: not is_wsl and (extension_src.changed or metadata_src.changed)
+      when: not is_wsl and (extension_src_v42.changed or extension_src_v46.changed or metadata_src.changed)
       register: extension_zip
 
     - name: "[Non-WSL] Install extension"
