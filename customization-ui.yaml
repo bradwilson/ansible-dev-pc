@@ -4,6 +4,7 @@
 
   vars:
     distribution_release_snwh_fallback:
+      'noble': 'focal'
       'jammy': 'focal'
     distribution_release_snwh: "{{ distribution_release_snwh_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}"
 
