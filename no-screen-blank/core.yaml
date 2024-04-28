@@ -14,40 +14,41 @@
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: "[Non-WSL] Create extension directory"
+    - name: "[Non-WSL] Make temporary folder"
       file:
-        path: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost
+        path: /tmp/gnome-extensions/no-screen-blank
         state: directory
-      register: folder
       when: not is_wsl
 
     - name: "[Non-WSL, Gnome 42] Copy extension code"
       copy:
         src: extension_v42.js
-        dest: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost/extension.js
-      when: folder.changed and is_ubu_22_04
+        dest: /tmp/gnome-extensions/no-screen-blank/extension.js
+      when: not is_wsl and is_ubu_22_04
+      register: extension_src
 
     - name: "[Non-WSL, Gnome 46] Copy extension code"
       copy:
         src: extension_v46.js
-        dest: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost/extension.js
-      when: folder.changed and is_ubu_24_04
+        dest: /tmp/gnome-extensions/no-screen-blank/extension.js
+      when: not is_wsl and is_ubu_24_04
+      register: extension_src
 
     - name: "[Non-WSL] Get GNOME shell version"
       shell: gnome-shell --version
-      when: folder.changed
+      when: not is_wsl
       register: gnome_shell_raw
 
-    - name: "[Non-WSL] Extraction GNOME shell version"
+    - name: "[Non-WSL] Extract GNOME shell version"
       set_fact:
         gnome_shell_version: "{{ gnome_shell_raw.stdout | regex_search(regexp, '\\1') }}"
       vars:
         regexp: 'GNOME Shell ((\d+)\.(\d+))'
-      when: folder.changed
+      when: not is_wsl
 
     - name: "[Non-WSL] Create extension manifest"
       blockinfile:
-        path: ~/.local/share/gnome-shell/extensions/no-screen-blank@localhost/metadata.json
+        path: /tmp/gnome-extensions/no-screen-blank/metadata.json
         create: yes
         marker: '{mark}'
         marker_begin: '{'
@@ -57,10 +58,22 @@
           "uuid": "no-screen-blank@localhost",
           "name": "No Screen Blank",
           "description": "Disable blanking the screen after showing the lock screen"
-      when: folder.changed
-      register: metadata
+      when: not is_wsl
+      register: metadata_src
 
-    - name: "[Non-WSL] Enable extension"
-      shell: gnome-extensions enable no-screen-blank@localhost
-      ignore_errors: yes
-      when: folder.changed and metadata.changed
+    - name: "[Non-WSL] Remove old ZIP file"
+      file:
+        path: /tmp/gnome-extensions/no-screen-blank@localhost.zip
+        state: absent
+      when: not is_wsl and (extension_src.changed or metadata_src.changed)
+
+    - name: "[Non-WSL] Create extension ZIP"
+      command: zip -j ../no-screen-blank@localhost.zip extension.js metadata.json
+      args:
+        chdir: /tmp/gnome-extensions/no-screen-blank
+      when: not is_wsl and (extension_src.changed or metadata_src.changed)
+      register: extension_zip
+
+    - name: "[Non-WSL] Install extension"
+      shell: gnome-extensions install /tmp/gnome-extensions/no-screen-blank@localhost.zip
+      when: not is_wsl and extension_zip.changed
