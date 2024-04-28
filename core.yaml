@@ -2,12 +2,6 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    distribution_fallback:
-      'Pop!_OS': 'Ubuntu'
-    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
-    is_ubu_22_04_or_newer: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) >= 22 }}"
-
   tasks:
     - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
@@ -72,23 +66,16 @@
         - uuid
         - xclip
 
-    - name: "[Ubuntu pre-22.04] Install exfat-utils"
-      become: yes
-      apt:
-        package: exfat-utils
-      when: not is_ubu_22_04_or_newer
-
-    - name: "[Ubuntu 22.04+] Install exfatprogs"
+    - name: "Install exfatprogs"
       become: yes
       apt:
         package: exfatprogs
-      when: is_ubu_22_04_or_newer
 
-    - name: "[Non-WSL Ubuntu 22.04+] Install Gnome Extension Manager"
+    - name: "[Non-WSL] Install Gnome Extension Manager"
       become: yes
       apt:
         package: gnome-shell-extension-manager
-      when: not is_wsl and is_ubu_22_04_or_newer
+      when: not is_wsl
 
     - name: "[Non-WSL] Install snapd"
       become: yes
