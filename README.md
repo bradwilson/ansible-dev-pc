@@ -34,6 +34,10 @@ Portions copyright (c) Microsoft Corporation, licensed [under the MIT license](h
 
 3. If you want to clone this Git repo, you should also install Git (`sudo apt -y install git`). These scripts will install it for you if you brought these files along in some other way.
 
+## WSL Pre-Requisites
+
+Because of the way Visual Studio Code is architected to work on WSL, you must have Visual Studio Code installed _on the Windows side_ before running any of the VS Code-related Ansible scripts. Extension installation will install the extensions into Windows VS Code, and then you're expected to "copy" them over to WSL as appropriate.
+
 # Running
 
 Before running the scripts, please review `_all.yaml` and `_all_no_customization.yaml`, and comment out software you don't want installed. In particular, most folders contain `customization.yaml` files which tend to contain my personal opinions on customizations; feel free to comment out sections of those files, or ignore them entirely.
