@@ -22,3 +22,10 @@
         marker: "### {mark} Ansible managed: awscli support"
         block: |
           complete -C '/usr/local/bin/aws_completer' aws
+
+    - name: Set default region
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: aws default region"
+        block: |
+          export AWS_DEFAULT_REGION=us-east-2
