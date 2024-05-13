@@ -41,3 +41,4 @@
         marker: "### {mark} Ansible managed: .NET Core enhancement"
         block: |
           export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
+          export DOTNET_ROOT=$HOME/.dotnet
