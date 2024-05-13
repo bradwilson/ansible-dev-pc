@@ -17,6 +17,7 @@
         # Note: You may want --theme="Visual Studio Dark+" if you plan to run a dark mode terminal
         # You can run 'bat --list-themes' and choose the one that works best for you
         block: |
+          --tabs=4
           --theme="GitHub"
           --italic-text=always
           --map-syntax "*.csproj:XML"
