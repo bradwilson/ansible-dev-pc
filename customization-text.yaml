@@ -36,6 +36,8 @@
 
           alias gpg-stop='gpgconf --kill gpg-agent'
 
+          alias wsl='wsl.exe'
+
           export LS_COLORS='ow=93'
 
     - name: Install APT packages
