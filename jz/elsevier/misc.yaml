@@ -1,0 +1,28 @@
+- name: Misc odds and ends
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: Install core packages
+      become: yes
+      apt:
+        package: "{{ item }}"
+      loop:
+        - dos2unix
+        - gh
+        - wslu
+
+    - name: Generate en_US.UTF-8 locale
+      ansible.builtin.command: update-locale LANG=en_US.UTF-8 LC_CTYPE=en_US.UTF-8
+      become: yes
+
+    - name: Add LC_ALL and LANG environment variables to shell configuration file
+      ansible.builtin.lineinfile:
+        path: "$HOME/.bashrc"
+        line: "{{ item }}"
+        state: present
+      loop:
+        - "export LC_ALL=en_US.UTF-8"
+        - "export LANG=en_US.UTF-8"
+
+

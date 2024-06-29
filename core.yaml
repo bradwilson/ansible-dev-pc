@@ -55,7 +55,6 @@
         package: "{{ item }}"
       loop:
         - curl
-        - dos2unix
         - dconf-editor
         - exfat-fuse
         - htop
