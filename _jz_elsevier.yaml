@@ -6,18 +6,16 @@
 - import_playbook: core.yaml
 
 # Trust the zscaler root cert in order for TLS requests to succeed
-- import_playbook: zscalar/core.yaml
+- import_playbook: jz/zscalar/core.yaml
 
-- import_playbook: elsevier/aws.yaml
-- import_playbook: elsevier/azure.yaml
-- import_playbook: elsevier/fulcrum.yaml
-- import_playbook: elsevier/go-aws-sso.yaml
-- import_playbook: elsevier/terragrunt.yaml
-
-- import playbook: starship/core.yaml
+- import_playbook: jz/elsevier/aws.yaml
+- import_playbook: jz/elsevier/azure.yaml
+- import_playbook: jz/elsevier/fulcrum.yaml
+- import_playbook: jz/elsevier/go-aws-sso.yaml
+- import_playbook: starship/core.yaml
 
 # Install Homebrew for linux
-- import_playbook: homebrew/core.yaml
+- import_playbook: jz/homebrew/core.yaml
 
 
 ##### Developer tools
