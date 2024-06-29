@@ -7,4 +7,4 @@
       shell:
         cmd: "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.39.7/install.sh | bash"
       args:
-        creates: ~/.nvm/install.sh
+        creates: ~/.nvm/nvm.sh
