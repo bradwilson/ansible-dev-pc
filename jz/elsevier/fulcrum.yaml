@@ -3,16 +3,6 @@
   connection: local
 
   tasks:
-    # requires: `ansible-galaxy collection install community.general`
-
-    # - name: Tap the required Homebrew repositories
-    #   community.general.homebrew_tap:
-    #     name: weaveworks/tap,sigsegv13/tgenv
-    #
-    # That wasn't working for me so I did this manually: 
-    # - brew tap weaveworks/tap
-    # - brew tap sigsegv13/tgenv
-
     - name: Install Fulcrum packages via homebrew
       homebrew:
         name: "{{ item }}"
