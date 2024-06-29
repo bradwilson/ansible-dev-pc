@@ -22,10 +22,10 @@
 ##### Developer tools
 
 # Visual Studio Code
-# - import_playbook: vscode/core.yaml
+- import_playbook: vscode/core.yaml
 
 # git
-#- import_playbook: git/core.yaml
+- import_playbook: git/core.yaml
 
 # PowerShell Core
 #- import_playbook: powershell-core/core.yaml
