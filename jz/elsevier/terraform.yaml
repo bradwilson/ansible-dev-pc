@@ -1,0 +1,43 @@
+---
+- name: Install Terraform version 1.5.7 and add it to PATH
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    terraform_version: 1.5.7
+    terragrunt_version: v0.50.12
+
+  tasks:
+    - name: Download Terraform binary
+      get_url:
+        url: "https://releases.hashicorp.com/terraform/{{ terraform_version }}/terraform_{{ terraform_version }}_linux_amd64.zip"
+        dest: /tmp/terraform_{{ terraform_version }}.zip
+
+    - name: Unzip Terraform binary
+      ansible.builtin.unarchive:
+        src: /tmp/terraform_{{ terraform_version }}.zip
+        dest: "$HOME/bin"
+        remote_src: yes
+        creates: "$HOME/bin/terraform"
+
+    - name: Set permissions on Terraform binary
+      ansible.builtin.file:
+        path: "$HOME/bin/terraform"
+        mode: '0755'
+
+    - name: Download Terragrunt binary
+      get_url:
+        url: "https://github.com/gruntwork-io/terragrunt/releases/download/{{ terragrunt_version }}/terragrunt_linux_amd64"
+        dest: /tmp/terragrunt
+
+    - name: Move Terragrunt binary to bin dir
+      ansible.builtin.copy:
+        src: /tmp/terragrunt
+        dest: "$HOME/bin/terragrunt"
+        mode: '0755'
+
+    - name: Add bin directory to PATH in ~/.bashrc
+      ansible.builtin.lineinfile:
+        path: "$HOME/.bashrc"
+        line: "export PATH=\"$HOME/bin:$PATH\""
+        state: present

@@ -11,10 +11,10 @@
 - import_playbook: jz/elsevier/aws.yaml
 - import_playbook: jz/elsevier/azure.yaml
 
-# Install Homebrew for linux
+# Install Homebrew for linux before fulcrum
 - import_playbook: jz/homebrew/core.yaml
 - import_playbook: jz/elsevier/fulcrum.yaml
-
+- import_playbook: jz/elsevier/terraform.yaml
 - import_playbook: jz/elsevier/go-aws-sso.yaml
 
 - import_playbook: starship/core.yaml

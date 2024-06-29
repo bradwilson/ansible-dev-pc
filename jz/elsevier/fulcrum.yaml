@@ -18,7 +18,9 @@
       - tfenv
       - tflint
       - tfsec
-      - warrensbox/tap/tgswitch
+      
+      # This doesn't seem to work today. 
+      #- warrensbox/tap/tgswitch
 
       # This one requires gcc. Skipping for now,
       # we don't use eks anyhow
