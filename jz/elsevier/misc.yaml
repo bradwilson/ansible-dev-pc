@@ -9,6 +9,7 @@
         package: "{{ item }}"
       loop:
         - dos2unix
+        - gcc-11
         - gh
         - make
         - python3-virtualenv
