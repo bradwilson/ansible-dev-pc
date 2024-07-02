@@ -29,4 +29,11 @@
         - "export LC_ALL=en_US.UTF-8"
         - "export LANG=en_US.UTF-8"
 
-
+    - name: Add bash aliases
+      blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: misc bash aliases"
+        block: |
+          alias rm-tg-cache='find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;'
+          alias rm-pycache='find . -type d -name "__pycache__" -prune -exec rm -rf {} \;'
+          alias rm-pyc='find . -type f -name "*.pyc" -exec rm -f {} \;'
