@@ -37,3 +37,5 @@
           alias rm-tg-cache='find . -type d -name ".terragrunt-cache" -prune -exec rm -rf {} \;'
           alias rm-pycache='find . -type d -name "__pycache__" -prune -exec rm -rf {} \;'
           alias rm-pyc='find . -type f -name "*.pyc" -exec rm -f {} \;'
+          alias tgp='terragrunt plan -out=plan.tfplan'
+          alias tga='terragrunt apply plan.tfplan'
