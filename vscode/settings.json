@@ -6,7 +6,6 @@
   "debug.toolBarLocation": "docked",
 
   // Text editor
-  "audioCues.volume": 0,
   "breadcrumbs.enabled": true,
   "editor.accessibilitySupport": "off",
   "editor.autoClosingBrackets": "never",
@@ -19,6 +18,7 @@
   "editor.minimap.enabled": false,
   "editor.parameterHints.enabled": false,
   "editor.renderWhitespace": "boundary",
+  "editor.semanticHighlighting.enabled": true,
   "editor.showFoldingControls": "always",
   "editor.suggestSelection": "first",
   "files.autoSave": "onWindowChange",
@@ -34,7 +34,6 @@
 
   // Git
   "diffEditor.ignoreTrimWhitespace": false,
-  "git.inputValidation": "off",
   "git.openRepositoryInParentFolders": "never",
 
   // TypeScript
@@ -126,6 +125,7 @@
 
   // extension: C#
   "csharp.debug.justMyCode": false,
+  "csharp.semanticHighlighting.enabled": true,
   "dotnet.autoDetect": "off",
   "dotnet.automaticallyCreateSolutionInWorkspace": false,
   "omnisharp.enableEditorConfigSupport": true,
@@ -186,5 +186,6 @@
     "testdouble",
     "vanaheim",
     "xunit"
-  ]
+  ],
+  "update.showReleaseNotes": false
 }
