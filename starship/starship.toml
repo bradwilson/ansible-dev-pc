@@ -7,20 +7,20 @@
 # lines do away with the diagonal boundaries and just show straight edges.
 
 add_newline = true
-format = "$status$env_var$ruby$python$golang$rust$dotnet(\u001b\\[38;5;25m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status)$directory\u001b\\[0m\n$shell$username"
-#format = "$status$env_var$ruby$python$golang$rust$dotnet(\u001b\\[0;38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[0m )$directory\u001b\\[0m\n$shell$username"
+format = "$status$env_var$ruby$python$golang$rust$custom(\u001b\\[38;5;25m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status)$directory\u001b\\[0m\n$shell$username"
+#format = "$status$env_var$ruby$python$golang$rust$custom(\u001b\\[0;38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[0m )$directory\u001b\\[0m\n$shell$username"
+
+[custom.dotnet]
+detect_extensions = ['sln','csproj','fsproj','vbproj','props','targets']
+format = "\u001b\\[38;5;54m\u001b\\[38;5;231;48;5;54m  $output "
+#format = "\u001b\\[38;5;231;48;5;54m  $output \u001b\\[0m "
+shell = ['dotnet','--version']
 
 [directory]
 format = "\u001b\\[38;5;28m\u001b\\[38;5;227;48;5;28m  \u001b\\[38;5;231m$path \u001b\\[0;38;5;28m"
 #format = "\u001b\\[38;5;227;48;5;28m  \u001b\\[38;5;231m$path \u001b\\[0m "
 truncate_to_repo = false
 truncation_length = 99
-
-[dotnet]
-detect_extensions = ["sln"]
-format = "\u001b\\[38;5;54m\u001b\\[38;5;231;48;5;54m  $version (» $tfm )"
-#format = "\u001b\\[38;5;231;48;5;54m  $version (» $tfm )\u001b\\[0m "
-version_format = '${raw}'
 
 [env_var.PromptEnvironment]
 format = "\u001b\\[38;5;183m\u001b\\[38;5;54;48;5;183m$env_value"
