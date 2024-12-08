@@ -12,6 +12,7 @@ format = "$status$env_var$ruby$python$golang$rust$custom(\u001b\\[38;5;25m\u0
 
 [custom.dotnet]
 detect_extensions = ['sln','csproj','fsproj','vbproj','props','targets']
+detect_files = ['global.json']
 format = "\u001b\\[38;5;54m\u001b\\[38;5;231;48;5;54m  $output "
 #format = "\u001b\\[38;5;231;48;5;54m  $output \u001b\\[0m "
 shell = ['dotnet','--version']
