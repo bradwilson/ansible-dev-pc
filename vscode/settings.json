@@ -1,11 +1,5 @@
 {
-  // Debugging
-  "debug.console.fontFamily": "Iosevka",
-  "debug.console.fontSize": 12,
-  "debug.internalConsoleOptions": "openOnSessionStart",
-  "debug.toolBarLocation": "docked",
-
-  // Text editor
+  // General settings
   "breadcrumbs.enabled": true,
   "editor.accessibilitySupport": "off",
   "editor.autoClosingBrackets": "never",
@@ -26,6 +20,13 @@
   "files.trimTrailingWhitespace": true,
   "security.workspace.trust.untrustedFiles": "open",
   "task.autoDetect": "off",
+  "update.showReleaseNotes": false,
+
+  // Debugging
+  "debug.console.fontFamily": "Iosevka",
+  "debug.console.fontSize": 12,
+  "debug.internalConsoleOptions": "openOnSessionStart",
+  "debug.toolBarLocation": "docked",
 
   // Explorer
   "explorer.confirmDelete": false,
@@ -143,33 +144,9 @@
   "redhat.telemetry.enabled": false,
 
   // extension: Code Spell Checker
-  "cSpell.enabledLanguageIds": [
-    "asciidoc",
-    "c",
-    "cpp",
-    "csharp",
-    "css",
-    "go",
-    "handlebars",
-    "html",
-    "jade",
-    "javascript",
-    "javascriptreact",
-    "latex",
-    "less",
-    "markdown",
-    "php",
-    "plaintext",
-    "pub",
-    "python",
-    "restructuredtext",
-    "rust",
-    "scss",
-    "text",
-    "typescript",
-    "typescriptreact",
-    "yml"
-  ],
+  "cSpell.enabledFileTypes": {
+    "*": true
+  },
   "cSpell.userWords": [
     "appcenter",
     "bitness",
@@ -181,11 +158,14 @@
     "logfmt",
     "Otel",
     "parallelizable",
+    "parameterless",
+    "parseable",
+    "prereleases",
     "recurse",
+    "skippable",
     "telegraf",
     "testdouble",
     "vanaheim",
     "xunit"
-  ],
-  "update.showReleaseNotes": false
+  ]
 }

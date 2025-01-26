@@ -9,17 +9,6 @@
         state: directory
         mode: 0700
 
-    - name: Install VS Live Share dependencies
-      become: yes
-      apt:
-        name: "{{ item }}"
-      loop:
-        - openssl
-        - gnome-keyring
-        - libsecret-1-0
-        - desktop-file-utils
-        - x11-utils
-
     - name: Install VS Code extensions
       command: ./invoke-code --install-extension {{ item }}
       args:
@@ -27,7 +16,6 @@
       loop:
         - amodio.toggle-excluded-files                    # Toggle Excluded Files
         - editorconfig.editorconfig                       # EditorConfig for VS Code
-        - MS-vsliveshare.vsliveshare                      # Live Share Extension Pack
         - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
         - pkief.material-icon-theme                       # Material Icon Theme
         - pflannery.vscode-versionlens                    # Version Lens
