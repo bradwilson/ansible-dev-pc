@@ -21,9 +21,11 @@
           --theme="GitHub"
           --italic-text=always
           --map-syntax "*.csproj:XML"
+          --map-syntax "*.fsproj:XML"
           --map-syntax "*.nuspec:XML"
           --map-syntax "*.props:XML"
           --map-syntax "*.targets:XML"
+          --map-syntax "*.vbproj:XML"
 
     - name: Alias bat to cat
       blockinfile:
