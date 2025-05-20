@@ -3,8 +3,8 @@
   connection: local
 
   vars:
-    dotnet_runtime_versions: ["6.0"]
-    dotnet_sdk_version: "8.0"
+    dotnet_runtime_versions: ["8.0"]
+    dotnet_sdk_version: "9.0"
 
   tasks:
     - name: Create ~/.dotnet
