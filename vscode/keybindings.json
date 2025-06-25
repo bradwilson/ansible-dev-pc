@@ -174,5 +174,9 @@
     "key": "shift+alt+down",
     "command": "editor.action.insertCursorBelow",
     "when": "editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "ctrl+alt+f4",
+    "command": "workbench.action.closeOtherEditors"
   }
 ]
