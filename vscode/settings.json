@@ -1,6 +1,7 @@
 {
   // General settings
   "breadcrumbs.enabled": true,
+  "chat.commandCenter.enabled": false,
   "editor.accessibilitySupport": "off",
   "editor.autoClosingBrackets": "never",
   "editor.find.autoFindInSelection": "never",
@@ -8,7 +9,7 @@
   "editor.fontLigatures": true,
   "editor.fontSize": 14,
   "editor.formatOnPaste": false,
-  "editor.inlineSuggest.enabled": true,
+  "editor.inlineSuggest.enabled": false,
   "editor.minimap.enabled": false,
   "editor.parameterHints.enabled": false,
   "editor.renderWhitespace": "boundary",
@@ -45,6 +46,7 @@
   "material-icon-theme.activeIconPack": "none",
   "material-icon-theme.folders.color": "#ff7043",
   "search.useGlobalIgnoreFiles": true,
+  "remote.autoForwardPortsSource": "hybrid",
   "terminal.integrated.fontFamily": "Iosevka",
   "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeightBold": "500",
@@ -129,19 +131,8 @@
   "csharp.semanticHighlighting.enabled": true,
   "dotnet.autoDetect": "off",
   "dotnet.automaticallyCreateSolutionInWorkspace": false,
+  "dotnet.testWindow.useTestingPlatformProtocol": true,
   "omnisharp.enableEditorConfigSupport": true,
-
-  // extension: Git Lens
-  "gitlens.advanced.messages": {
-    "suppressGitMissingWarning": true
-  },
-
-  // extension: PowerShell
-  "powershell.integratedConsole.showOnStartup": false,
-  "powershell.promptToUpdatePowerShell": false,
-
-  // extension: YAML
-  "redhat.telemetry.enabled": false,
 
   // extension: Code Spell Checker
   "cSpell.enabledFileTypes": {
@@ -167,5 +158,5 @@
     "testdouble",
     "vanaheim",
     "xunit"
-  ]
+  ],
 }
