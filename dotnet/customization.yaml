@@ -4,7 +4,7 @@
 
   tasks:
     - name: Install global tools
-      command: ~/.dotnet/dotnet tool install -g {{ item }}
+      command: ~/.local/share/dnvm/dotnet tool install -g {{ item }}
       args:
         creates: ~/.dotnet/tools/.store/{{ item }}
       loop:

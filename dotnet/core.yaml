@@ -3,42 +3,33 @@
   connection: local
 
   vars:
-    dotnet_runtime_versions: ["8.0"]
-    dotnet_sdk_version: "9.0"
+    dotnet_runtime_versions: ["latest", "8.0"]
 
   tasks:
-    - name: Create ~/.dotnet
+    - name: Create ~/.local/share/dnvm
       file:
-        path: ~/.dotnet
+        path: ~/.local/share/dnvm
         state: directory
         mode: 0755
 
-    - name: Download dotnet-install
-      get_url:
-        url: https://dot.net/v1/dotnet-install.sh
-        dest: ~/bin/dotnet-install
-        mode: 0755
+    # We download a known old version of dnvm so that we can update, which does the equivalent
+    # of a non-interactive install. In particular, it will extract the `env` file, and add things
+    # to the .bashrc to put `dnvm` and `dotnet` on the path
+    - name: Download dnvm
+      ansible.builtin.unarchive:
+        src: https://github.com/dn-vm/dnvm/releases/download/v0.9.7/dnvm-0.9.7-linux-x64.tar.gz
+        remote_src: yes
+        dest: ~/.local/share/dnvm
+        creates: ~/.local/share/dnvm/dnvm
 
-    - name: Install .NET SDK {{ dotnet_sdk_version }}
-      command: ~/bin/dotnet-install --channel {{ dotnet_sdk_version }}
+    - name: Install dnvm
+      ansible.builtin.command: ~/.local/share/dnvm/dnvm update --self
       args:
-        creates: ~/.dotnet/sdk/{{ dotnet_sdk_version }}.*/
-      register: dotnet_sdk_installed_linux
+        creates: ~/.local/share/dnvm/env
 
-    - name: Install ASP.NET Runtime
-      command: ~/bin/dotnet-install --channel {{ item }} --runtime aspnetcore
-      args:
-        creates: ~/.dotnet/shared/Microsoft.AspNetCore.App/{{ item }}.*/
+    - name: Install .NET Runtime
+      ansible.builtin.command: ~/.local/share/dnvm/dnvm track {{ item }}
       loop: "{{ dotnet_runtime_versions }}"
 
     - name: Perform first-run experience
-      command: ~/.dotnet/dotnet new
-      when: dotnet_sdk_installed_linux.changed
-
-    - name: Update environment for .NET
-      blockinfile:
-        path: ~/.bashrc
-        marker: "### {mark} Ansible managed: .NET Core enhancement"
-        block: |
-          export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
-          export DOTNET_ROOT=$HOME/.dotnet
+      ansible.builtin.command: ~/.local/share/dnvm/dotnet new
