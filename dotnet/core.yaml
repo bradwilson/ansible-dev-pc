@@ -4,6 +4,7 @@
 
   vars:
     dotnet_runtime_versions: ["latest", "8.0"]
+    manifest_json: "{{ lookup('file','~/.local/share/dnvm/dnvmManifest.json') | regex_replace('﻿', '') | from_json }}"
 
   tasks:
     - name: Create ~/.local/share/dnvm
@@ -27,7 +28,13 @@
       args:
         creates: ~/.local/share/dnvm/env
 
-    - name: Install .NET Runtime
+    - name: Detect already tracked channels
+      set_fact:
+        dotnet_runtime_versions: "{{ dotnet_runtime_versions | difference([item.channelName]) }}"
+      loop: "{{  manifest_json.registeredChannels }}"
+      when: "item.untracked == False"
+
+    - name: Track .NET channel
       ansible.builtin.command: ~/.local/share/dnvm/dnvm track {{ item }}
       loop: "{{ dotnet_runtime_versions }}"
 
