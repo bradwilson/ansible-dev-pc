@@ -60,15 +60,3 @@
         name={{ lookup('env', "USER") }}
         groups=docker
         append=yes
-
-    - name: Determine Docker Machine latest version
-      shell:
-        cmd: "curl -s https://api.github.com/repos/docker/machine/releases/latest | grep \"browser_download_url.*Linux-x86_64\\\"\" | cut -d : -f 2,3 | tr -d \\\""
-      register: docker_machine_version
-
-    - name: Install Docker Machine
-      become: yes
-      get_url:
-        url: "{{ docker_machine_version.stdout }}"
-        dest: /usr/local/bin/docker-machine
-        mode: 0755
