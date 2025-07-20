@@ -4,32 +4,27 @@
 
   vars:
     dotnet_runtime_versions: ["latest", "8.0"]
-    manifest_json: "{{ lookup('file','~/.local/share/dnvm/dnvmManifest.json') | regex_replace('﻿', '') | from_json }}"
+    manifest_json:
+      registeredChannels: []
 
   tasks:
-    - name: Create ~/.local/share/dnvm
-      file:
-        path: ~/.local/share/dnvm
-        state: directory
-        mode: 0755
+    - name: Check if ~/.local/share/dnvm/dnvmManifest.json exists
+      ansible.builtin.stat:
+        path: ~/.local/share/dnvm/dnvmManifest.json
+      register: manifest_stat
 
-    # We download a known old version of dnvm so that we can update, which does the equivalent
-    # of a non-interactive install. In particular, it will extract the `env` file, and add things
-    # to the .bashrc to put `dnvm` and `dotnet` on the path
-    - name: Download dnvm
-      ansible.builtin.unarchive:
-        src: https://github.com/dn-vm/dnvm/releases/download/v0.9.7/dnvm-0.9.7-linux-x64.tar.gz
-        remote_src: yes
-        dest: ~/.local/share/dnvm
-        creates: ~/.local/share/dnvm/dnvm
+    - name: Read ~/.local/share/dnvm/dnvmManifest.json
+      ansible.builtin.set_fact:
+        manifest_json: "{{ lookup('file','~/.local/share/dnvm/dnvmManifest.json', errors='ignore') | regex_replace('﻿', '') | from_json }}"
+      when: manifest_stat.stat.exists
 
     - name: Install dnvm
-      ansible.builtin.command: ~/.local/share/dnvm/dnvm update --self
+      ansible.builtin.shell: curl --proto '=https' -sSf https://dnvm.net/install.sh | sh -s -- -y --skip-tracking
       args:
-        creates: ~/.local/share/dnvm/env
+        creates: ~/.local/share/dnvm/dnvm
 
     - name: Detect already tracked channels
-      set_fact:
+      ansible.builtin.set_fact:
         dotnet_runtime_versions: "{{ dotnet_runtime_versions | difference([item.channelName]) }}"
       loop: "{{  manifest_json.registeredChannels }}"
       when: "item.untracked == False"
@@ -37,6 +32,8 @@
     - name: Track .NET channel
       ansible.builtin.command: ~/.local/share/dnvm/dnvm track {{ item }}
       loop: "{{ dotnet_runtime_versions }}"
+      register: track_channel
 
     - name: Perform first-run experience
       ansible.builtin.command: ~/.local/share/dnvm/dotnet new
+      when: track_channel.changed
