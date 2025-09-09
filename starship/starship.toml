@@ -7,8 +7,8 @@
 # lines do away with the diagonal boundaries and just show straight edges.
 
 add_newline = true
-format = "$status$env_var$ruby$python$golang$rust$custom(\u001b\\[38;5;25m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status)$directory\u001b\\[0m\n$shell$username"
-#format = "$status$env_var$ruby$python$golang$rust$custom(\u001b\\[0;38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[0m )$directory\u001b\\[0m\n$shell$username"
+format = "$status$env_var$ruby$python$golang$rust$nodejs$custom(\u001b\\[38;5;25m\u001b\\[38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status)$directory\u001b\\[0m\n$shell$username"
+#format = "$status$env_var$ruby$python$golang$rust$nodejs$custom(\u001b\\[0;38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[0m )$directory\u001b\\[0m\n$shell$username"
 
 [custom.dotnet]
 detect_extensions = ['sln','csproj','fsproj','vbproj','props','targets']
@@ -54,6 +54,11 @@ untracked = "(\u001b\\[38;5;227;48;5;25m+$count )"
 [golang]
 format = "\u001b\\[38;5;80m\u001b\\[38;5;16;48;5;80m  $version "
 #format = "\u001b\\[38;5;16;48;5;80m  $version \u001b\\[0m "
+version_format = "${raw}"
+
+[nodejs]
+format = "\u001b\\[38;5;65m\u001b\\[38;5;231;48;5;65m  $version "
+#format = "\u001b\\[38;5;231;48;5;65m  $version \u001b\\[0m "
 version_format = "${raw}"
 
 [python]
