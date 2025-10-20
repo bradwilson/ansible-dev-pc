@@ -9,4 +9,5 @@
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
         - dbaeumer.vscode-eslint
+        - esbenp.prettier-vscode
         - wallabyjs.quokka-vscode

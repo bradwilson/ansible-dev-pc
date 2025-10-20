@@ -177,4 +177,12 @@
     "Lines too Long": false,
     "Average Word Length too Long": false
   },
+
+  // extension: Typescript
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
