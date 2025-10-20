@@ -172,4 +172,9 @@
     "vanaheim",
     "xunit"
   ],
+  "cSpell.enabledNotifications": {
+    "Maximum Word Length Exceeded": false,
+    "Lines too Long": false,
+    "Average Word Length too Long": false
+  },
 }
