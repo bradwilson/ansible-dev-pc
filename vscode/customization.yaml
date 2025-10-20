@@ -21,6 +21,7 @@
         - pflannery.vscode-versionlens                    # Version Lens
         - streetsidesoftware.code-spell-checker           # Code Spell Checker
         - thenikso.github-plus-theme                      # GitHub Plus Theme
+        - tonsky.theme-alabaster                          # Alabaster Theme
         - visualstudioexptteam.vscodeintellicode          # Visual Studio IntelliCode
 
     - name: Override default VS Code preferences

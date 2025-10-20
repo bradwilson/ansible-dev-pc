@@ -37,6 +37,7 @@
   // Git
   "diffEditor.ignoreTrimWhitespace": false,
   "git.openRepositoryInParentFolders": "never",
+  "githubPullRequests.terminalLinksHandler": "github",
 
   // TypeScript
   "typescript.updateImportsOnFileMove.enabled": "always",
@@ -48,7 +49,7 @@
   "search.useGlobalIgnoreFiles": true,
   "remote.autoForwardPortsSource": "hybrid",
   "terminal.integrated.fontFamily": "Iosevka",
-  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontSize": 10,
   "terminal.integrated.fontWeightBold": "500",
   "window.restoreFullscreen": true,
   "window.restoreWindows": "none",
@@ -98,17 +99,28 @@
     "terminal.selectionBackground": "#3465a440",
 
     // Theme-based decorations
-    "[GitHub Plus]": {
-      "editor.background": "#eeeeee",
+    "[Alabaster]": {
+      "activityBar.background": "#e6e6e6",
+      "editor.background": "#f6f6f6",
       "editor.foreground": "#2e3436",
       "gitDecoration.ignoredResourceForeground": "#d0d0d0",
-      "panel.background": "#eeeeee3d",
+      "panel.background": "#ffffff3d",
+      "statusBar.background": "#3465a4",
+      "statusBar.border": "#3465a4",
+      "statusBar.foreground": "#eeeeee"
+    },
+    "[GitHub Plus]": {
+      "activityBar.background": "#e6e6e6",
+      "editor.background": "#f6f6f6",
+      "editor.foreground": "#2e3436",
+      "gitDecoration.ignoredResourceForeground": "#d0d0d0",
+      "panel.background": "#ffffff3d",
       "statusBar.background": "#3465a4",
       "statusBar.border": "#3465a4",
       "statusBar.foreground": "#eeeeee"
     }
   },
-  "workbench.colorTheme": "GitHub Plus",
+  "workbench.colorTheme": "Alabaster",
   "workbench.editor.closeEmptyGroups": false,
   "workbench.editor.enablePreview": false,
   "workbench.iconTheme": "material-icon-theme",
