@@ -123,6 +123,7 @@
   "workbench.colorTheme": "Alabaster",
   "workbench.editor.closeEmptyGroups": false,
   "workbench.editor.enablePreview": false,
+  "workbench.editor.wrapTabs": true,
   "workbench.iconTheme": "material-icon-theme",
   "workbench.settings.editor": "json",
   "workbench.sideBar.location": "left",
