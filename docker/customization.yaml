@@ -16,10 +16,11 @@
             [[ -z ${_images// } ]] || docker rmi $_images
           }
           docker-start() {
-            [ -S /var/run/docker.sock ] || sudo service docker start
+            sudo /etc/init.d/docker start
           }
           docker-stop() {
-            [ ! -S /var/run/docker.sock ] || sudo service docker stop
+            sudo systemctl stop docker.socket
+            sudo /etc/init.d/docker stop
           }
 
     - name: Ensure configuration folder exists
