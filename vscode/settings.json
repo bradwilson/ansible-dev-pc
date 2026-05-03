@@ -2,8 +2,10 @@
   // General settings
   "breadcrumbs.enabled": true,
   "chat.commandCenter.enabled": false,
+  "chat.disableAIFeatures": true,
   "editor.accessibilitySupport": "off",
   "editor.autoClosingBrackets": "never",
+  "editor.detectIndentation": false,
   "editor.find.autoFindInSelection": "never",
   "editor.fontFamily": "Iosevka",
   "editor.fontLigatures": true,
@@ -36,11 +38,9 @@
 
   // Git
   "diffEditor.ignoreTrimWhitespace": false,
+  "git.addAICoAuthor": "off",
   "git.openRepositoryInParentFolders": "never",
   "githubPullRequests.terminalLinksHandler": "github",
-
-  // TypeScript
-  "typescript.updateImportsOnFileMove.enabled": "always",
 
   // Themes/colors/fonts/workbench/etc.
   "extensions.ignoreRecommendations": true,
@@ -49,7 +49,7 @@
   "search.useGlobalIgnoreFiles": true,
   "remote.autoForwardPortsSource": "hybrid",
   "terminal.integrated.fontFamily": "Iosevka",
-  "terminal.integrated.fontSize": 10,
+  "terminal.integrated.fontSize": 14,
   "terminal.integrated.fontWeightBold": "500",
   "window.restoreFullscreen": true,
   "window.restoreWindows": "none",
@@ -107,7 +107,7 @@
       "panel.background": "#ffffff3d",
       "statusBar.background": "#3465a4",
       "statusBar.border": "#3465a4",
-      "statusBar.foreground": "#eeeeee"
+      "statusBar.foreground": "#eeeeee",
     },
     "[GitHub Plus]": {
       "activityBar.background": "#e6e6e6",
@@ -117,8 +117,8 @@
       "panel.background": "#ffffff3d",
       "statusBar.background": "#3465a4",
       "statusBar.border": "#3465a4",
-      "statusBar.foreground": "#eeeeee"
-    }
+      "statusBar.foreground": "#eeeeee",
+    },
   },
   "workbench.colorTheme": "Alabaster",
   "workbench.editor.closeEmptyGroups": false,
@@ -149,7 +149,7 @@
 
   // extension: Code Spell Checker
   "cSpell.enabledFileTypes": {
-    "*": true
+    "*": true,
   },
   "cSpell.userWords": [
     "appcenter",
@@ -159,7 +159,9 @@
     "fluentd",
     "goproxy",
     "inheritdoc",
+    "Jinjer",
     "logfmt",
+    "metalcore",
     "Otel",
     "parallelizable",
     "parameterless",
@@ -167,22 +169,35 @@
     "prereleases",
     "recurse",
     "skippable",
+    "Spiritbox",
     "telegraf",
     "testdouble",
     "vanaheim",
-    "xunit"
+    "xunit",
   ],
   "cSpell.enabledNotifications": {
     "Maximum Word Length Exceeded": false,
     "Lines too Long": false,
-    "Average Word Length too Long": false
+    "Average Word Length too Long": false,
   },
 
   // extension: Typescript
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
   "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
 }
