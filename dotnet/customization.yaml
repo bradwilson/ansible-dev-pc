@@ -8,7 +8,6 @@
       args:
         creates: ~/.dotnet/tools/.store/{{ item }}
       loop:
-        - coverlet.console
         - dotnet-depends
         - dotnet-format
         - dotnet-outdated-tool
