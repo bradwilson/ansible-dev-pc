@@ -2,38 +2,8 @@
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    dotnet_runtime_versions: ["latest", "8.0"]
-    manifest_json:
-      registeredChannels: []
-
   tasks:
-    - name: Check if ~/.local/share/dnvm/dnvmManifest.json exists
-      ansible.builtin.stat:
-        path: ~/.local/share/dnvm/dnvmManifest.json
-      register: manifest_stat
-
-    - name: Read ~/.local/share/dnvm/dnvmManifest.json
-      ansible.builtin.set_fact:
-        manifest_json: "{{ lookup('file','~/.local/share/dnvm/dnvmManifest.json', errors='ignore') | regex_replace('﻿', '') | from_json }}"
-      when: manifest_stat.stat.exists
-
     - name: Install dnvm
       ansible.builtin.shell: curl --proto '=https' -sSf https://dnvm.net/install.sh | sh -s -- -y --skip-tracking
       args:
         creates: ~/.local/share/dnvm/dnvm
-
-    - name: Detect already tracked channels
-      ansible.builtin.set_fact:
-        dotnet_runtime_versions: "{{ dotnet_runtime_versions | difference([item.channelName]) }}"
-      loop: "{{  manifest_json.registeredChannels }}"
-      when: "item.untracked == False"
-
-    - name: Track .NET channel
-      ansible.builtin.command: ~/.local/share/dnvm/dnvm track {{ item }}
-      loop: "{{ dotnet_runtime_versions }}"
-      register: track_channel
-
-    - name: Perform first-run experience
-      ansible.builtin.command: ~/.local/share/dnvm/dotnet new
-      when: track_channel.changed
