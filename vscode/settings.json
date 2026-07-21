@@ -42,6 +42,19 @@
   "git.openRepositoryInParentFolders": "never",
   "githubPullRequests.terminalLinksHandler": "github",
 
+  // JSON
+  "json.schemaDownload.trustedDomains": {
+    "https://developer.microsoft.com/json-schemas/": true,
+    "https://github.com": true,
+    "https://json-schema.org/": true,
+    "https://json.schemastore.org/": true,
+    "https://raw.githubusercontent.com/devcontainers/spec/": true,
+    "https://raw.githubusercontent.com/microsoft/vscode/": true,
+    "https://schemastore.azurewebsites.net/": true,
+    "https://www.schemastore.org/": true,
+    "https://xunit.net": true,
+  },
+
   // Themes/colors/fonts/workbench/etc.
   "extensions.ignoreRecommendations": true,
   "material-icon-theme.activeIconPack": "none",
@@ -133,9 +146,6 @@
   // extension: Toggle Excluded Files
   "toggleexcludedfiles.statusBar.enabled": true,
 
-  // extension: VS Intellicode
-  "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-
   // extension: Version Lens
   "versionlens.suggestions.showOnStartup": true,
 
@@ -143,8 +153,6 @@
   "csharp.debug.justMyCode": false,
   "csharp.semanticHighlighting.enabled": true,
   "dotnet.autoDetect": "off",
-  "dotnet.automaticallyCreateSolutionInWorkspace": false,
-  "dotnet.testWindow.useTestingPlatformProtocol": true,
   "omnisharp.enableEditorConfigSupport": true,
 
   // extension: Code Spell Checker

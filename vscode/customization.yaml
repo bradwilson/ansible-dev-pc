@@ -1,33 +1,35 @@
-- name: VS Code (customization)
+- name: "VS Code (customization)"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Ensure ~/.config folder exists
-      file:
+    - name: "Ensure ~/.config folder exists"
+      ansible.builtin.file:
         path: ~/.config
         state: directory
         mode: 0700
 
-    - name: Install VS Code extensions
-      command: ./invoke-code --install-extension {{ item }}
+    - name: "Install VS Code extensions"
+      ansible.builtin.command: ./invoke-code --install-extension {{ item }}
       args:
         creates: ~/.vscode/extensions/{{ item }}-*/package.json
       loop:
         - amodio.toggle-excluded-files                    # Toggle Excluded Files
-        - editorconfig.editorconfig                       # EditorConfig for VS Code
+        - editorconfig.editorconfig                       # EditorConfig
+        - esbenp.prettier-vscode                          # Prettier - Code formatter
         - ms-vscode-remote.vscode-remote-extensionpack    # Remote Development
         - pkief.material-icon-theme                       # Material Icon Theme
         - pflannery.vscode-versionlens                    # Version Lens
         - streetsidesoftware.code-spell-checker           # Code Spell Checker
+        - tamasfe.even-better-toml                        # Even Better TOML
         - tonsky.theme-alabaster                          # Alabaster Theme
 
-    - name: Override default VS Code preferences
-      copy:
+    - name: "Override default VS Code preferences"
+      ansible.builtin.copy:
         src: settings.json
         dest: ~/.config/Code/User/settings.json
 
-    - name: Override default VS Code key bindings
-      copy:
+    - name: "Override default VS Code key bindings"
+      ansible.builtin.copy:
         src: keybindings.json
         dest: ~/.config/Code/User/keybindings.json

@@ -1,4 +1,4 @@
-- name: "Go"
+- name: "Meld"
   hosts: 127.0.0.1
   connection: local
 
@@ -8,4 +8,4 @@
       ansible.builtin.dnf:
         name: "{{ item }}"
       loop:
-        - golang
+        - meld

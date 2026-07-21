@@ -1,43 +1,14 @@
-- name: Remmina
+- name: "Remmina"
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    distribution_fallback:
-      'Pop!_OS': 'Ubuntu'
-    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
-
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - ansible.builtin.set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: "[Non-WSL] Add Remmina APT package key"
+    - name: "[Non-WSL] Install package"
       become: yes
-      get_url:
-        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x04e38ce134b239b9f38f82ee8a993c2521c5f0ba
-        dest: /etc/apt/trusted.gpg.d/remmina.asc
-        mode: 0644
-      when: not is_wsl
-
-    - name: "[Non-WSL] Add Remmina APT package repository"
-      become: yes
-      apt_repository:
-        repo: deb http://ppa.launchpad.net/remmina-ppa-team/remmina-next/{{ distribution | lower }} {{ ansible_distribution_release }} main
-        filename: remmina
-        update_cache: no
-      register: apt_repository
-      when: not is_wsl
-
-    - name: "[Non-WSL] Update APT package list"
-      become: yes
-      apt:
-        update_cache: yes
-      when: not is_wsl and apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
-
-    - name: "[Non-WSL] Install Remmina"
-      become: yes
-      apt:
-        package: remmina
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+      loop:
+        - remmina
       when: not is_wsl

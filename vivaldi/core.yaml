@@ -1,0 +1,25 @@
+- name: "Vivaldi"
+  hosts: 127.0.0.1
+  connection: local
+
+  tasks:
+    - name: "Import Vivaldi package key"
+      become: yes
+      ansible.builtin.rpm_key:
+        key: https://repo.vivaldi.com/archive/linux_signing_key.pub
+
+    - name: "Add Vivaldi package repository"
+      become: yes
+      ansible.builtin.yum_repository:
+        name: vivaldi-snapshot
+        description: vivaldi-snapshot
+        baseurl: "https://repo.vivaldi.com/archive/rpm/{{ ansible_facts['machine'] }}"
+        gpgkey: https://repo.vivaldi.com/archive/linux_signing_key.pub
+        gpgcheck: yes
+
+    - name: "Install package"
+      become: yes
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+      loop:
+        - vivaldi

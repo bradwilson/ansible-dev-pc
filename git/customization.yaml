@@ -1,73 +1,82 @@
-- import_playbook: ../rust-lang/core.yaml    # diffr is installed with Rust's cargo package manager
+- import_playbook: ../rust-lang/core.yaml  # diffr/difftastic are installed with Rust's cargo package manager
 
-- name: git (customization)
+- name: "git (customization)"
   hosts: 127.0.0.1
   connection: local
 
   vars:
-    lazygit_version: 0.40.2
+    machine_fallback:
+      'aarch64': 'arm64'
+      'x86_64': '32-bit'
+    machine: "{{ machine_fallback[ansible_facts['machine']] | default(ansible_facts['machine']) }}"
 
   tasks:
-    - name: Create lazygit binary folder
+    - name: "Get latest version"
+      ansible.builtin.shell: "curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest | jq -r .tag_name | cut -c2-"
+      register: lazygit_version
+
+    - name: "Create lazygit binary folder"
       become: yes
-      file:
-        path: /opt/lazygit/{{ lazygit_version }}
+      ansible.builtin.file:
+        path: /opt/lazygit/{{ lazygit_version.stdout }}
         state: directory
 
-    - name: Install lazygit
+    - name: "Install lazygit"
       become: yes
-      unarchive:
-        src: https://github.com/jesseduffield/lazygit/releases/download/v{{ lazygit_version }}/lazygit_{{ lazygit_version }}_Linux_x86_64.tar.gz
-        dest: /opt/lazygit/{{ lazygit_version }}
+      ansible.builtin.unarchive:
+        src: https://github.com/jesseduffield/lazygit/releases/download/v{{ lazygit_version.stdout }}/lazygit_{{ lazygit_version.stdout }}_linux_{{ machine }}.tar.gz
+        dest: /opt/lazygit/{{ lazygit_version.stdout }}
         remote_src: yes
-        creates: /opt/lazygit/{{ lazygit_version }}/lazygit
+        creates: /opt/lazygit/{{ lazygit_version.stdout }}/lazygit
       register: lazygit_download
 
-    - name: Create symlink to /usr/local/bin/lazygit
+    - name: "Create symlink to /usr/local/bin/lazygit"
       become: yes
-      file:
+      ansible.builtin.file:
         path: /usr/local/bin/lazygit
-        src: /opt/lazygit/{{ lazygit_version }}/lazygit
+        src: /opt/lazygit/{{ lazygit_version.stdout }}/lazygit
         state: link
 
-    - name: Install diffr
-      command: ~/.cargo/bin/cargo install diffr
+    - name: "Create lazygit config folder"
+      ansible.builtin.file:
+        path: ~/.config/lazygit
+        state: directory
+
+    - name: "Create lazygit configuration file"
+      ansible.builtin.copy:
+        dest: ~/.config/lazygit/config.yml
+        mode: 0644
+        content: |
+          git:
+            autoRefresh: false
+            autoFetch: false
+
+    - name: "Install diffr"
+      ansible.builtin.shell: cargo install diffr
       args:
         creates: ~/.cargo/bin/diffr
 
-    - name: Install difftastic
-      command: ~/.cargo/bin/cargo install difftastic
+    - name: "Install difftastic"
+      ansible.builtin.shell: cargo install difftastic
       args:
         creates: ~/.cargo/bin/difft
 
-    - name: Download git-completion.bash
-      get_url:
-        url:  https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
-        dest: ~/.git-completion.bash
-
-    - name: Add bash completion for git
-      blockinfile:
-        path: ~/.bashrc
-        marker: "### {mark} Ansible managed: git-completion.bash"
-        block: |
-          if [ -f ~/.git-completion.bash ]; then
-            . ~/.git-completion.bash
-          fi
-
-    - name: Ensure ~/.config exists
-      file:
+    - name: "Ensure ~/.config exists"
+      ansible.builtin.file:
         path: ~/.config
         state: directory
         mode: 0700
 
-    - name: Create ~/.config/ripgrep
-      copy:
+    - name: "Create ~/.config/ripgrep"
+      ansible.builtin.copy:
         dest: ~/.config/ripgrep
         mode: 0755
         content: |
           --hidden
 
-    - name: Set ripgrep configuration path
-      lineinfile:
+    - name: "Set ripgrep configuration path"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
-        line: export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep
+        marker: "### {mark} Ansible managed: Git configuration"
+        block: |
+          export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep

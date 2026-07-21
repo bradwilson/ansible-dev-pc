@@ -1,72 +1,54 @@
-- name: Starship
+- name: "Starship"
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    starship_version: v1.18.2
-
   tasks:
-    - name: Create binary folder
+    - name: "Enable Starship COPR repository"
       become: yes
-      file:
-        path: /opt/starship/{{ starship_version }}
-        state: directory
+      ansible.builtin.shell: dnf -y copr enable atim/starship
+      args:
+        creates: /etc/yum.repos.d/_copr:copr.fedorainfracloud.org:atim:starship.repo
 
-    - name: Install Starship
+    - name: "Install package"
       become: yes
-      unarchive:
-        src: https://github.com/starship/starship/releases/download/{{ starship_version }}/starship-x86_64-unknown-linux-musl.tar.gz
-        dest: /opt/starship/{{ starship_version }}
-        remote_src: yes
-        creates: /opt/starship/{{ starship_version }}/starship
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+      loop:
+        - starship
 
-    - name: Set Starship binary ownership to root
-      become: yes
-      file:
-        path: /opt/starship/{{ starship_version }}/starship
-        owner: root
-        group: root
-
-    - name: Create symlink to /usr/local/bin/starship
-      become: yes
-      file:
-        path: /usr/local/bin/starship
-        src: /opt/starship/{{ starship_version }}/starship
-        state: link
-
-    - name: Ensure ~/.config folder exists
-      file:
+    - name: "Ensure ~/.config folder exists"
+      ansible.builtin.file:
         path: ~/.config
         state: directory
         mode: 0700
 
-    - name: Copy starship.toml to ~/.config
-      copy:
+    - name: "Copy starship.toml to ~/.config"
+      ansible.builtin.copy:
         src: starship.toml
         dest: ~/.config/starship.toml
 
-    - name: Enable Starship in bash
-      blockinfile:
+    - name: "Enable Starship in bash"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Starship"
         block: |
           eval "$(starship init bash)"
 
-    - name: Ensure PowerShell config folder exists
-      file:
+    - name: "Ensure PowerShell config folder exists"
+      ansible.builtin.file:
         path: ~/.config/powershell
         state: directory
         mode: 0700
 
-    - name: Ensure PowerShell profile exists
-      copy:
+    - name: "Ensure PowerShell profile exists"
+      ansible.builtin.copy:
         content: ""
         dest: ~/.config/powershell/Microsoft.PowerShell_profile.ps1
         force: false
         mode: 0600
 
-    - name: Enable Starship in PowerShell
-      blockinfile:
+    - name: "Enable Starship in PowerShell"
+      ansible.builtin.blockinfile:
         path: ~/.config/powershell/Microsoft.PowerShell_profile.ps1
         marker: "### {mark} Ansible managed: Starship"
         block: |

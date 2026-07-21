@@ -1,9 +1,11 @@
-- name: VLC
+- name: "VLC"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Install VLC
+    - name: "Install package"
       become: yes
-      apt:
-        package: vlc
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+      loop:
+        - vlc

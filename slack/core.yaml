@@ -1,38 +1,43 @@
-- name: Slack
+- name: "Slack"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - ansible.builtin.set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: "[Non-WSL] Add Slack APT package key"
+    - name: "[Non-WSL, x86_64] Import Slack package key"
       become: yes
-      get_url:
-        url: https://packagecloud.io/slacktechnologies/slack/gpgkey
-        dest: /etc/apt/trusted.gpg.d/slack.asc
-        mode: 0644
-      when: not is_wsl
+      ansible.builtin.rpm_key:
+        key: https://slack.com/gpg/slack_pubkey_20251016.gpg
+      when: not is_wsl and ansible_facts['machine'] == 'x86_64'
 
-    - name: "[Non-WSL] Add Slack APT package repository"
+    - name: "[Non-WSL, x86_64] Add Slack package repository"
       become: yes
-      apt_repository:
-        repo: deb https://packagecloud.io/slacktechnologies/slack/debian/ jessie main
-        filename: slack
-        update_cache: no
-      register: apt_repository
-      when: not is_wsl
+      ansible.builtin.yum_repository:
+        name: slack
+        description: slack
+        baseurl: "https://packagecloud.io/slacktechnologies/slack/fedora/21/$basearch"
+        gpgkey: https://slack.com/gpg/slack_pubkey_20251016.gpg
+      when: not is_wsl and ansible_facts['machine'] == 'x86_64'
 
-    - name: "[Non-WSL] Update APT package list"
+    - name: "[Non-WSL, x86_64] Install package"
       become: yes
-      apt:
-        update_cache: yes
-      when: apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+      loop:
+        - slack
+      when: not is_wsl and ansible_facts['machine'] == 'x86_64'
 
-    - name: "[Non-WSL] Install Slack Desktop"
+    - name: "[Non-WSL, aarch64] Get latest version"
+      ansible.builtin.shell: "curl -s https://api.github.com/repos/andirsun/Slacky/releases/latest | jq -r .tag_name | cut -c2-"
+      register: slacky_version
+      when: not is_wsl and ansible_facts['machine'] == 'aarch64'
+
+    - name: "[Non-WSL, aarch64] Install package"
       become: yes
-      apt:
-        package: slack-desktop
-      when: not is_wsl
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        disable_gpg_check: yes
+      loop:
+        - "https://github.com/andirsun/Slacky/releases/download/v{{ slacky_version.stdout }}/slacky-{{ slacky_version.stdout }}.aarch64.rpm"
+      when: not is_wsl and ansible_facts['machine'] == 'aarch64'

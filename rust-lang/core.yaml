@@ -1,19 +1,19 @@
-- name: Rust
+- name: "Rust"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Install pre-requisites
+    - name: "Install package"
       become: yes
-      apt:
-        package: "{{ item }}"
+      ansible.builtin.dnf:
+        name: "{{ item }}"
       loop:
-        - build-essential
-        - curl
-        - gcc
-        - make
+        - rust
+        - cargo
 
-    - name: Install Rust
-      shell:
-        cmd: curl https://sh.rustup.rs -sSf | sh -s -- -y
-        creates: ~/.cargo/bin/cargo
+    - name: "Add cargo binaries to the path"
+      ansible.builtin.blockinfile:
+        path: ~/.bashrc
+        marker: "### {mark} Ansible managed: Rust configuration"
+        block: |
+          export PATH=$PATH:~/.cargo/bin

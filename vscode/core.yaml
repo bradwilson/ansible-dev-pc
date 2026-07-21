@@ -1,63 +1,54 @@
-- name: VS Code
+- name: "VS Code"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
-
-    - name: "[Non-WSL] Add Microsoft APT package key"
-      become: yes
-      get_url:
-        url: https://packages.microsoft.com/keys/microsoft.asc
-        dest: /etc/apt/trusted.gpg.d/vscode.asc
-        mode: 0644
-      when: not is_wsl
-
-    - name: "[Non-WSL] Add VS Code APT package repository"
-      become: yes
-      apt_repository:
-        repo: deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main
-        filename: vscode
-        update_cache: no
-      register: apt_repository
-      when: not is_wsl
-
-    - name: "[Non-WSL] Update APT package list"
-      become: yes
-      apt:
-        update_cache: yes
-      when: apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
-
-    - name: "[Non-WSL] Install VS Code"
-      become: yes
-      apt:
-        package: code
-      when: not is_wsl
+    - ansible.builtin.set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: "[WSL] Get user's Windows home path"
-      shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
+      ansible.builtin.shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
       register: userprofile
       when: is_wsl
 
     - name: "[WSL] Create shortcut to Windows ~/.vscode"
-      file:
+      ansible.builtin.file:
         path: ~/.vscode
         src: "{{ userprofile.stdout }}/.vscode"
         state: link
       when: is_wsl
 
     - name: "[WSL] Ensure ~/.config folder exists"
-      file:
+      ansible.builtin.file:
         path: ~/.config
         state: directory
       when: is_wsl
 
     - name: "[WSL] Create shortcut to Windows ~/.config/Code"
-      file:
+      ansible.builtin.file:
         path: ~/.config/Code
         src: "{{ userprofile.stdout }}/AppData/Roaming/Code"
         state: link
       when: is_wsl
+
+    - name: "[Non-WSL] Import Microsoft package key"
+      become: yes
+      ansible.builtin.rpm_key:
+        key: https://packages.microsoft.com/keys/microsoft.asc
+      when: not is_wsl
+
+    - name: "[Non-WSL] Add VS Code package repository"
+      become: yes
+      ansible.builtin.yum_repository:
+        name: vscode-yum
+        description: vscode-yum
+        baseurl: https://packages.microsoft.com/yumrepos/vscode
+        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+      when: not is_wsl
+
+    - name: "[Non-WSL] Install package"
+      become: yes
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+      loop:
+        - code
+      when: not is_wsl

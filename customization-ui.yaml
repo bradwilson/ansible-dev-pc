@@ -1,313 +1,80 @@
-- name: Core OS customization (Gnome UI)
+- name: "Core OS customization (Gnome UI)"
   hosts: 127.0.0.1
   connection: local
 
   vars:
-    distribution_fallback:
-      'Pop!_OS': 'Ubuntu'
-    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
-    distribution_release_snwh_fallback:
-      'noble': 'focal'
-      'jammy': 'focal'
-    distribution_release_snwh: "{{ distribution_release_snwh_fallback[ansible_distribution_release] | default(ansible_distribution_release) }}"
-    is_ubu_22_04: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) == 22 }}"
-    is_ubu_24_04: "{{ distribution == 'Ubuntu' and (ansible_distribution_major_version | int) == 24 }}"
-
-    dconf_config:
-      # Themes
-      - key: /org/gnome/desktop/interface/cursor-theme
-        value: "'Paper'"
-      - key: /org/gnome/desktop/interface/gtk-theme
-        value: "'Numix'"
-      - key: /org/gnome/desktop/interface/icon-theme
-        value: "'Paper'"
-      - key: /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-theme-colors
-        value: "false"
-      # Fonts
-      - key: /org/gnome/desktop/interface/monospace-font-name
-        value: "'UbuntuMono Nerd Font Mono 12'"
-      # UI tweaks
-      - key: /org/gnome/desktop/interface/enable-animations
-        value: "false"
-      - key: /org/gnome/desktop/interface/show-battery-percentage
-        value: "true"
-      - key: /org/gnome/desktop/sound/allow-volume-above-100-percent
-        value: "true"
-      - key: /org/gnome/desktop/wm/preferences/button-layout
-        value: "'appmenu:minimize,maximize,close'"
-      - key: /org/gnome/desktop/wm/preferences/num-workspaces
-        value: "1"
-      - key: /org/gnome/mutter/dynamic-workspaces
-        value: "false"
-      - key: /org/gnome/settings-daemon/plugins/xsettings/antialiasing
-        value: "'grayscale'"
-      - key: /org/gnome/shell/favorite-apps
-        value: "['alacritty.desktop', 'firefox_firefox.desktop', 'microsoft-edge.desktop', 'slack.desktop', 'virt-manager.desktop', 'code.desktop', 'org.remmina.Remmina.desktop']"
-      - key: /org/gnome/shell/extensions/desktop-icons/show-home
-        value: "false"
-      - key: /org/gnome/shell/extensions/desktop-icons/show-trash
-        value: "true"
+    kde_config:
       # Keyboard & mouse settings
-      - key: /org/gnome/desktop/peripherals/keyboard/delay
-        value: "@u 250"
-      - key: /org/gnome/desktop/peripherals/keyboard/repeat-interval
-        value: "@u 25"
-      - key: /org/gnome/desktop/peripherals/mouse/accel-profile
-        value: "'adaptive'"
+      - file: kcminputrc
+        group: Keyboard
+        key: RepeatDelay
+        value: "250"
+      - file: kcminputrc
+        group: Keyboard
+        key: RepeatRate
+        value: "25"
+      - file: kwinrc
+        group: Wayland
+        key: VirtualKeyboardMode
+        value: "0"
       # Keyboard shortcuts
-      - key: /org/gnome/desktop/wm/keybindings/activate-window-menu
-        value: "['<Alt>space']"
-      - key: /org/gnome/desktop/wm/keybindings/always-on-top
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/begin-move
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/begin-resize
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/close
-        value: "['<Alt>F4']"
-      - key: /org/gnome/desktop/wm/keybindings/cycle-group
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/cycle-group-backward
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/cycle-panels
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/cycle-panels-backward
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/cycle-windows
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/cycle-windows-backward
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/lower
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/maximize-horizontally
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/maximize
-        value: "['<Super>Up']"
-      - key: /org/gnome/desktop/wm/keybindings/maximize-vertically
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/minimize
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-center
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-corner-ne
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-corner-nw
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-corner-se
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-corner-sw
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-down
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-left
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-right
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-monitor-up
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-side-e
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-side-n
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-side-s
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-side-w
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-10
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-11
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-12
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-1
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-2
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-3
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-4
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-5
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-6
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-7
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-8
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-9
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-down
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-last
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-left
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-right
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/move-to-workspace-up
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/panel-main-menu
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/panel-run-dialog
-        value: "['<Super>r']"
-      - key: /org/gnome/desktop/wm/keybindings/raise
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/raise-or-lower
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/set-spew-mark
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/show-desktop
-        value: "['<Super>m']"
-      - key: /org/gnome/desktop/wm/keybindings/switch-applications
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-applications-backward
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-group
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-group-backward
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-input-source
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-input-source-backward
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-panels
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-panels-backward
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-10
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-11
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-12
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-1
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-2
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-3
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-4
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-5
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-6
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-7
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-8
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-9
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-down
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-last
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-left
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-right
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-to-workspace-up
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/switch-windows
-        value: "['<Alt>Tab']"
-      - key: /org/gnome/desktop/wm/keybindings/switch-windows-backward
-        value: "['<Shift><Alt>Tab']"
-      - key: /org/gnome/desktop/wm/keybindings/toggle-above
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/toggle-fullscreen
-        value: "['<Super>f']"
-      - key: /org/gnome/desktop/wm/keybindings/toggle-maximized
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/toggle-on-all-workspaces
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/toggle-shaded
-        value: "@as []"
-      - key: /org/gnome/desktop/wm/keybindings/unmaximize
-        value: "['<Super>Down']"
-      - key: /org/gnome/mutter/keybindings/toggle-tiled-left
-        value: "['<Super>Left']"
-      - key: /org/gnome/mutter/keybindings/toggle-tiled-right
-        value: "['<Super>Right']"
-      - key: /org/gnome/settings-daemon/plugins/media-keys/home
-        value: "'<Super>e'"
-      - key: /org/gnome/settings/daemon/plugins/media-keys/screensaver
-        value: "['<Super>l']"
-      - key: /org/gnome/shell/extensions/emoji-selector/emoji-keybinding
-        value: "['<Super>Period']"
-      - key: /org/gnome/shell/extensions/emoji-selector/use-keybinding
-        value: "true"
-      - key: /org/gnome/shell/keybindings/open-application-menu
-        value: "@as []"
-      - key: /org/gnome/shell/keybindings/toggle-message-tray
-        value: "@as []"
+      - file: kglobalshortcutsrc
+        group: kwin
+        key: "Window Maximize"
+        value: "Meta+Up,Meta+PgUp,Maximize Window"
+      - file: kglobalshortcutsrc
+        group: kwin
+        key: "Window Minimize"
+        value: "Meta+Down,Meta+PgDown,Minimize Window"
+      - file: kglobalshortcutsrc
+        group: kwin
+        key: "Window Quick Tile Bottom"
+        value: "none,Meta+Down,Quick Time Window to the Bottom"
+      - file: kglobalshortcutsrc
+        group: kwin
+        key: "Window Quick Tile Top"
+        value: "none,Meta+Up,Quick Time Window to the Top"
+      - file: kglobalshortcutsrc
+        group: kwin
+        key: "Show Desktop"
+        value: "Meta+M,Meta+D,Show Desktop"
 
     fonts:
       # FiraCode Nerd Font
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFontMono-Regular.ttf
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Bold/FiraCodeNerdFontMono-Bold.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/FiraCodeNerdFontMono-Regular.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/FiraCodeNerdFontMono-Bold.ttf
       # Iosevka
       - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Iosevka/IosevkaNerdFontMono-Regular.ttf
       - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Iosevka/IosevkaNerdFontMono-Italic.ttf
       - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Iosevka/IosevkaNerdFontMono-Bold.ttf
       - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Iosevka/IosevkaNerdFontMono-BoldItalic.ttf
       # JetBrainsMono Nerd Font
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/Regular/JetBrainsMonoNerdFontMono-Regular.ttf
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/Italic/JetBrainsMonoNerdFontMono-Italic.ttf
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/Bold/JetBrainsMonoNerdFontMono-Bold.ttf
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/BoldItalic/JetBrainsMonoNerdFontMono-BoldItalic.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Regular.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Italic.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-Bold.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/JetBrainsMono/Ligatures/JetBrainsMonoNerdFontMono-BoldItalic.ttf
       # UbuntuMono Nerd Font
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular/UbuntuMonoNerdFontMono-Regular.ttf
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Regular-Italic/UbuntuMonoNerdFontMono-Italic.ttf
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold/UbuntuMonoNerdFontMono-Bold.ttf
-      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/Bold-Italic/UbuntuMonoNerdFontMono-BoldItalic.ttf
-
-    fonts_apt:
-      - fonts-crosextra-carlito
-      - fonts-crosextra-caladea
-
-    # Extensions for Gnome 42 in Ubuntu 22.04
-    gnome_extensions_v42:
-      # Dash to Panel (Windows-style bottom task bar)
-      - name: dash-to-panel@jderose9.github.com
-        file: dash-to-paneljderose9.github.com.v56.shell-extension.zip
-      # Emoji Copy
-      - name: emoji-copy@felipeftn
-        file: emoji-copyfelipeftn.v9.shell-extension.zip
-      # TopIconsFix (shows legacy app icons in Gnome 3)
-      - name: topiconsfix@aleskva@devnullmail.com
-        file: topiconsfixaleskvadevnullmail.com.v15.shell-extension.zip
-
-    # Extensions for Gnome 46 in Ubuntu 24.04
-    gnome_extensions_v46:
-      # Dash to Panel (Windows-style bottom task bar)
-      - name: dash-to-panel@jderose9.github.com
-        file: dash-to-paneljderose9.github.com.v62.shell-extension.zip
-      # Emoji Copy
-      - name: emoji-copy@felipeftn
-        file: emoji-copyfelipeftn.v21.shell-extension.zip
-      # TopIconsFix (shows legacy app icons in Gnome 3)
-      - name: topiconsfix@aleskva@devnullmail.com
-        file: topiconsfixaleskvadevnullmail.com.v22.shell-extension.zip
-
-    missing_extensions: []
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/UbuntuMonoNerdFontMono-Regular.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/UbuntuMonoNerdFontMono-Italic.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/UbuntuMonoNerdFontMono-Bold.ttf
+      - https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/UbuntuMono/UbuntuMonoNerdFontMono-BoldItalic.ttf
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - ansible.builtin.set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
     - name: "[WSL] Get Windows folder"
-      shell: wslpath "$(cmd.exe /c "echo %WINDIR%" 2>/dev/null)"
+      ansible.builtin.shell: wslpath "$(cmd.exe /c "echo %WINDIR%" 2>/dev/null)"
       register: windir
       when: is_wsl
 
     - name: "[WSL] Get user's Windows home folder"
-      shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
+      ansible.builtin.shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
       register: userprofile
       when: is_wsl
 
     - name: "[WSL] Link Windows fonts into WSL"
       become: yes
-      copy:
+      ansible.builtin.copy:
         dest: /etc/fonts/local.conf
         content: |
           <?xml version="1.0"?>
@@ -318,72 +85,16 @@
           </fontconfig>
       when: is_wsl
 
-    - name: "[Non-WSL] Make temporary folder for Gnome extensions"
-      file:
-        path: /tmp/gnome-extensions
+    - name: "[Non-WSL] Ensure /usr/local/share/fonts exists"
+      become: yes
+      ansible.builtin.file:
+        path: /usr/local/share/fonts
         state: directory
-        mode: 0755
       when: not is_wsl
-
-    - name: "[Non-WSL, Gnome v42] Check if extension is installed"
-      stat:
-        path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
-      register: gnome_extensions_v42_installed
-      loop: "{{ gnome_extensions_v42 }}"
-      when: not is_wsl and is_ubu_22_04
-
-    - name: "[Non-WSL, Gnome v42] Create missing Gnome extension list"
-      set_fact:
-        missing_extensions: "{{ missing_extensions + [item.item] }}"
-      when: not is_wsl and is_ubu_22_04 and not item.stat.exists
-      with_items: "{{ gnome_extensions_v42_installed.results }}"
-
-    - name: "[Non-WSL, Gnome v46] Check if extension is installed"
-      stat:
-        path: ~/.local/share/gnome-shell/extensions/{{ item.name }}
-      register: gnome_extensions_v46_installed
-      loop: "{{ gnome_extensions_v46 }}"
-      when: not is_wsl and is_ubu_24_04
-
-    - name: "[Non-WSL, Gnome v46] Create missing Gnome extension list"
-      set_fact:
-        missing_extensions: "{{ missing_extensions + [item.item] }}"
-      when: not is_wsl and is_ubu_24_04 and not item.stat.exists
-      with_items: "{{ gnome_extensions_v46_installed.results }}"
-
-    - name: "[Non-WSL] Download Gnome extensions"
-      get_url:
-        url: https://extensions.gnome.org/extension-data/{{ item.file }}
-        dest: /tmp/gnome-extensions
-        mode: 0644
-      loop: "{{ missing_extensions }}"
-      when: not is_wsl
-
-    - name: "[Non-WSL] Install Gnome extension"
-      command: gnome-extensions install /tmp/gnome-extensions/{{ item.file }}
-      loop: "{{ missing_extensions }}"
-      when: not is_wsl
-
-    - name: "[Non-WSL] Install Fonts (via APT)"
-      become: yes
-      apt:
-        package: "{{ item }}"
-      loop: "{{ fonts_apt }}"
-      when: not is_wsl
-
-    - name: "[Non-WSL] Gather package facts"
-      package_facts:
-        manager: auto
-
-    - name: "[Non-WSL] Install Microsoft TTF fonts"
-      become: yes
-      apt:
-        deb: http://ftp.us.debian.org/debian/pool/contrib/m/msttcorefonts/ttf-mscorefonts-installer_3.8.1_all.deb
-      when: not is_wsl and "ttf-mscorefonts-installer" not in ansible_facts.packages
 
     - name: "[Non-WSL] Install Fonts (downloaded)"
       become: yes
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ item }}"
         dest: /usr/local/share/fonts/
       loop: "{{ fonts }}"
@@ -392,82 +103,10 @@
 
     - name: "[Non-WSL] Update font cache"
       become: yes
-      command: fc-cache -sv
+      ansible.builtin.command: fc-cache -sv
       when: not is_wsl and fonts_downloaded.changed
 
-    - name: "[Non-WSL] Add Gnome themes APT package key"
-      become: yes
-      get_url:
-        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xd320d0c30b02e64c5b2bb2743766223989993a70
-        dest: /etc/apt/trusted.gpg.d/ppa_snwh_ppa_{{ distribution_release_snwh }}.asc
-        mode: 0644
-      when: not is_wsl
-
-    - name: "[Non-WSL] Install Gnome Tweaks"
-      become: yes
-      apt:
-        package: gnome-tweaks
-      when: not is_wsl
-
-    - name: "[Non-WSL] Enable chrome-gnome-shell"
-      become: yes
-      apt:
-        package: chrome-gnome-shell
-      when: not is_wsl
-
-    - name: "[Non-WSL] Install numix Gnome theme"
-      become: yes
-      apt:
-        package: numix-gtk-theme
-      when: not is_wsl
-
-    - name: "[Non-WSL] Add paper Gnome icon theme APT package source"
-      become: yes
-      apt_repository:
-        repo: deb http://ppa.launchpad.net/snwh/ppa/ubuntu {{ distribution_release_snwh }} main
-        filename: ppa_snwh_ppa_{{ distribution_release_snwh }}
-        update_cache: no
-      register: apt_repository
-      when: not is_wsl
-
-    - name: "[Non-WSL] Update APT package list"
-      become: yes
-      apt:
-        update_cache: yes
-      when: not is_wsl and apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
-
-    - name: "[Non-WSL] Install paper Gnome icon theme"
-      become: yes
-      apt:
-        package: "{{ item }}"
-      loop:
-        - paper-icon-theme
-      when: not is_wsl
-
-    - name: "[Non-WSL] Install PIP 3"
-      become: yes
-      apt:
-        package: python3-pip
-      when: not is_wsl
-
-    - name: "[Non-WSL, Ubuntu 22.04] Install psutil Python package"
-      become: yes
-      pip:
-        name: psutil
-      when: not is_wsl and is_ubu_22_04
-
-    - name: "[Non-WSL, Ubuntu 24.04+] Install psutil Python package"
-      become: yes
-      apt:
-        package: python3-psutil
-      when: not is_wsl and not is_ubu_22_04
-
-    - name: "[Non-WSL] Update customization with dconf"
-      dconf:
-        key: "{{ item.key }}"
-        value: "{{ item.value }}"
-      loop: "{{ dconf_config }}"
+    - name: "[Non-WSL] Update customization with kwriteconfig5"
+      ansible.builtin.command: kwriteconfig5 --file ~/.config/{{ item.file }} --group {{ item.group }} --key "{{ item.key }}" "{{ item.value }}"
+      loop: "{{ kde_config }}"
       when: not is_wsl

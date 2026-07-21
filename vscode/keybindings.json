@@ -178,5 +178,9 @@
   {
     "key": "ctrl+alt+f4",
     "command": "workbench.action.closeOtherEditors"
+  },
+  {
+    "key": "ctrl+shift+=",
+    "command": "workbench.action.zoomIn"
   }
 ]

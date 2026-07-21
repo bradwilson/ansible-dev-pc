@@ -1,20 +1,20 @@
-- name: Python
+- name: "Python"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Install pyenv
-      git:
+    - name: "Install pyenv"
+      ansible.builtin.git:
         dest: ~/.pyenv
         repo: https://github.com/pyenv/pyenv
 
-    - name: Install pyenv-virtualenv
-      git:
+    - name: "Install pyenv-virtualenv"
+      ansible.builtin.git:
         dest: ~/.pyenv/plugins/pyenv-virtualenv
         repo: https://github.com/pyenv/pyenv-virtualenv
 
-    - name: Enable pyenv
-      blockinfile:
+    - name: "Enable pyenv"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: pyenv support"
         block: |

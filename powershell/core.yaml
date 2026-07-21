@@ -1,0 +1,36 @@
+- name: "PowerShell"
+  hosts: 127.0.0.1
+  connection: local
+
+  vars:
+    machine_fallback:
+      'aarch64': 'arm64'
+      'x86_64': 'x64'
+    machine: "{{ machine_fallback[ansible_facts['machine']] | default(ansible_facts['machine']) }}"
+
+  tasks:
+    - name: "Get latest version"
+      ansible.builtin.shell: "curl -s https://api.github.com/repos/PowerShell/PowerShell/releases/latest | jq -r .tag_name | cut -c2-"
+      register: pwsh_version
+
+    - name: "Create binary binary folder"
+      become: yes
+      ansible.builtin.file:
+        path: /opt/microsoft/pwsh/{{ pwsh_version.stdout }}
+        state: directory
+
+    - name: "Install PowerShell"
+      become: yes
+      ansible.builtin.unarchive:
+        src: https://github.com/PowerShell/PowerShell/releases/download/v{{ pwsh_version.stdout }}/powershell-{{ pwsh_version.stdout }}-linux-{{ machine }}.tar.gz
+        dest: /opt/microsoft/pwsh/{{ pwsh_version.stdout }}
+        remote_src: yes
+        creates: /opt/microsoft/pwsh{{ pwsh_version.stdout }}/pwsh
+      register: pwsh_download
+
+    - name: "Create symlink to /usr/local/bin/pwsh"
+      become: yes
+      ansible.builtin.file:
+        path: /usr/local/bin/pwsh
+        src: /opt/microsoft/pwsh/{{ pwsh_version.stdout }}/pwsh
+        state: link

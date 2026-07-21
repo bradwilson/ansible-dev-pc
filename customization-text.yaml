@@ -1,22 +1,22 @@
-- name: Core OS customization (terminal)
+- name: "Core OS customization (terminal)"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Remove old common bash aliases
-      blockinfile:
+    - name: "Remove old common bash aliases"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Bash aliases (common)"
         state: absent
 
-    - name: Remove old Linux bash aliases
-      blockinfile:
+    - name: "Remove old Linux bash aliases"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Bash aliases (Linux)"
         state: absent
 
-    - name: Add bash aliases
-      blockinfile:
+    - name: "Add bash aliases"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Bash aliases"
         block: |
@@ -40,72 +40,63 @@
 
           export LS_COLORS='ow=93'
 
-    - name: Install APT packages
+    - name: "Install package"
       become: yes
-      apt:
-        package: "{{ item }}"
+      ansible.builtin.dnf:
+        name: "{{ item }}"
       loop:
         - colordiff
-        - fortune
-        - neofetch
+        - fastfetch
+        - fortune-mod
 
-    - name: Ensure neofetch configuration folder exists
-      file:
-        path: ~/.config/neofetch
+    - name: "Ensure fastfetch configuration folder exists"
+      ansible.builtin.file:
+        path: ~/.config/fastfetch
         state: directory
 
-    - name: Override neofetch configuration
-      copy:
-        dest: ~/.config/neofetch/config
+    - name: "Override fastfetch configuration"
+      ansible.builtin.copy:
+        dest: ~/.config/fastfetch/config.jsonc
         mode: 0755
         content: |
-          print_info() {
-              info title
-
-              prin ""
-
-              info "OS" distro
-              info "Kernel" kernel
-              info "Uptime" uptime
-              info "IP" local_ip
-
-              prin ""
-
-              info "Host" model
-              info "CPU" cpu
-              info "Memory" memory
-              info "GPU" gpu
-              info "Screens" resolution
-              info "Disk" disk
-              info "Battery" battery
+          {
+            "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+            "modules": [
+              "title",
+              "break",
+              "os",
+              "kernel",
+              "uptime",
+              "localip",
+              "break",
+              "host",
+              "cpu",
+              "memory",
+              "gpu",
+              "display",
+              "disk",
+              "battery"
+            ]
           }
 
-          cpu_temp="C"
-          refresh_rate="on"
-          block_range=(0 15)
-          cpu_display="infobar"
-          memory_display="infobar"
-          battery_display="infobar"
-          disk_display="infobar"
-          thumbnail_dir="${XDG_CACHE_HOME:-${HOME}/.cache}/thumbnails/neofetch"
-
-    - name: Add neofetch & fortune to ~/.bashrc
-      blockinfile:
+    - name: "Add fastfetch & fortune to ~/.bashrc"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: login banner"
         block: |
           echo ""
-          neofetch
+          fastfetch
+          echo ""
           fortune
 
-    - name: Disable sudo password requirement
+    - name: "Disable sudo password requirement"
       become: yes
-      lineinfile:
+      ansible.builtin.lineinfile:
         path: /etc/sudoers
         line: "{{ lookup('env', 'USER') }} ALL=(ALL) NOPASSWD: ALL"
 
-    - name: Enhance terminal prompt
-      blockinfile:
+    - name: "Enhance terminal prompt"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: prompt enhancement"
         block: |
@@ -125,7 +116,7 @@
             function writeCwdInTitlebar() {
               case "$TERM" in
                 xterm*|rxvt*)
-                  echo -ne "\033]0;[WSL] $WSL_DISTRO_NAME: `dirs +0`\007\c"
+                  echo -ne "\033]0;`dirs +0`᲻\007\c"
                   ;;
                 *)
                   ;;
@@ -165,26 +156,19 @@
           export GREP_COLORS='1;35;40'
           export LSCOLORS=GxFxCxDxBxegedabagaced
 
-          # Create a bunch of symlinks to known things in Google Drive
-          if [ -d ~/gdrive ]; then
+          # Create a bunch of symlinks to known things in OneDrive
+          if [ -d ~/OneDrive ]; then
 
-            # TODO: How many of these things can/should be raw automated instead of
-            # being pulled from Google Drive?
+            # TODO: How many of these things can/should be raw automated?
 
             if [ ! -e ~/.config/git/config ]; then
               mkdir -p ~/.config/git
               chmod 700 ~/.config
-              ln -s $HOME/gdrive/DevBinaries/.config/git/config ~/.config/git
-            fi
-
-            if [ ! -e ~/.docker/config.json ]; then
-              mkdir -p ~/.docker
-              chmod 700 ~/.docker
-              ln -s $HOME/gdrive/DevBinaries/.docker/config.json ~/.docker
+              ln -s $HOME/OneDrive/Development/.config/git/config ~/.config/git
             fi
 
             if [ ! -e ~/.git-credentials ]; then
-              ln -s $HOME/gdrive/DevBinaries/DotFiles/.git-credentials ~/
+              ln -s $HOME/OneDrive/Development/.git-credentials ~/
             fi
 
             if [ ! -d ~/.gnupg ]; then
@@ -192,42 +176,21 @@
               chmod 700 ~/.gnupg
             fi
 
-            ln -fs $HOME/gdrive/DevBinaries/DotFiles/.gnupg/* ~/.gnupg/
+            ln -fs $HOME/OneDrive/Development/.gnupg/* ~/.gnupg/
 
-            if [ ! -d ~/.kube ]; then
-              mkdir ~/.kube
-            fi
-
-            if [ ! -e ~/.kube/config ]; then
-              ln -s $HOME/gdrive/DevBinaries/DotFiles/.kube/config ~/.kube/
-            fi
-
-            if [ ! -d ~/.kube/ports ]; then
-              ln -s $HOME/gdrive/DevBinaries/DotFiles/.kube/ports ~/.kube/
-            fi
-
-            if [ ! -e ~/.npmrc ]; then
-              ln -s $HOME/gdrive/DevBinaries/DotFiles/.npmrc ~/
-            fi
-
-            if [ ! -e ~/.nuget/NuGet/NuGet.Config ]; then
-              mkdir -p ~/.nuget/NuGet
-              ln -s $HOME/gdrive/DevBinaries/DotFiles/NuGet.Config ~/.nuget/NuGet/
-            fi
-
-            if [ -d ~/gdrive/DevBinaries/.ssh ]; then
+            if [ -d ~/OneDrive/Development/.ssh ]; then
               mkdir -p ~/.ssh
               chmod 700 ~/.ssh
-              ln -fs $HOME/gdrive/DevBinaries/.ssh/* ~/.ssh/
+              ln -fs $HOME/OneDrive/Development/.ssh/* ~/.ssh/
               chmod 700 ~/.ssh/* 2>/dev/null
 
               if [ ! -e ~/.ssh/authorized_keys ]; then
-                ln -s $HOME/gdrive/DevBinaries/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+                ln -s $HOME/OneDrive/Development/.ssh/id_rsa.pub ~/.ssh/authorized_keys
               fi
             fi
 
-            if [ -d ~/gdrive/DevBinaries ]; then
-              export PATH=~/gdrive/DevBinaries:$PATH
+            if [ -d ~/OneDrive/Development/bin ]; then
+              export PATH=~/OneDrive/Development/bin:$PATH
             fi
 
           fi

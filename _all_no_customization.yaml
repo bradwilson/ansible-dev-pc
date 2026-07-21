@@ -5,7 +5,7 @@
 #
 #########################################################################################
 
-- name: Configure machine for development work
+- name: "Configure machine for development work"
   hosts: 127.0.0.1
   connection: local
 
@@ -30,40 +30,40 @@
 # .NET
 - import_playbook: dotnet/core.yaml
 
-# Flameshot
-- import_playbook: flameshot/core.yaml
-
 # git
 - import_playbook: git/core.yaml
 
 # golang
-- import_playbook: golang/core.yaml
+# - import_playbook: golang/core.yaml
+
+# Meld (2- and 3-way diff/merge tool)
+- import_playbook: meld/core.yaml
+
+# NodeJS
+# - import_playbook: nodejs/core.yaml
+
+# PowerShell
+- import_playbook: powershell/core.yaml
+
+# Python
+# - import_playbook: python/core.yaml
+
+# Ruby
+# - import_playbook: ruby/core.yaml
+
+# rust-lang
+# - import_playbook: rust-lang/core.yaml
 
 # Virtualization (QEMU/KVM)
 - import_playbook: virtualization/core.yaml
 
-# NodeJS
-- import_playbook: nodejs/core.yaml
-
-# PowerShell Core
-- import_playbook: powershell-core/core.yaml
-
-# Python
-- import_playbook: python/core.yaml
-
-# Ruby
-- import_playbook: ruby/core.yaml
-
-# rust-lang
-- import_playbook: rust-lang/core.yaml
-
-##### Applications (free)
+##### Applications
 
 # Alacritty (high performance terminal application)
 - import_playbook: alacritty/core.yaml
 
-# Microsoft Edge
-- import_playbook: edge/core.yaml
+# OneDrive
+- import_playbook: onedrive/core.yaml
 
 # Prettier version of ping w/ graphs
 - import_playbook: prettyping/core.yaml
@@ -74,13 +74,8 @@
 # Slack desktop application
 - import_playbook: slack/core.yaml
 
-# VideoLan Client (primarily for codecs)
+# Vivaldi (browser)
+- import_playbook: vivaldi/core.yaml
+
+# VLC video player (primarily for codecs)
 - import_playbook: vlc/core.yaml
-
-##### Applications (commercial license required)
-
-# Beyond Compare 4
-- import_playbook: bc4/core.yaml
-
-# Google Backup and Sync (compatible; using Insync on Linux)
-- import_playbook: google-backup/core.yaml

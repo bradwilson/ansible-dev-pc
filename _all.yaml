@@ -5,7 +5,7 @@
 #
 #########################################################################################
 
-- name: Configure machine for development work (with customizations)
+- name: "Configure machine for development work (with customizations)"
   hosts: 127.0.0.1
   connection: local
 
@@ -25,7 +25,6 @@
 - import_playbook: bat/customization.yaml
 
 - import_playbook: docker/customization.yaml
-- import_playbook: docker/vscode.yaml
 
 - import_playbook: dotnet/customization.yaml
 - import_playbook: dotnet/vscode.yaml
@@ -33,28 +32,22 @@
 - import_playbook: git/customization.yaml
 - import_playbook: git/vscode.yaml
 
-- import_playbook: golang/vscode.yaml
+# - import_playbook: golang/vscode.yaml
 
-- import_playbook: no-screen-blank/core.yaml
+# - import_playbook: nodejs/customization.yaml
+# - import_playbook: nodejs/vscode.yaml
 
-- import_playbook: nodejs/customization.yaml
-- import_playbook: nodejs/vscode.yaml
+# - import_playbook: powershell/vscode.yaml
 
-- import_playbook: powershell-core/vscode.yaml
+# - import_playbook: python/vscode.yaml
 
-- import_playbook: python/vscode.yaml
+# - import_playbook: ruby/customization.yaml
+# - import_playbook: ruby/vscode.yaml
 
-- import_playbook: ruby/customization.yaml
-- import_playbook: ruby/vscode.yaml
-
-- import_playbook: rust-lang/vscode.yaml
-
-- import_playbook: toml/vscode.yaml
-
-##### Applications (free)
-
-- import_playbook: alacritty/customization.yaml
-
-##### This has to be last, because it enables WSL Remote, which breaks installing Code extensions in WSL 2
+# - import_playbook: rust-lang/vscode.yaml
 
 - import_playbook: vscode/customization.yaml
+
+##### Applications
+
+- import_playbook: alacritty/customization.yaml

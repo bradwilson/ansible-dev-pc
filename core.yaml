@@ -1,112 +1,60 @@
-- name: Core OS packages
+- name: "Core OS packages"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+    - ansible.builtin.set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
 
-    - name: Disable auto-upgrade timer
-      become: yes
-      command:
-        cmd: systemctl disable {{ item }}.timer
-        removes: /etc/systemd/system/timers.target.wants/{{ item }}.timer
-      loop:
-        - apt-daily
-        - apt-daily-upgrade
-
-    - name: Create ~/bin
-      file:
+    - name: "Create ~/bin"
+      ansible.builtin.file:
         path: ~/bin
         state: directory
         mode: 0700
 
-    - name: Add ~/bin to PATH
-      lineinfile:
+    - name: "Add ~/bin to PATH"
+      ansible.builtin.lineinfile:
         path: ~/.bashrc
         line: export PATH=$PATH:~/bin
 
-    - name: Enable HTTPS APT support
+    - name: "Upgrade packages"
       become: yes
-      apt:
-        name: "{{ packages }}"
-      vars:
-        packages:
-          - apt-transport-https
-          - ca-certificates
-          - gnupg-agent
-          - software-properties-common
-
-    - name: Update APT package list
-      become: yes
-      apt:
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
         update_cache: yes
-      register: apt_update
-      retries: 5
-      until: apt_update is success
 
-    - name: Upgrade to latest APT packages
+    - name: "Install core package"
       become: yes
-      apt:
-        upgrade: "yes"
-
-    - name: Install core packages
-      become: yes
-      apt:
-        package: "{{ item }}"
+      ansible.builtin.dnf:
+        name: "{{ item }}"
       loop:
-        - curl
-        - dconf-editor
-        - exfat-fuse
+        - 7zip-standalone
+        - dosfstools
+        - exfatprogs
         - htop
-        - inetutils-traceroute
         - jq
-        - net-tools
-        - p7zip-full
-        - unzip
+        - ncurses
+        - ntfs-3g-system-compression
+        - ntfsprogs
         - uuid
         - xclip
 
-    - name: "Install exfatprogs"
+    - name: "[WSL] Enable WSL interop"
       become: yes
-      apt:
-        package: exfatprogs
+      ansible.builtin.copy:
+        dest: /usr/lib/binfmt.d/WSLInterop.conf
+        mode: 0644
+        content: |
+          :WSLInterop:M::MZ::/init:PF
+      register: wsl_interop
+      when: is_wsl
 
-    - name: "[Non-WSL] Install Gnome Extension Manager"
+    - name: "[WSL] Restart systemd-binfmt"
       become: yes
-      apt:
-        package: gnome-shell-extension-manager
-      when: not is_wsl
+      ansible.builtin.shell: systemctl restart systemd-binfmt
+      when: is_wsl and wsl_interop.changed
 
-    - name: "[Non-WSL] Install snapd"
-      become: yes
-      apt:
-        package: snapd
-      when: not is_wsl
-
-    - name: "[Non-WSL] Install snap core"
-      become: yes
-      command: snap install core
-      args:
-        creates: /snap/core/current/bin/bash
-      when: not is_wsl
-
-    - name: "[Non-WSL] Add /snap/bin to PATH"
-      lineinfile:
-        path: ~/.bashrc
-        line: export PATH=$PATH:/snap/bin
-      when: not is_wsl
-
-    - name: Get installed package list
-      package_facts: {}
-
-    - name: Add dm-crypt to /etc/initramfs-tools/modules
-      become: yes
-      lineinfile:
-        path: /etc/initramfs-tools/modules
-        line: dm-crypt
-      when: ansible_facts.packages["cryptsetup-initramfs"] is defined
-
-    - name: Ensure ~/.hushlogin exists
-      file:
+    - name: "Ensure ~/.hushlogin exists"
+      ansible.builtin.file:
         path: ~/.hushlogin
         state: touch

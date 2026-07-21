@@ -1,0 +1,27 @@
+- name: "OneDrive"
+  hosts: 127.0.0.1
+  connection: local
+
+  # For non-WSL, it's assumed that the user has install https://github.com/abraunegg/onedrive
+  # and that it's monitored/synced to ~/OneDrive
+
+  tasks:
+    - ansible.builtin.set_fact: is_wsl={{ lookup('file', '/proc/version') is regex('(M|m)icrosoft') }}
+
+    - name: "[WSL] Get user's Windows home path"
+      ansible.builtin.shell: wslpath "$(cmd.exe /c "echo %USERPROFILE%" 2>/dev/null)"
+      register: userprofile
+      when: is_wsl
+
+    - name: "[WSL] Check for OneDrive folder"
+      ansible.builtin.stat:
+        path: "{{ userprofile.stdout }}/OneDrive"
+      register: onedrive_path
+      when: is_wsl
+
+    - name: "[WSL] Create symlink to ~/OneDrive"
+      ansible.builtin.file:
+        path: ~/OneDrive
+        src: "{{ userprofile.stdout }}/OneDrive"
+        state: link
+      when: is_wsl and onedrive_path.stat.exists

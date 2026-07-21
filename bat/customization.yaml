@@ -1,16 +1,16 @@
-- name: bat (customization)
+- name: "bat (customization)"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Ensure configuration folder exists
+    - name: "Ensure configuration folder exists"
       become: yes
-      file:
+      ansible.builtin.file:
         path: ~/.config/bat
         state: directory
 
-    - name: Add configuration file
-      blockinfile:
+    - name: "Add configuration file"
+      ansible.builtin.blockinfile:
         path: ~/.config/bat/config
         create: true
         marker: "### {mark} Ansible managed: bat customization"
@@ -25,12 +25,13 @@
           --map-syntax "*.fsproj:XML"
           --map-syntax "*.nuspec:XML"
           --map-syntax "*.props:XML"
+          --map-syntax "*.slnx:XML"
           --map-syntax "*.targets:XML"
           --map-syntax "*.trx:XML"
           --map-syntax "*.vbproj:XML"
 
-    - name: Alias bat to cat
-      blockinfile:
+    - name: "Alias bat to cat"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: bat customization"
         block: |

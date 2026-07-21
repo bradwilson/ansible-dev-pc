@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.1
-Type=Application
-Name=Alacritty
-Exec=__HOME__/.cargo/bin/alacritty
-Icon=__ICON__
-Categories=System;
-Terminal=false
-StartupWMClass=Alacritty

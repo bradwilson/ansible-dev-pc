@@ -1,38 +1,18 @@
-- name: Ruby
+- name: "Ruby"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Install pre-requisites
+    - name: "Install package"
       become: yes
-      apt:
-        package: "{{ item }}"
+      ansible.builtin.dnf:
+        name: "{{ item }}"
       loop:
-        - gcc
-        - libssl-dev
-        - libreadline-dev
-        - make
-        - zlib1g-dev
+        - ruby-build-rbenv
 
-    - name: Install rbenv
-      git:
-        repo: https://github.com/rbenv/rbenv
-        dest: ~/.rbenv
-
-    - name: Install ruby-build
-      git:
-        repo: https://github.com/rbenv/ruby-build.git
-        dest: ~/.rbenv/plugins/ruby-build
-
-    - name: Ensure shims folder exists
-      file:
-        path: ~/.rbenv/shims
-        state: directory
-
-    - name: Enable rbenv in bash
-      blockinfile:
+    - name: "Enable rbenv in bash"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Ruby"
         block: |
-          export PATH="$HOME/.rbenv/bin:$PATH"
-          eval "$(rbenv init -)"
+          eval "$(rbenv init - --no-rehash bash)"

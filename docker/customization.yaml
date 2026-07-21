@@ -1,10 +1,10 @@
-- name: Docker (customization)
+- name: "Docker (customization)"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Add custom Docker commands
-      blockinfile:
+    - name: "Add custom Docker commands"
+      ansible.builtin.blockinfile:
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: Docker customization"
         block: |
@@ -16,22 +16,21 @@
             [[ -z ${_images// } ]] || docker rmi $_images
           }
           docker-start() {
-            sudo /etc/init.d/docker start
+            sudo systemctl start docker.service
           }
           docker-stop() {
             sudo systemctl stop docker.socket
-            sudo /etc/init.d/docker stop
           }
 
-    - name: Ensure configuration folder exists
+    - name: "Ensure configuration folder exists"
       become: yes
-      file:
+      ansible.builtin.file:
         path: /etc/docker
         state: directory
 
-    - name: Configure default Docker network
+    - name: "Configure default Docker network"
       become: yes
-      copy:
+      ansible.builtin.copy:
         dest: /etc/docker/daemon.json
         content: |
           {

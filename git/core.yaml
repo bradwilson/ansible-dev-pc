@@ -1,49 +1,15 @@
-- name: git
+- name: "git"
   hosts: 127.0.0.1
   connection: local
 
-  vars:
-    distribution_fallback:
-      'Pop!_OS': 'Ubuntu'
-    distribution: "{{ distribution_fallback[ansible_distribution] | default(ansible_distribution) }}"
-    linux_git_packages:
-      - git
-      - git-gui
-      - git-lfs
-      - gitk
-
   tasks:
-    - name: Add Git APT package key
+    - name: "Install package"
       become: yes
-      get_url:
-        url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa1715d88e1df1f24
-        dest: /etc/apt/trusted.gpg.d/git.asc
-        mode: 0644
-
-    - name: Add Git APT package repository
-      become: yes
-      apt_repository:
-        repo: deb http://ppa.launchpad.net/git-core/ppa/{{ distribution | lower }} {{ ansible_distribution_release }} main
-        filename: git
-        update_cache: no
-      register: apt_repository
-
-    - name: Update APT package list
-      become: yes
-      apt:
-        update_cache: yes
-      when: apt_repository.changed
-      register: apt_update
-      retries: 5
-      until: apt_update is success
-
-    - name: Install APT package
-      become: yes
-      apt:
-        package: "{{ item }}"
-      loop: "{{ linux_git_packages }}"
-
-    - name: "Install ripgrep"
-      become: yes
-      apt:
-        package: ripgrep
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+      loop:
+        - git
+        - git-gui
+        - git-lfs
+        - gitk
+        - ripgrep

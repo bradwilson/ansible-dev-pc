@@ -1,17 +1,17 @@
-- name: NodeJS (customization)
+- name: "NodeJS (customization)"
   hosts: 127.0.0.1
   connection: local
 
   tasks:
-    - name: Test for installed NodeJS LTS
-      shell: bash -ic "nvm ls lts/*" >/dev/null
+    - name: "Test for installed NodeJS LTS"
+      ansible.builtin.shell: bash -ic "nvm ls lts/*" >/dev/null
       register: nvm_ls
       ignore_errors: yes
 
-    - name: Install NodeJS LTS
-      command: bash -ic "nvm install lts/*"
+    - name: "Install NodeJS LTS"
+      ansible.builtin.command: bash -ic "nvm install lts/*"
       when: nvm_ls.failed
 
-    - name: Use NodeJS LTS by default
-      command: bash -ic "nvm use --lts"
+    - name: "Use NodeJS LTS by default"
+      ansible.builtin.command: bash -ic "nvm use --lts"
       when: nvm_ls.failed
