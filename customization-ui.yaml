@@ -1,4 +1,4 @@
-- name: "Core OS customization (Gnome UI)"
+- name: "Core OS customization (KDE Plasma)"
   hosts: 127.0.0.1
   connection: local
 
