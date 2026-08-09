@@ -161,22 +161,28 @@
 
             # TODO: How many of these things can/should be raw automated?
 
-            if [ ! -e ~/.config/git/config ]; then
-              mkdir -p ~/.config/git
-              chmod 700 ~/.config
-              ln -s $HOME/OneDrive/Development/.config/git/config ~/.config/git
+            if [ -e ~/OneDrive/Development/.config/git/config ]; then
+              if [ ! -e ~/.config/git/config ]; then
+                mkdir -p ~/.config/git
+                chmod 700 ~/.config
+                ln -s $HOME/OneDrive/Development/.config/git/config ~/.config/git
+              fi
             fi
 
-            if [ ! -e ~/.git-credentials ]; then
-              ln -s $HOME/OneDrive/Development/.git-credentials ~/
+            if [ -e ~/OneDrive/Development/.git-credentials ]; then
+              if [ ! -e ~/.git-credentials ]; then
+                ln -s $HOME/OneDrive/Development/.git-credentials ~/
+              fi
             fi
 
-            if [ ! -d ~/.gnupg ]; then
-              mkdir -p ~/.gnupg
-              chmod 700 ~/.gnupg
-            fi
+            if [ -d ~/OneDrive/Development/.gnupg ]; then
+              if [ ! -d ~/.gnupg ]; then
+                mkdir -p ~/.gnupg
+                chmod 700 ~/.gnupg
+              fi
 
-            ln -fs $HOME/OneDrive/Development/.gnupg/* ~/.gnupg/
+              ln -fs $HOME/OneDrive/Development/.gnupg/* ~/.gnupg/
+            fi
 
             if [ -d ~/OneDrive/Development/.ssh ]; then
               mkdir -p ~/.ssh
@@ -189,8 +195,17 @@
               fi
             fi
 
-            if [ -d ~/OneDrive/Development/bin ]; then
-              export PATH=~/OneDrive/Development/bin:$PATH
+            if [ -d ~/OneDrive/Development/powershell ]; then
+              export PATH=~/OneDrive/Development/powershell:$PATH
+            fi
+
+            if [ -d ~/OneDrive/Development/bin-linux ]; then
+              export PATH=~/OneDrive/Development/bin-linux:$PATH
+            fi
+
+            ARCH=$(uname -m)
+            if [ -d ~/OneDrive/Development/bin-linux-$ARCH ]; then
+              export PATH=~/OneDrive/Development/bin-linux-$ARCH:$PATH
             fi
 
           fi
