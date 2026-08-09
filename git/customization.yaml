@@ -1,4 +1,4 @@
-- import_playbook: ../rust-lang/core.yaml  # diffr/difftastic are installed with Rust's cargo package manager
+- ansible.builtin.import_playbook: ../rust-lang/core.yaml  # diffr/difftastic are installed with Rust's cargo package manager
 
 - name: "git (customization)"
   hosts: 127.0.0.1

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+#########################################################################################
+#
+#  Customize this to exclude things. For a list of environment variables, see
+#  _all_no_customization.yaml.
+#
+#########################################################################################
+
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
+
+SKIP_GOLANG=1 SKIP_NODEJS=1 SKIP_PYTHON=1 SKIP_RUBY=1 SKIP_RUST_LANG=1 ansible-playbook ${@:--K ${SCRIPT_DIR}/_all.yaml}

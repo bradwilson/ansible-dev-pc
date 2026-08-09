@@ -5,49 +5,64 @@
 #
 #########################################################################################
 
-- name: "Configure machine for development work (with customizations)"
-  hosts: 127.0.0.1
-  connection: local
+##### Install the base software
 
-- import_playbook: _all_no_customization.yaml
+- ansible.builtin.import_playbook: "_all_no_customization.yaml"
 
 ##### Operating system packages and configuration
 
-- import_playbook: customization-text.yaml
-- import_playbook: customization-ui.yaml
+- ansible.builtin.import_playbook: customization-text.yaml
+- ansible.builtin.import_playbook: customization-ui.yaml
 
 ##### Use Starship for its customized prompt
 
-- import_playbook: starship/core.yaml
+- ansible.builtin.import_playbook: starship/core.yaml
+  when: not skip_starship
 
 ##### Developer tools
 
-- import_playbook: bat/customization.yaml
+- ansible.builtin.import_playbook: bat/customization.yaml
+  when: not skip_bat
 
-- import_playbook: docker/customization.yaml
+- ansible.builtin.import_playbook: docker/customization.yaml
+  when: not skip_docker
 
-- import_playbook: dotnet/customization.yaml
-- import_playbook: dotnet/vscode.yaml
+- ansible.builtin.import_playbook: dotnet/customization.yaml
+  when: not skip_dotnet
+- ansible.builtin.import_playbook: dotnet/vscode.yaml
+  when: not skip_dotnet and not skip_vscode
 
-- import_playbook: git/customization.yaml
-- import_playbook: git/vscode.yaml
+- ansible.builtin.import_playbook: git/customization.yaml
+  when: not skip_git
+- ansible.builtin.import_playbook: git/vscode.yaml
+  when: not skip_git and not skip_vscode
 
-# - import_playbook: golang/vscode.yaml
+- ansible.builtin.import_playbook: golang/vscode.yaml
+  when: not skip_golang and not skip_vscode
 
-# - import_playbook: nodejs/customization.yaml
-# - import_playbook: nodejs/vscode.yaml
+- ansible.builtin.import_playbook: nodejs/customization.yaml
+  when: not skip_nodejs
+- ansible.builtin.import_playbook: nodejs/vscode.yaml
+  when: not skip_nodejs and not skip_vscode
 
-# - import_playbook: powershell/vscode.yaml
+- ansible.builtin.import_playbook: powershell/vscode.yaml
+  when: not skip_powershell and not skip_vscode
 
-# - import_playbook: python/vscode.yaml
+- ansible.builtin.import_playbook: python/vscode.yaml
+  when: not skip_python and not skip_vscode
 
-# - import_playbook: ruby/customization.yaml
-# - import_playbook: ruby/vscode.yaml
+- ansible.builtin.import_playbook: ruby/customization.yaml
+  when: not skip_ruby
+- ansible.builtin.import_playbook: ruby/vscode.yaml
+  when: not skip_ruby and not skip_vscode
 
-# - import_playbook: rust-lang/vscode.yaml
+- ansible.builtin.import_playbook: rust-lang/vscode.yaml
+  when: not skip_rust_lang and not skip_vscode
 
-- import_playbook: vscode/customization.yaml
+- ansible.builtin.import_playbook: vscode/customization.yaml
+  when: not skip_vscode
 
 ##### Applications
 
-- import_playbook: alacritty/customization.yaml
+- ansible.builtin.import_playbook: alacritty/customization.yaml
+  when: not skip_alacritty

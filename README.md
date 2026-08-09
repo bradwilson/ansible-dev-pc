@@ -56,6 +56,19 @@ You will be prompted for your password, so that administrative-level software ca
 
 Since core OS packages are upgraded, it is safest to reboot the PC/VM after running these scripts. At a bare minimum, many UI shell customizations done here will require you to log out and log back in, and shell customizations will require you to restart your shell.
 
+# Skipping
+
+You can skip individual installations with environment variables. For example, if you don't plan to use Ruby, you can run your playbook like this:
+
+```shell
+$ SKIP_RUBY=1 ansible-playbook -K _all.yaml
+```
+
+The list of environment variables is at the top of [`_all_no_customization.yaml`](_all_no_customization.yaml).
+
+> [!NOTE]
+> Skipping is performed inside of the "all" scripts, and not inside the individual playbooks. This allows you to take dependencies from one playbook on another (for example, [`git/customization.yaml`](git/customization.yaml) depends on [`rust-lang/core.yaml`](rust-lang/core.yaml) because it uses Cargo to install software, so even if you've specified `SKIP_RUST_LANG=1`, you will still get it installed if you don't also specify `SKIP_GIT` (or comment out the customization step). However, even in this scenario, you would still skip the Rust VSCode playbook.
+
 # Notes on differences between Linux distros
 
 In general, these scripts are optimized around the experience of users of Fedora Workstation distributions. These scripts install GUI-based applications, and manipulate the GUI shell for development purposes. They will probably most work on a server-based distribution if that's what you use for development, though they may require reworking.
