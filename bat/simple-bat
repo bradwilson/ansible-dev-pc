@@ -1,0 +1,172 @@
+#!/usr/bin/env bash
+
+declare -a bat_args=()
+declare -a paths=()
+declare -a style=()
+diff_flag=false
+language=""
+non_printable_notation=""
+paging=""
+show_all=false
+show_help=false
+
+bat_source=$(command -v bat 2>/dev/null || command -v batcat 2>/dev/null)
+if [ -z "$bat_source" ]; then
+    echo "'bat' command not found" >&2
+    exit 1
+fi
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -?|--help)
+            show_help=true
+            ;;
+        -d|--diff)
+            diff_flag=true
+            shift
+            ;;
+        -l|--language)
+            language="$2"
+            shift 2
+            ;;
+        -n|--non-printable-notation)
+            non_printable_notation="$2"
+            shift 2
+            ;;
+        -p|--paging)
+            paging="$2"
+            shift 2
+            ;;
+        -s|--show-all)
+            show_all=true
+            shift
+            ;;
+        --style)
+            style+=("$2")
+            shift 2
+            ;;
+        -*)
+            echo "Unknown parameter: $1" >&2
+            show_help=true
+            ;;
+        *)
+            paths+=("$1")
+            shift
+            ;;
+    esac
+done
+
+if [[ ${#paths[@]} -eq 0 ]]; then
+    show_help=true
+fi
+
+if [[ "$show_help" == true ]]; then
+    echo "Usage: $(basename "$0") [OPTIONS] [FILE]..."
+    echo ""
+    echo "Options:"
+    echo "  -d, --diff"
+    echo "          Only show lines that have been added/removed/modified with respect to the Git index."
+    echo ""
+    echo "  -l, --language <language>"
+    echo "          Explicitly set the language for syntax highlighting. The language can be specified as a"
+    echo "          name (like 'C++' or 'LaTeX') or possible file extension (like 'cpp', 'hpp' or 'md'). "
+    echo ""
+    echo "  -n, --non-printable-notation <notation>"
+    echo "          Set notation for non-printable characters."
+    echo ""
+    echo "          Possible values:"
+    echo "            * unicode (␇, ␊, ␀, ..)"
+    echo "            * caret   (^G, ^J, ^@, ..)"
+    echo ""
+    echo "  -p, --paging <when>"
+    echo "          Specify when to use the pager."
+    echo ""
+    echo "          Possible values:"
+    echo "            * auto (default)"
+    echo "            * never"
+    echo "            * always"
+    echo ""
+    echo "  -s, --show-all"
+    echo "          Show non-printable characters like space, tab or newline. This option can also be used to"
+    echo "          print binary files."
+    echo ""
+    echo "      --style <components>"
+    echo "          Configure which elements (line numbers, file headers, grid borders, Git modifications, ..)"
+    echo "          to display in addition to the file contents. The argument is a comma-separated list of"
+    echo "          components to display (e.g. 'numbers,changes,grid') or a pre-defined style ('full')."
+    echo ""
+    echo "          When styles are specified in multiple places, the 'nearest' set of styles take precedence."
+    echo "          The command-line arguments are the highest priority, followed by the BAT_STYLE environment"
+    echo "          variable, and then the configuration file. If any set of styles consists entirely of"
+    echo "          components prefixed with '+' or '-', it will modify the previous set of styles instead of"
+    echo "          replacing them."
+    echo ""
+    echo "          By default, the following components are enabled:"
+    echo "            changes, grid, header-filename, numbers, snip"
+    echo ""
+    echo "          Possible values:"
+    echo ""
+    echo "            * default: enables recommended style components (default)."
+    echo "            * full: enables all available components."
+    echo "            * auto: same as 'default', unless the output is piped."
+    echo "            * plain: disables all available components."
+    echo "            * changes: show Git modification markers."
+    echo "            * header: alias for 'header-filename'."
+    echo "            * header-filename: show filenames before the content."
+    echo "            * header-filesize: show file sizes before the content."
+    echo "            * grid: vertical/horizontal lines to separate side bar"
+    echo "                    and the header from the content."
+    echo "            * rule: horizontal lines to delimit files."
+    echo "            * numbers: show line numbers in the side bar."
+    echo "            * snip: draw separation lines between distinct line ranges."
+    echo ""
+    echo "  -?, --help"
+    echo "          Print this help screen."
+
+    exit 1
+fi
+
+# Resolve paths to absolute
+for path in "${paths[@]}"; do
+    if [[ -e "$path" ]]; then
+        full_path=$(realpath "$path" 2>/dev/null || readlink -f "$path" 2>/dev/null || echo "$path")
+        bat_args+=("$full_path")
+    fi
+done
+
+# Add style arguments based on number of files
+if [[ ${#bat_args[@]} -gt 1 ]]; then
+    bat_args+=("--style" "header-filename,grid")
+else
+    bat_args+=("--style" "plain")
+fi
+
+# Add optional arguments
+if [[ "$diff_flag" == true ]]; then
+    bat_args+=("--diff")
+fi
+
+if [[ -n "$language" ]]; then
+    bat_args+=("--language" "$language")
+fi
+
+if [[ -n "$non_printable_notation" ]]; then
+    bat_args+=("--nonprintable-notation" "$non_printable_notation")
+fi
+
+if [[ -n "$paging" ]]; then
+    bat_args+=("--paging" "$paging")
+fi
+
+if [[ "$show_all" == true ]]; then
+    bat_args+=("--show-all")
+fi
+
+if [[ ${#style[@]} -gt 0 ]]; then
+    # Join style array with commas
+    style_string=$(IFS=,; echo "${style[*]}")
+    bat_args+=("--style" "$style_string")
+fi
+
+# Execute bat command
+"$bat_source" "${bat_args[@]}"

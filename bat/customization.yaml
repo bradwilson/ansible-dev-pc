@@ -35,4 +35,10 @@
         path: ~/.bashrc
         marker: "### {mark} Ansible managed: bat customization"
         block: |
-          alias cat='bat -pp'
+          alias cat='simple-bat'
+
+    - name: "Copy simple-bat to ~/bin"
+      ansible.builtin.copy:
+        src: simple-bat
+        dest: ~/bin/simple-bat
+        mode: 0755
