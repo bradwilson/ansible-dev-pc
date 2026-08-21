@@ -11,7 +11,7 @@ format = "$status$env_var$ruby$python$golang$rust$nodejs$custom(\u001b\\[38;5;25
 #format = "$status$env_var$ruby$python$golang$rust$nodejs$custom(\u001b\\[0;38;5;110;48;5;25m  $git_branch$git_commit$git_state$git_status\u001b\\[0m )$directory\u001b\\[0m\n$shell$username"
 
 [custom.dotnet]
-detect_extensions = ['sln','csproj','fsproj','vbproj','props','targets']
+detect_extensions = ['sln','slnx','csproj','fsproj','vbproj','props','targets']
 detect_files = ['global.json']
 format = "\u001b\\[38;5;54m\u001b\\[38;5;231;48;5;54m  $output "
 #format = "\u001b\\[38;5;231;48;5;54m  $output \u001b\\[0m "
